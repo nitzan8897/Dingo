@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getTranslations, type Locale } from '../src/index';
+import { getTranslations, type Locale } from '../index';
 
 describe('i18n utilities', () => {
   it('should export getTranslations function', () => {
