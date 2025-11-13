@@ -4,9 +4,23 @@
   "private": true,
   "description": "Shared configuration for Dingo monorepo",
   "main": "index.js",
+  "exports": {
+    "./eslint-preset": "./eslint-preset.js",
+    "./prettier": "./prettier.config.js",
+    "./tsconfig": "./tsconfig.base.json"
+  },
   "files": [
     "eslint-preset.js",
     "prettier.config.js",
     "tsconfig.base.json"
-  ]
+  ],
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
+    "eslint-config-prettier": "^9.1.0"
+  },
+  "peerDependencies": {
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
 }

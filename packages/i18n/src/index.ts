@@ -8,15 +8,13 @@ export function getDirection(locale: Locale): 'rtl' | 'ltr' {
   return locale === 'he' ? 'rtl' : 'ltr';
 }
 
-// Load translations for a given locale
-export function getTranslations(locale: Locale): Record<string, any> {
+// Dynamically load locale messages
+export async function getLocaleMessages(locale: Locale): Promise<Record<string, any>> {
   try {
-    return require(`../locales/${locale}.json`);
+    const messages = await import(`../locales/${locale}.json`);
+    return messages.default || messages;
   } catch (error) {
-    console.warn(`Failed to load translations for locale: ${locale}`);
+    console.warn(`Failed to load messages for locale: ${locale}`);
     return {};
   }
 }
-
-export { default as he } from '../locales/he.json';
-export { default as en } from '../locales/en.json';

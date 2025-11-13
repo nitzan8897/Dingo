@@ -71,7 +71,7 @@ export default function Home() {
 
         <header className="mb-12 text-center">
           <h1 className="text-5xl font-bold text-gray-900 mb-4">
-            🦴 {t('home.title')}
+            {t('home.title')}
           </h1>
           <p className="text-xl text-gray-600">
             {t('home.subtitle')}
