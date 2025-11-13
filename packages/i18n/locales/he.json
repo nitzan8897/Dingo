@@ -1,0 +1,55 @@
+{
+  "common": {
+    "appName": "דינגו",
+    "loading": "טוען...",
+    "error": "שגיאה",
+    "noResults": "לא נמצאו תוצאות"
+  },
+  "home": {
+    "title": "דינגו",
+    "subtitle": "פלטפורמה חכמה לדירוג עורכי דין",
+    "loadingLawyers": "טוען עורכי דין...",
+    "noLawyersFound": "לא נמצאו עורכי דין"
+  },
+  "search": {
+    "placeholder": "חפש עורכי דין...",
+    "allSpecialties": "כל התמחויות",
+    "filterByCity": "סנן לפי עיר...",
+    "specialty": "התמחות",
+    "city": "עיר"
+  },
+  "specialties": {
+    "CRIMINAL": "פלילי",
+    "CIVIL": "אזרחי",
+    "CORPORATE": "חברות",
+    "FAMILY": "משפחה",
+    "LABOR": "עבודה",
+    "TAX": "מיסים",
+    "IMMIGRATION": "הגירה",
+    "REAL_ESTATE": "נדל\"ן",
+    "INTELLECTUAL_PROPERTY": "קניין רוחני"
+  },
+  "lawyer": {
+    "overall": "כללי",
+    "yearsOfExperience": "שנות ניסיון",
+    "specialties": "התמחויות",
+    "contact": "צור קשר",
+    "viewProfile": "צפה בפרופיל"
+  },
+  "ratings": {
+    "professionalism": "מקצועיות",
+    "availability": "זמינות",
+    "empathy": "אמפתיה",
+    "cost": "עלות",
+    "overall": "ציון כללי"
+  },
+  "language": {
+    "he": "עברית",
+    "en": "English",
+    "switchLanguage": "החלף שפה"
+  },
+  "metadata": {
+    "title": "דינגו - דירוג חכם לעורכי דין",
+    "description": "מצא ודרג את עורכי הדין הטובים ביותר."
+  }
+}

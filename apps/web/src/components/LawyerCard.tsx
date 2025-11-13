@@ -1,4 +1,7 @@
+'use client';
+
 import React from 'react';
+import { useTranslations } from 'next-intl';
 import { Lawyer, calculateOverallRating } from '@dingo/types';
 import RatingBar from './RatingBar';
 
@@ -11,6 +14,7 @@ interface LawyerCardProps {
  * Displays lawyer information with FIFA-style ratings
  */
 const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
+  const t = useTranslations();
   const overallRating = Math.round(calculateOverallRating(lawyer.ratingVector));
 
   return (
@@ -22,7 +26,7 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
         </div>
         <div className="text-right">
           <div className="text-3xl font-bold text-primary-600">{overallRating}</div>
-          <div className="text-xs text-gray-500">Overall</div>
+          <div className="text-xs text-gray-500">{t('lawyer.overall')}</div>
         </div>
       </div>
 
@@ -33,34 +37,34 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
               key={specialty}
               className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full"
             >
-              {specialty}
+              {t(`specialties.${specialty}`)}
             </span>
           ))}
         </div>
       </div>
 
       <div className="mb-4 text-sm text-gray-600">
-        <span className="font-semibold">{lawyer.yearsOfExperience}</span> years of experience
+        <span className="font-semibold">{lawyer.yearsOfExperience}</span> {t('lawyer.yearsOfExperience')}
       </div>
 
       <div className="space-y-2">
         <RatingBar
-          label="Professionalism"
+          label={t('ratings.professionalism')}
           value={lawyer.ratingVector.professionalism}
           color="#10b981"
         />
         <RatingBar
-          label="Availability"
+          label={t('ratings.availability')}
           value={lawyer.ratingVector.availability}
           color="#3b82f6"
         />
         <RatingBar
-          label="Empathy"
+          label={t('ratings.empathy')}
           value={lawyer.ratingVector.empathy}
           color="#8b5cf6"
         />
         <RatingBar
-          label="Cost"
+          label={t('ratings.cost')}
           value={lawyer.ratingVector.cost}
           color="#f59e0b"
         />

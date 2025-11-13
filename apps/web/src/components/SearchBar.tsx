@@ -1,10 +1,12 @@
+'use client';
+
 import React, { useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
   onFilterSpecialty?: (specialty: string) => void;
   onFilterCity?: (city: string) => void;
-  placeholder?: string;
 }
 
 /**
@@ -15,8 +17,8 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onSearch,
   onFilterSpecialty,
   onFilterCity,
-  placeholder = 'Search lawyers...',
 }) => {
+  const t = useTranslations();
   const [query, setQuery] = useState('');
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,7 +35,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             type="text"
             value={query}
             onChange={handleSearch}
-            placeholder={placeholder}
+            placeholder={t('search.placeholder')}
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
           />
         </div>
@@ -43,16 +45,16 @@ const SearchBar: React.FC<SearchBarProps> = ({
             onChange={(e) => onFilterSpecialty(e.target.value)}
             className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-white"
           >
-            <option value="">All Specialties</option>
-            <option value="CRIMINAL">Criminal Law</option>
-            <option value="CIVIL">Civil Law</option>
-            <option value="CORPORATE">Corporate Law</option>
-            <option value="FAMILY">Family Law</option>
-            <option value="LABOR">Labor Law</option>
-            <option value="TAX">Tax Law</option>
-            <option value="IMMIGRATION">Immigration Law</option>
-            <option value="REAL_ESTATE">Real Estate Law</option>
-            <option value="INTELLECTUAL_PROPERTY">Intellectual Property</option>
+            <option value="">{t('search.allSpecialties')}</option>
+            <option value="CRIMINAL">{t('specialties.CRIMINAL')}</option>
+            <option value="CIVIL">{t('specialties.CIVIL')}</option>
+            <option value="CORPORATE">{t('specialties.CORPORATE')}</option>
+            <option value="FAMILY">{t('specialties.FAMILY')}</option>
+            <option value="LABOR">{t('specialties.LABOR')}</option>
+            <option value="TAX">{t('specialties.TAX')}</option>
+            <option value="IMMIGRATION">{t('specialties.IMMIGRATION')}</option>
+            <option value="REAL_ESTATE">{t('specialties.REAL_ESTATE')}</option>
+            <option value="INTELLECTUAL_PROPERTY">{t('specialties.INTELLECTUAL_PROPERTY')}</option>
           </select>
         )}
 
@@ -60,7 +62,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
           <input
             type="text"
             onChange={(e) => onFilterCity(e.target.value)}
-            placeholder="Filter by city..."
+            placeholder={t('search.filterByCity')}
             className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
           />
         )}
