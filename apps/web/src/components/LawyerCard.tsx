@@ -33,7 +33,7 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
 
       <div className="mb-4">
         <div className="flex flex-wrap gap-2">
-          {lawyer.specialties.map((specialty) => (
+          {lawyer.specialties.map(specialty => (
             <span
               key={specialty}
               className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full"
@@ -45,7 +45,8 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
       </div>
 
       <div className="mb-4 text-sm text-gray-600">
-        <span className="font-semibold">{lawyer.yearsOfExperience}</span> {t('lawyer.yearsOfExperience')}
+        <span className="font-semibold">{lawyer.yearsOfExperience}</span>{' '}
+        {t('lawyer.yearsOfExperience')}
       </div>
 
       <div className="space-y-2">
@@ -68,6 +69,7 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
           label={t('ratings.cost')}
           value={lawyer.ratingVector.cost}
           color="#f59e0b"
+          showValue={false}
         />
       </div>
     </div>
