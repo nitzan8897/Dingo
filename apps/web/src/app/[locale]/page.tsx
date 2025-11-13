@@ -1,11 +1,14 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useTranslations } from 'next-intl';
 import { Lawyer } from '@dingo/types';
 import LawyerCard from '@/components/LawyerCard';
 import SearchBar from '@/components/SearchBar';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Home() {
+  const t = useTranslations();
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [filteredLawyers, setFilteredLawyers] = useState<Lawyer[]>([]);
   const [loading, setLoading] = useState(true);
@@ -62,10 +65,16 @@ export default function Home() {
   return (
     <main className="min-h-screen p-8">
       <div className="max-w-7xl mx-auto">
+        <div className="flex justify-end mb-4">
+          <LanguageSwitcher />
+        </div>
+
         <header className="mb-12 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">🦴 Dingo</h1>
+          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+            🦴 {t('home.title')}
+          </h1>
           <p className="text-xl text-gray-600">
-            Smart Lawyer Ratings Platform
+            {t('home.subtitle')}
           </p>
         </header>
 
@@ -78,7 +87,7 @@ export default function Home() {
         {loading ? (
           <div className="text-center py-12">
             <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-            <p className="mt-4 text-gray-600">Loading lawyers...</p>
+            <p className="mt-4 text-gray-600">{t('home.loadingLawyers')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -90,7 +99,7 @@ export default function Home() {
 
         {!loading && filteredLawyers.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">No lawyers found</p>
+            <p className="text-gray-600 text-lg">{t('home.noLawyersFound')}</p>
           </div>
         )}
       </div>
