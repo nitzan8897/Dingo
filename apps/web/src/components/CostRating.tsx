@@ -29,7 +29,7 @@ const CostRating: React.FC<CostRatingProps> = ({
         {[...Array(5)].map((_, index) => (
           <span
             key={index}
-            className="text-2xl transition-colors duration-300"
+            className="text-xl transition-colors duration-300"
             style={{ color: index < dollarCount ? color : '#d1d5db' }}
           >
             $
