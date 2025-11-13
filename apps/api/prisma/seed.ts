@@ -12,36 +12,36 @@ async function main() {
   const lawyers = await Promise.all([
     prisma.lawyer.create({
       data: {
-        fullName: 'Sarah Johnson',
-        city: 'New York',
+        fullName: 'איתי לוי',
+        city: 'יבנה',
         specialties: ['CRIMINAL', 'CIVIL'],
         yearsOfExperience: 15,
         ratingVector: {
-          professionalism: 95,
-          availability: 88,
-          empathy: 92,
-          cost: 75,
+          professionalism: 69,
+          availability: 99,
+          empathy: 3,
+          cost: 2,
         },
       },
     }),
     prisma.lawyer.create({
       data: {
-        fullName: 'Michael Chen',
-        city: 'San Francisco',
+        fullName: 'ניצן אברגיל',
+        city: 'יבנה',
         specialties: ['CORPORATE', 'INTELLECTUAL_PROPERTY'],
-        yearsOfExperience: 12,
+        yearsOfExperience: 300,
         ratingVector: {
-          professionalism: 98,
-          availability: 85,
-          empathy: 78,
-          cost: 65,
+          professionalism: 99,
+          availability: 56,
+          empathy: 90,
+          cost: 100,
         },
       },
     }),
     prisma.lawyer.create({
       data: {
-        fullName: 'Emily Rodriguez',
-        city: 'Miami',
+        fullName: 'ניר שקיבי',
+        city: 'יבנה',
         specialties: ['FAMILY', 'IMMIGRATION'],
         yearsOfExperience: 8,
         ratingVector: {
@@ -54,8 +54,8 @@ async function main() {
     }),
     prisma.lawyer.create({
       data: {
-        fullName: 'David Thompson',
-        city: 'Chicago',
+        fullName: 'שחר קורן',
+        city: 'הרצליה',
         specialties: ['LABOR', 'CIVIL'],
         yearsOfExperience: 20,
         ratingVector: {
@@ -68,8 +68,8 @@ async function main() {
     }),
     prisma.lawyer.create({
       data: {
-        fullName: 'Jennifer Lee',
-        city: 'Boston',
+        fullName: 'גילי לוי',
+        city: 'חיפה',
         specialties: ['TAX', 'CORPORATE'],
         yearsOfExperience: 10,
         ratingVector: {
