@@ -24,7 +24,7 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2" dir="ltr">
       {locales.map((locale) => (
         <button
           key={locale}
