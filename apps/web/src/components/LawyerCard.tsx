@@ -2,7 +2,9 @@
 
 import React from 'react';
 import { useTranslations } from 'next-intl';
-import { Lawyer, calculateOverallRating } from '@dingo/types';
+import { Lawyer } from '@dingo/types';
+// TODO: Re-enable for future overall rating feature
+// import { calculateOverallRating } from '@dingo/types';
 import RatingBar from './RatingBar';
 
 interface LawyerCardProps {
@@ -15,7 +17,8 @@ interface LawyerCardProps {
  */
 const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
   const t = useTranslations();
-  const overallRating = Math.round(calculateOverallRating(lawyer.ratingVector));
+  // TODO: Overall rating calculation - future feature
+  // const overallRating = Math.round(calculateOverallRating(lawyer.ratingVector));
 
   return (
     <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-6">
@@ -24,10 +27,12 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
           <h3 className="text-xl font-bold text-gray-900">{lawyer.fullName}</h3>
           <p className="text-sm text-gray-600">{lawyer.city}</p>
         </div>
+        {/* TODO: Overall rating - future feature
         <div className="text-right">
           <div className="text-3xl font-bold text-primary-600">{overallRating}</div>
           <div className="text-xs text-gray-500">{t('lawyer.overall')}</div>
         </div>
+        */}
       </div>
 
       <div className="mb-4">
