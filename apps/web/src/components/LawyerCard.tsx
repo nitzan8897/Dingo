@@ -4,6 +4,7 @@ import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Lawyer, calculateOverallRating } from '@dingo/types';
 import RatingBar from './RatingBar';
+import CostRating from './CostRating';
 
 interface LawyerCardProps {
   lawyer: Lawyer;
@@ -63,7 +64,7 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
           value={lawyer.ratingVector.empathy}
           color="#8b5cf6"
         />
-        <RatingBar
+        <CostRating
           label={t('ratings.cost')}
           value={lawyer.ratingVector.cost}
           color="#f59e0b"

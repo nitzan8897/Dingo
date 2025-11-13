@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Lawyer, calculateOverallRating } from '@dingo/types';
 import RatingBar from './RatingBar';
+import CostRating from './CostRating';
 
 interface LawyerCardProps {
   lawyer: Lawyer;
@@ -52,7 +53,11 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
           color="#3b82f6"
         />
         <RatingBar label="Empathy" value={lawyer.ratingVector.empathy} color="#8b5cf6" />
-        <RatingBar label="Cost" value={lawyer.ratingVector.cost} color="#f59e0b" />
+        <CostRating
+          label="Cost"
+          value={lawyer.ratingVector.cost}
+          color="#f59e0b"
+        />
       </View>
     </View>
   );
