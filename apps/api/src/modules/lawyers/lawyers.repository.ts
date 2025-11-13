@@ -53,7 +53,12 @@ export class LawyersRepository {
         city: createLawyerDto.city,
         specialties: createLawyerDto.specialties,
         yearsOfExperience: createLawyerDto.yearsOfExperience,
-        ratingVector: createLawyerDto.ratingVector,
+        ratingVector: {
+          professionalism: createLawyerDto.ratingVector.professionalism,
+          availability: createLawyerDto.ratingVector.availability,
+          empathy: createLawyerDto.ratingVector.empathy,
+          cost: createLawyerDto.ratingVector.cost,
+        },
       },
     });
 

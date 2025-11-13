@@ -9,7 +9,7 @@ RUN npm install -g pnpm@8.15.0
 WORKDIR /app
 
 # Copy workspace files
-COPY pnpm-workspace.yaml package.json pnpm-lock.yaml* ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY packages ./packages
 COPY apps/web/package.json ./apps/web/
 
@@ -31,18 +31,19 @@ COPY --from=deps /app/apps/web/node_modules ./apps/web/node_modules
 
 # Copy application files
 COPY apps/web ./apps/web
-COPY pnpm-workspace.yaml package.json ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 
 # Build packages
 WORKDIR /app/packages/types
 RUN pnpm build
 
 # Build application
-WORKDIR /app/apps/web
+WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED 1
 ENV NODE_ENV production
 
-RUN pnpm build
+# Build from workspace root to properly resolve dependencies
+RUN pnpm --filter @dingo/web build
 
 # Stage 3: Production
 FROM node:20-alpine AS production

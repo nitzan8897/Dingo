@@ -32,7 +32,7 @@ RUN npm install -g pnpm@8.15.0
 WORKDIR /app
 
 # Copy workspace files
-COPY pnpm-workspace.yaml package.json ./
+COPY pnpm-workspace.yaml package.json pnpm-lock.yaml ./
 COPY packages ./packages
 
 # Copy built application from builder
