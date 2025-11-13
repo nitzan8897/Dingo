@@ -1,0 +1,13 @@
+apiVersion: v2
+name: dingo-web
+description: Helm chart for Dingo Web (Next.js)
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
+keywords:
+  - dingo
+  - web
+  - nextjs
+maintainers:
+  - name: Dingo Team
+    email: team@dingo.com

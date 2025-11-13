@@ -1,0 +1,26 @@
+{
+  "name": "dingo-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dingo - Smart ratings platform for professionals",
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "db:push": "pnpm --filter @dingo/api db:push",
+    "db:seed": "pnpm --filter @dingo/api db:seed",
+    "db:studio": "pnpm --filter @dingo/api db:studio"
+  },
+  "devDependencies": {
+    "prettier": "^3.2.5",
+    "turbo": "^1.13.0"
+  },
+  "packageManager": "pnpm@8.15.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  }
+}

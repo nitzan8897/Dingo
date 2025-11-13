@@ -1,0 +1,23 @@
+/**
+ * Common types and enums used across the Dingo platform
+ */
+
+export interface ApiResponse<T> {
+  data: T;
+  message?: string;
+  status: 'success' | 'error';
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  hasMore: boolean;
+}
+
+export interface HealthResponse {
+  status: 'ok' | 'error';
+  timestamp: string;
+  version: string;
+}

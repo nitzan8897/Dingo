@@ -1,0 +1,24 @@
+// Prisma schema for Dingo
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Lawyer {
+  id                String   @id @default(uuid())
+  fullName          String
+  city              String
+  specialties       String[]
+  yearsOfExperience Int
+  ratingVector      Json     // { professionalism, availability, empathy, cost }
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([city])
+  @@index([specialties])
+}
