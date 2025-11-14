@@ -45,6 +45,9 @@ COPY --from=builder /app/apps/api/node_modules ./apps/api/node_modules
 WORKDIR /app/apps/api
 RUN pnpm install --prod --frozen-lockfile
 
+# Generate Prisma Client in production
+RUN pnpm prisma:generate
+
 # Expose port
 EXPOSE 3001
 
