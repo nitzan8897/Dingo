@@ -29,8 +29,8 @@ const SpecialtyTag: React.FC<SpecialtyTagProps> = ({
         onClick ? 'cursor-pointer hover:opacity-80' : ''
       } ${
         selected
-          ? 'bg-primary-600 text-white'
-          : 'bg-primary-100 text-primary-700'
+          ? 'bg-primary-600 dark:bg-primary-500 text-white'
+          : 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
       }`}
     >
       {specialty}

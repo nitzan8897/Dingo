@@ -21,8 +21,8 @@ const RatingBar: React.FC<RatingBarProps> = ({
 
   return (
     <div className="flex items-center gap-3">
-      <div className="w-32 text-sm text-gray-700 font-medium">{label}</div>
-      <div className="flex-1 bg-gray-200 rounded-full h-4 overflow-hidden">
+      <div className="w-32 text-sm text-gray-700 dark:text-gray-200 font-medium">{label}</div>
+      <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-4 overflow-hidden">
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{

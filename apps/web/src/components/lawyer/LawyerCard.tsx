@@ -24,11 +24,11 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer, onSpecialtyClick }) => 
   // const overallRating = Math.round(calculateOverallRating(lawyer.ratingVector));
 
   return (
-    <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 p-6">
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700">
       <div className="flex items-start justify-between mb-4">
         <div>
-          <h3 className="text-xl font-bold text-gray-900">{lawyer.fullName}</h3>
-          <p className="text-sm text-gray-600">{lawyer.city}</p>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white">{lawyer.fullName}</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-300">{lawyer.city}</p>
         </div>
         {/* TODO: Overall rating - future feature
         <div className="text-right">
@@ -50,7 +50,7 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer, onSpecialtyClick }) => 
         </div>
       </div>
 
-      <div className="mb-4 text-sm text-gray-600">
+      <div className="mb-4 text-sm text-gray-600 dark:text-gray-300">
         <span className="font-semibold">{lawyer.yearsOfExperience}</span>{' '}
         {t('lawyer.yearsOfExperience')}
       </div>
