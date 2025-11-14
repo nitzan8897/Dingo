@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { locales, type Locale } from '@dingo/i18n';
+import LanguageSwitcherButton from './language-switcher-button';
+import LanguageDropdown from './language-dropdown';
 
 /**
  * LanguageSwitcher component
@@ -18,7 +20,7 @@ const LanguageSwitcher: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const switchLanguage = (newLocale: Locale) => {
+  const switchLanguage = (newLocale: Locale): void => {
     if (newLocale === currentLocale) {
       setIsOpen(false);
       return;
@@ -49,47 +51,19 @@ const LanguageSwitcher: React.FC = () => {
 
   return (
     <div className="relative" ref={dropdownRef} dir="ltr">
-      <button
+      <LanguageSwitcherButton
+        isOpen={isOpen}
         onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-        aria-label={t('switchLanguage')}
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-      >
-        {/* Language/Globe icon */}
-        <svg
-          className="w-5 h-5 text-gray-700 dark:text-gray-200"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-          />
-        </svg>
-      </button>
+        ariaLabel={t('switchLanguage')}
+      />
 
-      {/* Dropdown menu */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
-          {locales.map((locale) => (
-            <button
-              key={locale}
-              onClick={() => switchLanguage(locale)}
-              className={`w-full px-4 py-2 text-left text-sm font-medium transition-colors ${
-                locale === currentLocale
-                  ? 'bg-primary-600 dark:bg-primary-500 text-white'
-                  : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-              aria-label={`Switch to ${t(locale)}`}
-            >
-              {t(locale)}
-            </button>
-          ))}
-        </div>
+        <LanguageDropdown
+          locales={locales}
+          currentLocale={currentLocale}
+          onLanguageSelect={switchLanguage}
+          getLocaleName={(locale) => t(locale)}
+        />
       )}
     </div>
   );

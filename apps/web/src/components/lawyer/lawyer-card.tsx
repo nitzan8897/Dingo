@@ -3,10 +3,8 @@
 import React from 'react';
 import { useTranslations } from 'next-intl';
 import { Lawyer } from '@dingo/types';
-// TODO: Re-enable for future overall rating feature
-// import { calculateOverallRating } from '@dingo/types';
-import RatingBar from '../rating/rating-bar';
-import CostRating from '../rating/cost-rating';
+import LawyerCardHeader from './lawyer-card-header';
+import LawyerCardRatings from './lawyer-card-ratings';
 import SpecialtyTag from './specialty-tag';
 
 interface LawyerCardProps {
@@ -20,23 +18,10 @@ interface LawyerCardProps {
  */
 const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer, onSpecialtyClick }) => {
   const t = useTranslations();
-  // TODO: Overall rating calculation - future feature
-  // const overallRating = Math.round(calculateOverallRating(lawyer.ratingVector));
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 p-6 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-start justify-between mb-4">
-        <div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white">{lawyer.fullName}</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-300">{lawyer.city}</p>
-        </div>
-        {/* TODO: Overall rating - future feature
-        <div className="text-right">
-          <div className="text-3xl font-bold text-primary-600">{overallRating}</div>
-          <div className="text-xs text-gray-500">{t('lawyer.overall')}</div>
-        </div>
-        */}
-      </div>
+      <LawyerCardHeader fullName={lawyer.fullName} city={lawyer.city} />
 
       <div className="mb-4">
         <div className="flex flex-wrap gap-2">
@@ -55,29 +40,15 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer, onSpecialtyClick }) => 
         {t('lawyer.yearsOfExperience')}
       </div>
 
-      <div className="space-y-2">
-        <RatingBar
-          label={t('ratings.professionalism')}
-          value={lawyer.ratingVector.professionalism}
-          color="#10b981"
-        />
-        <RatingBar
-          label={t('ratings.availability')}
-          value={lawyer.ratingVector.availability}
-          color="#3b82f6"
-        />
-        <RatingBar
-          label={t('ratings.empathy')}
-          value={lawyer.ratingVector.empathy}
-          color="#8b5cf6"
-        />
-        <CostRating
-          label={t('ratings.cost')}
-          value={lawyer.ratingVector.cost}
-          color="#f59e0b"
-          showValue={false}
-        />
-      </div>
+      <LawyerCardRatings
+        ratings={lawyer.ratingVector}
+        labels={{
+          professionalism: t('ratings.professionalism'),
+          availability: t('ratings.availability'),
+          empathy: t('ratings.empathy'),
+          cost: t('ratings.cost'),
+        }}
+      />
     </div>
   );
 };
