@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Lawyer } from '@dingo/types';
-import LawyerCard from '@/components/LawyerCard';
-import SearchBar from '@/components/SearchBar';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
+import LawyerCard from '@/components/lawyer/LawyerCard';
+import SearchBar from '@/components/search/SearchBar';
+import LanguageSwitcher from '@/components/common/LanguageSwitcher';
 
 export default function Home() {
   const t = useTranslations();
