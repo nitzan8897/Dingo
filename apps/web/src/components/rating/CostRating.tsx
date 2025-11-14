@@ -24,13 +24,13 @@ const CostRating: React.FC<CostRatingProps> = ({
 
   return (
     <div className="flex items-center gap-3">
-      <div className="w-32 text-sm text-gray-700 font-medium">{label}</div>
+      <div className="w-32 text-sm text-gray-700 dark:text-gray-200 font-medium">{label}</div>
       <div className="flex-1 flex items-center gap-1">
         {[...Array(5)].map((_, index) => (
           <span
             key={index}
             className="text-xl transition-colors duration-300"
-            style={{ color: index < dollarCount ? color : '#d1d5db' }}
+            style={{ color: index < dollarCount ? color : '#6b7280' }}
           >
             $
           </span>

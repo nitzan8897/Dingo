@@ -31,8 +31,8 @@ const LanguageSwitcher: React.FC = () => {
           onClick={() => switchLanguage(locale)}
           className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
             locale === currentLocale
-              ? 'bg-primary-600 text-white'
-              : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              ? 'bg-primary-600 dark:bg-primary-500 text-white'
+              : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600'
           }`}
           aria-label={`Switch to ${t(locale)}`}
         >

@@ -6,6 +6,7 @@ import { Lawyer } from '@dingo/types';
 import LawyerCard from '@/components/Lawyer/LawyerCard';
 import SearchBar from '@/components/Search/SearchBar';
 import LanguageSwitcher from '@/components/Common/LanguageSwitcher';
+import ThemeToggle from '@/components/Common/ThemeToggle';
 
 export default function Home() {
   const t = useTranslations();
@@ -75,17 +76,18 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen p-8">
+    <main className="min-h-screen p-8 dark:bg-gray-900 transition-colors">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-end mb-4">
+        <div className="flex justify-end gap-3 mb-4">
+          <ThemeToggle />
           <LanguageSwitcher />
         </div>
 
         <header className="mb-12 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 mb-4">
+          <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
             {t('home.title')}
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 dark:text-gray-300">
             {t('home.subtitle')}
           </p>
         </header>
@@ -99,8 +101,8 @@ export default function Home() {
 
         {loading ? (
           <div className="text-center py-12">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
-            <p className="mt-4 text-gray-600">{t('home.loadingLawyers')}</p>
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 dark:border-primary-400"></div>
+            <p className="mt-4 text-gray-600 dark:text-gray-300">{t('home.loadingLawyers')}</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -116,7 +118,7 @@ export default function Home() {
 
         {!loading && filteredLawyers.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-600 text-lg">{t('home.noLawyersFound')}</p>
+            <p className="text-gray-600 dark:text-gray-300 text-lg">{t('home.noLawyersFound')}</p>
           </div>
         )}
       </div>

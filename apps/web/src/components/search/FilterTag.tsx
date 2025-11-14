@@ -26,8 +26,8 @@ const FilterTag: React.FC<FilterTagProps> = ({
       onClick={handleClick}
       className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-full transition-colors font-medium cursor-pointer hover:opacity-80 ${
         selected
-          ? 'bg-emerald-600 text-white'
-          : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+          ? 'bg-emerald-600 dark:bg-emerald-500 text-white'
+          : 'bg-emerald-50 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-700'
       }`}
     >
       {label}

@@ -60,15 +60,15 @@ const SpecialtyDropdown: React.FC<SpecialtyDropdownProps> = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-white text-left flex items-center justify-between"
+        className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-white dark:bg-gray-800 text-left flex items-center justify-between transition-colors"
       >
-        <span className="text-gray-700">
+        <span className="text-gray-700 dark:text-gray-200">
           {selectedSpecialties.length > 0
             ? `${selectedSpecialties.length} ${t('search.specialties')}`
             : t('search.chooseSpecialties')}
         </span>
         <svg
-          className={`w-5 h-5 text-gray-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`w-5 h-5 text-gray-400 dark:text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -79,15 +79,15 @@ const SpecialtyDropdown: React.FC<SpecialtyDropdownProps> = ({
 
       {/* Dropdown panel */}
       {isOpen && (
-        <div className="absolute z-10 mt-2 w-full bg-white border border-gray-300 rounded-lg shadow-lg">
+        <div className="absolute z-10 mt-2 w-full bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
           {/* Search input */}
-          <div className="p-3 border-b border-gray-200">
+          <div className="p-3 border-b border-gray-200 dark:border-gray-700">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={t('search.searchSpecialties')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm placeholder-gray-400 dark:placeholder-gray-500"
             />
           </div>
 
@@ -105,17 +105,17 @@ const SpecialtyDropdown: React.FC<SpecialtyDropdownProps> = ({
                   />
                 ))
               ) : (
-                <p className="text-sm text-gray-500">{t('common.noResults')}</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{t('common.noResults')}</p>
               )}
             </div>
           </div>
 
           {/* Clear All button at bottom left */}
           {selectedSpecialties.length > 0 && (
-            <div className="border-t border-gray-200 p-3">
+            <div className="border-t border-gray-200 dark:border-gray-700 p-3">
               <button
                 onClick={handleClearAll}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white transition-colors"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path

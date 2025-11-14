@@ -4,6 +4,7 @@ import { getMessages, getTranslations } from 'next-intl/server';
 import { getDirection, type Locale, locales } from '@dingo/i18n';
 import { notFound } from 'next/navigation';
 import { Heebo } from 'next/font/google';
+import { ThemeProvider } from '@/components/Providers/ThemeProvider';
 import '../globals.css';
 
 const heebo = Heebo({
@@ -58,11 +59,13 @@ export default async function LocaleLayout({
   const messages = await getMessages();
 
   return (
-    <html lang={locale} dir={direction}>
-      <body className={`${heebo.className} bg-gray-50`} suppressHydrationWarning>
-        <NextIntlClientProvider messages={messages}>
-          {children}
-        </NextIntlClientProvider>
+    <html lang={locale} dir={direction} suppressHydrationWarning>
+      <body className={`${heebo.className} bg-gray-50 dark:bg-gray-900 transition-colors`} suppressHydrationWarning>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <NextIntlClientProvider messages={messages}>
+            {children}
+          </NextIntlClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

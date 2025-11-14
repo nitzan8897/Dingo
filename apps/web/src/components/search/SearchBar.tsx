@@ -45,7 +45,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             value={query}
             onChange={handleSearch}
             placeholder={t('search.placeholder')}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none placeholder-gray-400 dark:placeholder-gray-500"
           />
         </div>
 
@@ -63,7 +63,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             type="text"
             onChange={(e) => onFilterCity(e.target.value)}
             placeholder={t('search.filterByCity')}
-            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+            className="px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none placeholder-gray-400 dark:placeholder-gray-500"
           />
         )}
       </div>
