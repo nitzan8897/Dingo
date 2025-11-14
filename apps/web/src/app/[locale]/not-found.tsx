@@ -1,4 +1,4 @@
-import { useTranslations } from 'next-intl';
+import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -6,8 +6,8 @@ import Link from 'next/link';
  * Not Found page (404)
  * Displayed when a page cannot be found
  */
-export default function NotFound() {
-  const t = useTranslations('notFound');
+export default async function NotFound() {
+  const t = await getTranslations('notFound');
 
   return (
     <main className="min-h-screen flex items-center justify-center p-8 dark:bg-gray-900 transition-colors">

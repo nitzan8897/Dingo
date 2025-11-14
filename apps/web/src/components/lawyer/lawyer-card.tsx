@@ -5,9 +5,9 @@ import { useTranslations } from 'next-intl';
 import { Lawyer } from '@dingo/types';
 // TODO: Re-enable for future overall rating feature
 // import { calculateOverallRating } from '@dingo/types';
-import RatingBar from '../Rating/RatingBar';
-import CostRating from '../Rating/CostRating';
-import SpecialtyTag from './SpecialtyTag';
+import RatingBar from '../rating/rating-bar';
+import CostRating from '../rating/cost-rating';
+import SpecialtyTag from './specialty-tag';
 
 interface LawyerCardProps {
   lawyer: Lawyer;

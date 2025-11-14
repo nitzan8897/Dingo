@@ -1,66 +1,32 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { Lawyer } from '@dingo/types';
-import LawyerCard from '@/components/Lawyer/LawyerCard';
-import SearchBar from '@/components/Search/SearchBar';
-import LanguageSwitcher from '@/components/Common/LanguageSwitcher';
-import ThemeToggle from '@/components/Common/ThemeToggle';
+import LawyerCard from '@/components/lawyer/lawyer-card';
+import SearchBar from '@/components/search/search-bar';
+import LanguageSwitcher from '@/components/common/language-switcher';
+import ThemeToggle from '@/components/common/theme-toggle';
+import { useLawyers } from '@/hooks/use-lawyers';
+import { useSpecialtyFilter } from '@/hooks/use-specialty-filter';
 
+/**
+ * Home Page Component
+ * Following SOLID principles:
+ * - Single Responsibility: Only handles UI rendering and user interactions
+ * - Open/Closed: Open for extension through hooks and services
+ * - Dependency Inversion: Depends on abstractions (hooks) not concrete implementations
+ */
 export default function Home() {
   const t = useTranslations();
-  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
-  const [filteredLawyers, setFilteredLawyers] = useState<Lawyer[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
-
-  useEffect(() => {
-    fetchLawyers();
-  }, []);
-
-  const fetchLawyers = async (params?: { specialties?: string[]; city?: string }) => {
-    try {
-      setLoading(true);
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/v1';
-      const queryParams = new URLSearchParams();
-
-      if (params?.specialties && params.specialties.length > 0) {
-        queryParams.append('specialties', params.specialties.join(','));
-      }
-      if (params?.city) queryParams.append('city', params.city);
-
-      const url = `${apiUrl}/lawyers${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-      const response = await fetch(url);
-      const data = await response.json();
-
-      setLawyers(data);
-      setFilteredLawyers(data);
-    } catch (error) {
-      console.error('Error fetching lawyers:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const { filteredLawyers, loading, fetchLawyers, searchLawyers } = useLawyers();
+  const { selectedSpecialties, addSpecialty, setSpecialties } = useSpecialtyFilter();
 
   const handleSearch = (query: string) => {
-    if (!query.trim()) {
-      setFilteredLawyers(lawyers);
-      return;
-    }
-
-    const filtered = lawyers.filter(
-      (lawyer) =>
-        lawyer.fullName.toLowerCase().includes(query.toLowerCase()) ||
-        lawyer.city.toLowerCase().includes(query.toLowerCase()) ||
-        lawyer.specialties.some((s) => s.toLowerCase().includes(query.toLowerCase()))
-    );
-    setFilteredLawyers(filtered);
+    searchLawyers(query);
   };
 
   const handleFilterSpecialties = (specialties: string[]) => {
-    setSelectedSpecialties(specialties);
+    setSpecialties(specialties);
     fetchLawyers({ specialties });
   };
 
@@ -69,10 +35,10 @@ export default function Home() {
   };
 
   const handleSpecialtyClick = (specialty: string) => {
+    addSpecialty(specialty);
     const newSpecialties = selectedSpecialties.includes(specialty)
       ? selectedSpecialties
       : [...selectedSpecialties, specialty];
-    setSelectedSpecialties(newSpecialties);
     fetchLawyers({ specialties: newSpecialties });
   };
 
