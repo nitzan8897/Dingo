@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { LawyerSpecialty } from '@dingo/types';
-import FilterTag from './FilterTag';
+import FilterTag from './filter-tag';
 
 interface SpecialtyDropdownProps {
   selectedSpecialties: string[];

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import SpecialtyDropdown from './SpecialtyDropdown';
+import SpecialtyDropdown from './specialty-dropdown';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;

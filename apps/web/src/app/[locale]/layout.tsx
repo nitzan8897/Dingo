@@ -4,7 +4,7 @@ import { getMessages, getTranslations } from 'next-intl/server';
 import { getDirection, type Locale, locales } from '@dingo/i18n';
 import { notFound } from 'next/navigation';
 import { Heebo } from 'next/font/google';
-import { ThemeProvider } from '@/components/Providers/ThemeProvider';
+import { ThemeProvider } from '@/components/providers/theme-provider';
 import '../globals.css';
 
 const heebo = Heebo({
