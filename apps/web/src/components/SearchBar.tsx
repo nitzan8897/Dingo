@@ -68,9 +68,9 @@ const SearchBar: React.FC<SearchBarProps> = ({
         </div>
 
         {onFilterSpecialties && (
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-gray-700">
-              {t('search.specialties')}
+          <div className="flex flex-col gap-3">
+            <label className="text-base font-semibold text-gray-700">
+              {t('search.chooseSpecialties')}
             </label>
             <div className="flex flex-wrap gap-2">
               {allSpecialties.map((specialty) => (
