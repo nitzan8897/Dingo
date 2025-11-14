@@ -86,32 +86,9 @@ const SpecialtyDropdown: React.FC<SpecialtyDropdownProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={t('search.placeholder')}
+              placeholder={t('search.searchSpecialties')}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none text-sm"
             />
-          </div>
-
-          {/* Header with Clear All */}
-          <div className="flex items-center justify-between px-3 py-2 border-b border-gray-200">
-            <span className="text-sm font-semibold text-gray-700">
-              {t('search.chooseSpecialties')}
-            </span>
-            {selectedSpecialties.length > 0 && (
-              <button
-                onClick={handleClearAll}
-                className="flex items-center gap-1.5 px-2 py-1 text-xs font-medium text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-                {t('search.clearAll')}
-              </button>
-            )}
           </div>
 
           {/* Filter tags */}
@@ -132,6 +109,26 @@ const SpecialtyDropdown: React.FC<SpecialtyDropdownProps> = ({
               )}
             </div>
           </div>
+
+          {/* Clear All button at bottom left */}
+          {selectedSpecialties.length > 0 && (
+            <div className="border-t border-gray-200 p-3">
+              <button
+                onClick={handleClearAll}
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+                {t('search.clearAll')}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>

@@ -13,6 +13,7 @@
   },
   "search": {
     "placeholder": "חפש עורכי דין...",
+    "searchSpecialties": "חפש התמחויות...",
     "allSpecialties": "כל התמחויות",
     "filterByCity": "סנן לפי עיר...",
     "specialty": "התמחות",

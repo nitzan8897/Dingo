@@ -32,20 +32,22 @@ const FilterTag: React.FC<FilterTagProps> = ({
     >
       {label}
       {selected && (
-        <svg
-          className="w-3.5 h-3.5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
+        <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-emerald-700 bg-opacity-30">
+          <svg
+            className="w-2.5 h-2.5 text-emerald-100"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={3}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </span>
       )}
     </span>
   );
