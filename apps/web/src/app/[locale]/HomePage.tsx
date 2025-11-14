@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 import { Lawyer } from '@dingo/types';
 import LawyerCard from '@/components/Lawyer/LawyerCard';
 import SearchBar from '@/components/Search/SearchBar';
@@ -84,9 +85,18 @@ export default function Home() {
         </div>
 
         <header className="mb-12 text-center">
-          <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            {t('home.title')}
-          </h1>
+          <div className="flex items-center justify-center gap-6 mb-4">
+            <Image
+              src="/images/dingo-logo.png"
+              alt="Dingo Logo"
+              width={128}
+              height={128}
+              className="object-contain"
+            />
+            <h1 className="text-5xl font-bold text-gray-900 dark:text-white">
+              {t('home.title')}
+            </h1>
+          </div>
           <p className="text-xl text-gray-600 dark:text-gray-300">
             {t('home.subtitle')}
           </p>

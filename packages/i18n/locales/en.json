@@ -13,6 +13,7 @@
   },
   "search": {
     "placeholder": "Search lawyers...",
+    "searchSpecialties": "Search specialties...",
     "allSpecialties": "All Specialties",
     "filterByCity": "Filter by city...",
     "specialty": "Specialty",
@@ -54,5 +55,10 @@
   "metadata": {
     "title": "Dingo - Smart Lawyer Ratings",
     "description": "Find and rate the best lawyers."
+  },
+  "notFound": {
+    "title": "Where do we go now?",
+    "description": "The page you're looking for doesn't exist.",
+    "backHome": "Back to Home"
   }
 }
