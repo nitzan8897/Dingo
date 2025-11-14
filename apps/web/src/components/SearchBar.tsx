@@ -41,6 +41,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
     onFilterSpecialties(newSpecialties);
   };
 
+  const handleClearAll = () => {
+    if (!onFilterSpecialties) return;
+    onFilterSpecialties([]);
+  };
+
   const allSpecialties = Object.values(LawyerSpecialty);
 
   return (
@@ -69,9 +74,33 @@ const SearchBar: React.FC<SearchBarProps> = ({
 
         {onFilterSpecialties && (
           <div className="flex flex-col gap-3">
-            <label className="text-base font-semibold text-gray-700">
-              {t('search.chooseSpecialties')}
-            </label>
+            <div className="flex items-center justify-between">
+              <label className="text-base font-semibold text-gray-700">
+                {t('search.chooseSpecialties')}
+              </label>
+              {selectedSpecialties.length > 0 && (
+                <button
+                  onClick={handleClearAll}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                  {t('search.clearAll')}
+                </button>
+              )}
+            </div>
             <div className="flex flex-wrap gap-2">
               {allSpecialties.map((specialty) => (
                 <FilterTag
