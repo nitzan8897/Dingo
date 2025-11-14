@@ -3,8 +3,6 @@ node_modules
 .pnp
 .pnp.js
 
-# Claude
-.claude
 
 # Testing
 coverage

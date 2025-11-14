@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Skill(pdca-ai-coding)",
+      "Bash(pnpm --filter @dingo/i18n test:*)",
+      "Bash(pnpm dev)",
+      "Bash(pnpm --filter @dingo/web lint:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
