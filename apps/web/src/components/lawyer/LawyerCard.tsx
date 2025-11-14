@@ -5,18 +5,20 @@ import { useTranslations } from 'next-intl';
 import { Lawyer } from '@dingo/types';
 // TODO: Re-enable for future overall rating feature
 // import { calculateOverallRating } from '@dingo/types';
-import RatingBar from './RatingBar';
-import CostRating from './CostRating';
+import RatingBar from '../Rating/RatingBar';
+import CostRating from '../Rating/CostRating';
+import SpecialtyTag from './SpecialtyTag';
 
 interface LawyerCardProps {
   lawyer: Lawyer;
+  onSpecialtyClick?: (specialty: string) => void;
 }
 
 /**
  * LawyerCard component - Web implementation
  * Displays lawyer information with FIFA-style ratings
  */
-const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
+const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer, onSpecialtyClick }) => {
   const t = useTranslations();
   // TODO: Overall rating calculation - future feature
   // const overallRating = Math.round(calculateOverallRating(lawyer.ratingVector));
@@ -38,13 +40,12 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
 
       <div className="mb-4">
         <div className="flex flex-wrap gap-2">
-          {lawyer.specialties.map(specialty => (
-            <span
+          {lawyer.specialties.map((specialty) => (
+            <SpecialtyTag
               key={specialty}
-              className="px-2 py-1 bg-primary-100 text-primary-700 text-xs rounded-full"
-            >
-              {t(`specialties.${specialty}`)}
-            </span>
+              specialty={t(`specialties.${specialty}`)}
+              onClick={onSpecialtyClick ? () => onSpecialtyClick(specialty) : undefined}
+            />
           ))}
         </div>
       </div>

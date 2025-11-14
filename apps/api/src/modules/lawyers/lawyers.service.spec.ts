@@ -63,7 +63,30 @@ describe('LawyersService', () => {
     });
 
     it('should pass filters to repository', async () => {
-      const filter = { city: 'New York', specialty: 'CRIMINAL' };
+      const filter = { city: 'New York', specialties: ['CRIMINAL'] };
+      mockRepository.findAll.mockResolvedValue([mockLawyer]);
+
+      await service.findAll(filter);
+
+      expect(repository.findAll).toHaveBeenCalledWith(filter);
+    });
+
+    it('should filter by multiple specialties', async () => {
+      const filter = { specialties: ['CRIMINAL', 'CIVIL', 'FAMILY'] };
+      mockRepository.findAll.mockResolvedValue([mockLawyer]);
+
+      const result = await service.findAll(filter);
+
+      expect(result).toEqual([mockLawyer]);
+      expect(repository.findAll).toHaveBeenCalledWith(filter);
+    });
+
+    it('should combine multiple filters', async () => {
+      const filter = {
+        city: 'New York',
+        specialties: ['CRIMINAL', 'CIVIL'],
+        minYearsOfExperience: 5,
+      };
       mockRepository.findAll.mockResolvedValue([mockLawyer]);
 
       await service.findAll(filter);

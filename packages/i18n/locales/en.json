@@ -16,6 +16,9 @@
     "allSpecialties": "All Specialties",
     "filterByCity": "Filter by city...",
     "specialty": "Specialty",
+    "specialties": "Specialties",
+    "chooseSpecialties": "Choose Specialties",
+    "clearAll": "Clear All",
     "city": "City"
   },
   "specialties": {

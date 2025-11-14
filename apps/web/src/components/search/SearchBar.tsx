@@ -2,21 +2,24 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import SpecialtyDropdown from './SpecialtyDropdown';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
-  onFilterSpecialty?: (specialty: string) => void;
+  onFilterSpecialties?: (specialties: string[]) => void;
   onFilterCity?: (city: string) => void;
+  selectedSpecialties?: string[];
 }
 
 /**
  * SearchBar component - Web implementation
- * Search and filter interface
+ * Search and filter interface with multi-select specialty filtering
  */
 const SearchBar: React.FC<SearchBarProps> = ({
   onSearch,
-  onFilterSpecialty,
+  onFilterSpecialties,
   onFilterCity,
+  selectedSpecialties = [],
 }) => {
   const t = useTranslations();
   const [query, setQuery] = useState('');
@@ -25,6 +28,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
     const value = e.target.value;
     setQuery(value);
     onSearch(value);
+  };
+
+  const handleSpecialtiesChange = (specialties: string[]) => {
+    if (onFilterSpecialties) {
+      onFilterSpecialties(specialties);
+    }
   };
 
   return (
@@ -40,22 +49,13 @@ const SearchBar: React.FC<SearchBarProps> = ({
           />
         </div>
 
-        {onFilterSpecialty && (
-          <select
-            onChange={(e) => onFilterSpecialty(e.target.value)}
-            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-white"
-          >
-            <option value="">{t('search.allSpecialties')}</option>
-            <option value="CRIMINAL">{t('specialties.CRIMINAL')}</option>
-            <option value="CIVIL">{t('specialties.CIVIL')}</option>
-            <option value="CORPORATE">{t('specialties.CORPORATE')}</option>
-            <option value="FAMILY">{t('specialties.FAMILY')}</option>
-            <option value="LABOR">{t('specialties.LABOR')}</option>
-            <option value="TAX">{t('specialties.TAX')}</option>
-            <option value="IMMIGRATION">{t('specialties.IMMIGRATION')}</option>
-            <option value="REAL_ESTATE">{t('specialties.REAL_ESTATE')}</option>
-            <option value="INTELLECTUAL_PROPERTY">{t('specialties.INTELLECTUAL_PROPERTY')}</option>
-          </select>
+        {onFilterSpecialties && (
+          <div className="md:w-64">
+            <SpecialtyDropdown
+              selectedSpecialties={selectedSpecialties}
+              onSpecialtiesChange={handleSpecialtiesChange}
+            />
+          </div>
         )}
 
         {onFilterCity && (
