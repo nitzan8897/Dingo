@@ -3,6 +3,8 @@ node_modules
 .pnp
 .pnp.js
 
+# Claude
+.claude/settings.local.json
 
 # Testing
 coverage
