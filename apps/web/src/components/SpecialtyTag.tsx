@@ -8,7 +8,8 @@ interface SpecialtyTagProps {
 
 /**
  * SpecialtyTag component
- * Displays a specialty badge with optional click handler
+ * Displays a small specialty badge with optional click handler
+ * Used on lawyer cards
  */
 const SpecialtyTag: React.FC<SpecialtyTagProps> = ({
   specialty,
@@ -24,12 +25,12 @@ const SpecialtyTag: React.FC<SpecialtyTagProps> = ({
   return (
     <span
       onClick={handleClick}
-      className={`px-3 py-1.5 text-sm rounded-full transition-colors font-medium ${
+      className={`px-2 py-1 text-xs rounded-full transition-colors ${
         onClick ? 'cursor-pointer hover:opacity-80' : ''
       } ${
         selected
-          ? 'bg-emerald-600 text-white'
-          : 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+          ? 'bg-primary-600 text-white'
+          : 'bg-primary-100 text-primary-700'
       }`}
     >
       {specialty}

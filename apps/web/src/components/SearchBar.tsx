@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { LawyerSpecialty } from '@dingo/types';
-import SpecialtyTag from './SpecialtyTag';
+import FilterTag from './FilterTag';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -74,10 +74,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
             </label>
             <div className="flex flex-wrap gap-2">
               {allSpecialties.map((specialty) => (
-                <SpecialtyTag
+                <FilterTag
                   key={specialty}
-                  specialty={t(`specialties.${specialty}`)}
-                  onClick={() => handleSpecialtyToggle(specialty)}
+                  label={t(`specialties.${specialty}`)}
+                  value={specialty}
+                  onClick={handleSpecialtyToggle}
                   selected={selectedSpecialties.includes(specialty)}
                 />
               ))}
