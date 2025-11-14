@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import SpecialtyDropdown from '../SpecialtyDropdown';
+import SpecialtyDropdown from '../specialty-dropdown';
 import { LawyerSpecialty } from '@dingo/types';
 
 describe('SpecialtyDropdown', () => {

@@ -635,9 +635,59 @@ export default LawyerCard;
 - **Props Interface Naming:** Always `{ComponentName}Props`
 - **Component Organization:** Props interface → Component → Export
 - **Client Directive:** Mark client components with `'use client'` at top
+- **Server Components by Default:** Pages (`page.tsx`) should be Server Components unless interactivity requires Client Component
 - **Destructure Props:** Always destructure props in function signature
 - **Event Handlers:** Name as `handle{Action}` (e.g., `handleClick`, `handleSubmit`)
 - **Memoization:** Use `React.memo()` for expensive list items only when needed
+
+### Server Components vs Client Components
+
+**Server Components** (default in Next.js 15):
+- Use for pages that fetch data server-side
+- Better SEO - search engines see full content
+- Faster initial load - no loading spinner
+- Can use `async/await` directly in component
+- Cannot use hooks (`useState`, `useEffect`, etc.)
+
+**Client Components** (`'use client'`):
+- Use for interactive features (search, filters, forms)
+- Can use React hooks
+- Receive server-rendered data as props
+- Handle user interactions
+
+**Pattern Example:**
+
+```typescript
+// page.tsx - Server Component (fetches data)
+import { getTranslations } from 'next-intl/server';
+import { lawyerService } from '@/services/lawyer-service';
+import HomeClient from './home-client';
+
+export default async function Page() {
+  const t = await getTranslations();
+  const initialLawyers = await lawyerService.fetchLawyers();
+
+  return (
+    <div>
+      <h1>{t('home.title')}</h1>
+      <HomeClient initialLawyers={initialLawyers} />
+    </div>
+  );
+}
+
+// home-client.tsx - Client Component (handles interactivity)
+'use client';
+import { useState } from 'react';
+
+interface HomeClientProps {
+  initialLawyers: Lawyer[];
+}
+
+export default function HomeClient({ initialLawyers }: HomeClientProps) {
+  const [lawyers, setLawyers] = useState(initialLawyers);
+  // ... interactive features
+}
+```
 
 ### Custom Hooks
 
