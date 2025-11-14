@@ -68,8 +68,8 @@ async function main() {
     }),
     prisma.lawyer.create({
       data: {
-        fullName: 'גילי לוי',
-        city: 'חיפה',
+        fullName: 'בן בוכריס',
+        city: 'נוקדים',
         specialties: ['TAX', 'CORPORATE'],
         yearsOfExperience: 10,
         ratingVector: {
