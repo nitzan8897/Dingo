@@ -66,3 +66,6 @@ web-build/
 
 # Docker
 *.log
+
+# Deprecated packages
+packages/*.deprecated

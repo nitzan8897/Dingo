@@ -57,6 +57,8 @@ This document provides comprehensive guidelines for AI-assisted development on t
 - **Framework:** Expo 50.0.0
 - **Router:** expo-router 3.4.0
 - **UI Framework:** React Native 0.73.0
+- **i18n:** react-i18next 13.5.0 + i18next 23.7.0
+- **TypeScript:** 5.4.5
 
 ### Backend (API)
 - **Framework:** NestJS 10.3.7
@@ -105,7 +107,6 @@ Dingo/
 │       └── app/               # Expo router pages
 ├── packages/
 │   ├── types/                 # Shared TypeScript types
-│   ├── ui/                    # Shared UI components
 │   ├── i18n/                  # i18n configuration
 │   └── config/                # Shared configs (ESLint, tsconfig)
 ├── .claude/
@@ -114,6 +115,292 @@ Dingo/
 ├── turbo.json
 └── pnpm-workspace.yaml
 ```
+
+---
+
+## Shared Packages Strategy
+
+### Philosophy: Platform-Specific UI, Shared Logic
+
+The Dingo monorepo follows a **pragmatic approach** to code sharing:
+
+**✅ DO Share:**
+- Business logic (calculations, utilities)
+- Type definitions
+- API contracts (DTOs, interfaces)
+- Configuration (ESLint, tsconfig)
+- Translation keys and locale data
+
+**❌ DON'T Share:**
+- UI components (React vs React Native)
+- Styling (Tailwind vs StyleSheet)
+- Platform-specific integrations
+- i18n providers (next-intl vs react-i18next)
+
+### Rationale
+
+Web and mobile have fundamentally different rendering systems:
+- **Web:** HTML/CSS with Tailwind, shadcn/ui, DOM events
+- **Mobile:** React Native components, StyleSheet, touch gestures
+
+Attempting to share UI components leads to:
+- Abstraction complexity that harms both platforms
+- Compromised user experience
+- Difficult maintenance
+- Performance issues
+
+**Instead:** Keep UI implementations separate but maintain **consistent patterns** across platforms.
+
+---
+
+### Current Shared Packages
+
+#### 1. `@dingo/types`
+
+**Purpose:** Shared TypeScript types, interfaces, and business logic
+
+**Contents:**
+- Entity types (`Lawyer`, `User`, etc.)
+- Utility functions (`calculateOverallRating`, validators)
+- Enums and constants
+- API response types
+
+**Usage:**
+```typescript
+import { Lawyer, calculateOverallRating } from '@dingo/types';
+```
+
+**Rules:**
+- Pure TypeScript only (no React, no DOM, no React Native)
+- No platform-specific code
+- 100% test coverage for utilities
+- Type-only imports when possible
+
+---
+
+#### 2. `@dingo/i18n`
+
+**Purpose:** Shared translation keys and locale configuration
+
+**Contents:**
+- Locale constants (`he`, `en`)
+- Translation JSON files
+- Locale utilities (`getDirection`)
+
+**Usage:**
+
+**Web (Next.js with next-intl):**
+```typescript
+import { useTranslations } from 'next-intl';
+
+const Component = () => {
+  const t = useTranslations();
+  return <div>{t('common.appName')}</div>;
+};
+```
+
+**Mobile (React Native with react-i18next):**
+```typescript
+import { useTranslation } from 'react-i18next';
+
+const Component = () => {
+  const { t } = useTranslation();
+  return <Text>{t('common.appName')}</Text>;
+};
+```
+
+**Rules:**
+- Translation files must have identical keys across locales
+- Namespace structure: `{category}.{key}` (e.g., `lawyer.overall`)
+- Platform apps implement their own i18n providers
+- `@dingo/i18n` only provides data, not provider logic
+
+---
+
+#### 3. `@dingo/config`
+
+**Purpose:** Shared configuration files
+
+**Contents:**
+- ESLint configurations
+- TypeScript configurations
+- Shared build configs
+
+**Usage:**
+```json
+{
+  "extends": "@dingo/config/eslint"
+}
+```
+
+**Rules:**
+- Base configurations only
+- Apps can extend with platform-specific rules
+- Keep minimal and non-opinionated
+
+---
+
+### Deprecated Packages
+
+#### ~~`@dingo/ui`~~ (Deprecated)
+
+**Status:** Removed as of 2025-11-14
+
+**Reason:** Attempted to share UI components between Web and Mobile, but this approach doesn't work due to fundamental platform differences:
+- Different component primitives (HTML vs React Native)
+- Different styling systems (CSS vs StyleSheet)
+- Different user interactions (click vs touch)
+
+**Replacement Strategy:**
+- Web components in `apps/web/src/components/`
+- Mobile components in `apps/mobile/components/`
+- Share only business logic via `@dingo/types`
+
+---
+
+### Creating New Shared Packages
+
+**Before creating a new shared package, ask:**
+
+1. **Can this code run on ALL platforms?**
+   - ✅ Yes → Consider shared package
+   - ❌ No → Keep in platform app
+
+2. **Does it have platform-specific dependencies?**
+   - ✅ Yes → Keep in platform app
+   - ❌ No → Consider shared package
+
+3. **Is it pure logic or configuration?**
+   - ✅ Yes → Good candidate for shared package
+   - ❌ No → Keep in platform app
+
+4. **Will sharing reduce duplication significantly?**
+   - ✅ Yes → Consider shared package
+   - ❌ No → Duplication might be better than abstraction
+
+**Good Candidates:**
+- Validation utilities
+- Date formatting utilities
+- Business calculation logic
+- Type definitions
+- Constants and enums
+
+**Bad Candidates:**
+- UI components
+- Hooks that use platform APIs
+- Styling utilities
+- Navigation logic
+- Platform-specific integrations
+
+---
+
+### Pattern Consistency vs Code Sharing
+
+**Prefer pattern consistency over code sharing:**
+
+Instead of forcing shared UI components, maintain **consistent patterns**:
+
+**Example: LawyerCard Component**
+
+**Web implementation:**
+```typescript
+// apps/web/src/components/lawyer/lawyer-card.tsx
+const LawyerCard = ({ lawyer }: LawyerCardProps) => {
+  const t = useTranslations();
+  const overallRating = calculateOverallRating(lawyer.ratingVector); // Shared logic
+
+  return (
+    <div className="card">
+      <h3>{lawyer.fullName}</h3>
+      {/* Web-specific JSX */}
+    </div>
+  );
+};
+```
+
+**Mobile implementation:**
+```typescript
+// apps/mobile/components/LawyerCard.tsx
+const LawyerCard = ({ lawyer }: LawyerCardProps) => {
+  const { t } = useTranslation();
+  const overallRating = calculateOverallRating(lawyer.ratingVector); // Shared logic
+
+  return (
+    <View style={styles.card}>
+      <Text style={styles.name}>{lawyer.fullName}</Text>
+      {/* Mobile-specific JSX */}
+    </View>
+  );
+};
+```
+
+**Notice:**
+- ✅ Same component name and props interface
+- ✅ Same business logic (`calculateOverallRating` from `@dingo/types`)
+- ✅ Same data structure
+- ❌ Different rendering (appropriate for each platform)
+- ❌ Different styling (appropriate for each platform)
+
+This approach gives you:
+- **Consistency:** Easy to understand structure across platforms
+- **Flexibility:** Each platform can optimize for its UX
+- **Maintainability:** No complex abstraction layers
+- **Performance:** No runtime overhead from abstraction
+
+---
+
+### Migration Guide: Shared Logic
+
+**When you find duplicated business logic across platforms:**
+
+1. **Extract to `@dingo/types`:**
+```typescript
+// packages/types/src/utils/rating.ts
+export function calculateOverallRating(vector: RatingVector): number {
+  const { professionalism, availability, empathy, cost } = vector;
+  return (professionalism + availability + empathy + cost) / 4;
+}
+```
+
+2. **Update both platforms to use it:**
+```typescript
+// Both web and mobile
+import { calculateOverallRating } from '@dingo/types';
+```
+
+3. **Add tests in `@dingo/types`:**
+```typescript
+// packages/types/src/utils/__tests__/rating.test.ts
+describe('calculateOverallRating', () => {
+  it('should calculate average of all ratings', () => {
+    const vector = { professionalism: 80, availability: 90, empathy: 70, cost: 60 };
+    expect(calculateOverallRating(vector)).toBe(75);
+  });
+});
+```
+
+---
+
+### Summary
+
+**Share aggressively:**
+- Types
+- Business logic
+- Utilities
+- Constants
+
+**Keep separate:**
+- UI components
+- Styling
+- Platform APIs
+- Providers
+
+**Document consistently:**
+- Use same naming conventions
+- Follow same architectural patterns
+- Maintain parallel folder structures where it makes sense
+
+This pragmatic approach keeps the codebase maintainable while allowing each platform to excel at what it does best.
 
 ---
 
@@ -257,11 +544,20 @@ gh pr create --title "Implement lawyer rating system" --body "..."
 1. **UI Framework:** Use shadcn/ui for all components (migration in progress)
 2. **File Length:** Maximum 60 lines per file (can exceed if absolutely necessary)
 3. **Naming Convention:** kebab-case for all file names and folder names
-4. **API Calls:** Must be in dedicated service modules (frontend)
-5. **Custom Hooks:** Create when a service function is called more than once
-6. **Function Style:** Prefer `const` arrow functions over `function` keyword
-7. **Type Assertions:** Avoid `as` keyword when possible; use proper typing
-8. **E2E Testing:** Playwright tests must cover both Hebrew and English locales
+   - Components: `lawyer-card.tsx`, `rating-bar.tsx`
+   - Styles: `lawyer-card.styles.ts`, `index.styles.ts`
+   - Services: `lawyer-service.ts`
+   - Hooks: `use-lawyers.ts`
+4. **Style Files:** ALWAYS separate styles into `{name}.styles.ts` files, NEVER inline StyleSheet
+5. **API Calls:** Must be in dedicated service modules (frontend)
+6. **HTTP Clients:**
+   - Web: Next.js enhanced `fetch` with caching
+   - Mobile: `axios` for all API calls
+7. **Environment Config:** API URLs MUST come from `config/env.ts`, NEVER hardcoded inline
+8. **Custom Hooks:** Create when a service function is called more than once
+9. **Function Style:** Prefer `const` arrow functions over `function` keyword
+10. **Type Assertions:** Avoid `as` keyword when possible; use proper typing
+11. **E2E Testing:** Playwright tests must cover both Hebrew and English locales
 
 ---
 
@@ -399,11 +695,14 @@ export const useLawyers = (): UseLawyersReturn => {
 
 ### Rules
 
-- **Tailwind Only:** No inline styles or CSS modules
-- **Component Variants:** Use `cva` (class-variance-authority) for variants
-- **Theme Variables:** Use CSS variables from shadcn/ui theme (no hardcoded colors)
-- **Responsive Design:** Mobile-first approach (base for mobile, `md:` for desktop)
-- **Dark Mode:** All components must support dark mode via `next-themes`
+- **Tailwind Only:** No inline styles or CSS modules (web)
+- **React Native StyleSheet:** Use StyleSheet.create, NEVER inline styles (mobile)
+- **Style File Naming:** Always `{component-name}.styles.ts` (e.g., `lawyer-card.styles.ts`)
+- **Style File Location:** Co-located with component file
+- **Component Variants:** Use `cva` (class-variance-authority) for variants (web only)
+- **Theme Variables:** Use CSS variables from shadcn/ui theme (no hardcoded colors) (web)
+- **Responsive Design:** Mobile-first approach (base for mobile, `md:` for desktop) (web)
+- **Dark Mode:** All components must support dark mode via `next-themes` (web)
 
 ### Example
 
@@ -447,15 +746,34 @@ const Button = ({ variant, size, children }: ButtonProps): JSX.Element => {
 
 ---
 
-## API & Services
+## Mobile App Architecture
 
-### Service Structure
+The mobile app follows the **same architectural patterns as the web app** for consistency:
+
+### Service Layer + Custom Hooks Pattern
+
+**Architecture:**
+```
+Component → Custom Hook → Service → API
+```
+
+**Benefits:**
+- Separation of concerns
+- Reusable state management
+- Testable business logic
+- Consistent with web app patterns
+
+---
+
+### Service Structure (Mobile)
+
+Services handle all API communication:
 
 ```typescript
-// File: src/services/lawyer-service.ts
+// File: apps/mobile/services/lawyer-service.ts
 import { Lawyer } from '@dingo/types';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL = 'http://localhost:3001/v1'; // Use env variable in production
 
 interface FetchLawyersParams {
   specialties?: string[];
@@ -492,13 +810,308 @@ export const lawyerService = {
 };
 ```
 
+**Rules:**
+- **HTTP Client:** MUST use `axios` for all API calls (not native fetch)
+- **Environment Config:** API URLs MUST come from centralized config file (`config/env.ts`), never inline strings
+- Service naming: `{resource}-service.ts` (e.g., `lawyer-service.ts`)
+- Service location: `apps/mobile/services/`
+- Error handling: Services must catch and transform errors
+- Loading states: Let hooks handle loading states, not services
+- API response types: Always type responses with `@dingo/types`
+
+---
+
+### Custom Hooks (Mobile)
+
+Custom hooks manage state and call services:
+
+```typescript
+// File: apps/mobile/hooks/use-lawyers.ts
+import { useState, useCallback } from 'react';
+import { Lawyer } from '@dingo/types';
+import { lawyerService } from '@/services/lawyer-service';
+
+interface FetchLawyersParams {
+  specialties?: string[];
+  city?: string;
+}
+
+interface UseLawyersReturn {
+  lawyers: Lawyer[];
+  loading: boolean;
+  error: Error | null;
+  fetchLawyers: (params?: FetchLawyersParams) => Promise<void>;
+}
+
+export const useLawyers = (): UseLawyersReturn => {
+  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<Error | null>(null);
+
+  const fetchLawyers = useCallback(async (params?: FetchLawyersParams) => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await lawyerService.fetchLawyers(params);
+      setLawyers(data);
+    } catch (err) {
+      setError(err instanceof Error ? err : new Error('Failed to fetch'));
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { lawyers, loading, error, fetchLawyers };
+};
+```
+
+**Rules:**
+- Hook naming: Must start with `use` (e.g., `useLawyers`)
+- Hook returns: Return object for multiple values (not array)
+- Dependencies: Always include all dependencies in useEffect/useCallback/useMemo
+- Hook location: `apps/mobile/hooks/`
+- Mirror web app hooks: Keep same API as web for consistency
+
+---
+
+### Component Usage (Mobile)
+
+Components use hooks, never call services directly:
+
+```typescript
+// File: apps/mobile/app/index.tsx
+import { useEffect } from 'react';
+import { View, FlatList, ActivityIndicator } from 'react-native';
+import { useLawyers } from '@/hooks/use-lawyers';
+import LawyerCard from '@/components/LawyerCard';
+
+export default function Index() {
+  const { lawyers, loading, error, fetchLawyers } = useLawyers();
+
+  useEffect(() => {
+    fetchLawyers();
+  }, [fetchLawyers]);
+
+  if (loading) {
+    return <ActivityIndicator />;
+  }
+
+  return (
+    <FlatList
+      data={lawyers}
+      renderItem={({ item }) => <LawyerCard lawyer={item} />}
+      keyExtractor={(item) => item.id}
+    />
+  );
+}
+```
+
+**Rules:**
+- ❌ NO inline API calls in components
+- ✅ USE custom hooks for data fetching
+- ✅ USE services only from hooks, never from components
+- ✅ MIRROR web app component patterns
+
+---
+
+### i18n Integration (Mobile)
+
+Mobile uses **react-i18next** (different from web's next-intl):
+
+**Setup:**
+```typescript
+// File: apps/mobile/i18n/config.ts
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import en from '@dingo/i18n/locales/en.json';
+import he from '@dingo/i18n/locales/he.json';
+
+i18n
+  .use(initReactI18next)
+  .init({
+    resources: {
+      en: { translation: en },
+      he: { translation: he },
+    },
+    lng: 'he', // Default language
+    fallbackLng: 'en',
+    interpolation: {
+      escapeValue: false,
+    },
+  });
+
+export default i18n;
+```
+
+**Usage in Components:**
+```typescript
+import { useTranslation } from 'react-i18next';
+import { Text } from 'react-native';
+
+const Component = () => {
+  const { t } = useTranslation();
+
+  return <Text>{t('common.appName')}</Text>;
+};
+```
+
+**Rules:**
+- Use same translation keys as web app
+- Import translations from `@dingo/i18n/locales/`
+- Different API (`useTranslation` vs `useTranslations`)
+- Same translation key structure
+
+---
+
+### Folder Structure (Mobile)
+
+```
+apps/mobile/
+├── app/                      # Expo router pages
+│   ├── index.tsx            # Home screen
+│   ├── _layout.tsx          # Root layout with i18n provider
+│   └── [id].tsx             # Dynamic routes
+├── components/              # React Native components
+│   ├── LawyerCard.tsx
+│   ├── RatingBar.tsx
+│   └── CostRating.tsx
+├── hooks/                   # Custom hooks
+│   ├── use-lawyers.ts
+│   └── use-specialty-filter.ts
+├── services/                # API services
+│   └── lawyer-service.ts
+├── i18n/                    # i18n configuration
+│   └── config.ts
+└── constants/               # App constants
+    └── Colors.ts
+```
+
+**Rules:**
+- Mirror web app folder structure where possible
+- Keep components in `components/`
+- Keep hooks in `hooks/`
+- Keep services in `services/`
+- Use kebab-case for all file names
+
+---
+
+### Testing (Mobile)
+
+Follow same testing patterns as web app:
+
+**Unit Tests:**
+```typescript
+// File: apps/mobile/hooks/__tests__/use-lawyers.test.ts
+import { renderHook, waitFor } from '@testing-library/react-native';
+import { useLawyers } from '../use-lawyers';
+import { lawyerService } from '@/services/lawyer-service';
+
+jest.mock('@/services/lawyer-service');
+
+describe('useLawyers', () => {
+  it('should fetch lawyers on mount', async () => {
+    const mockLawyers = [{ id: '1', fullName: 'John Doe' }];
+    (lawyerService.fetchLawyers as jest.Mock).mockResolvedValue(mockLawyers);
+
+    const { result } = renderHook(() => useLawyers());
+
+    await waitFor(() => {
+      expect(result.current.lawyers).toEqual(mockLawyers);
+    });
+  });
+});
+```
+
+**Rules:**
+- Test hooks in isolation
+- Mock services
+- Test loading/error states
+- Match web app testing patterns
+
+---
+
+### Summary: Web vs Mobile Consistency
+
+| Aspect | Web | Mobile | Shared |
+|--------|-----|--------|--------|
+| **Service Layer** | ✅ `services/lawyer-service.ts` | ✅ `services/lawyer-service.ts` | Same pattern |
+| **Custom Hooks** | ✅ `hooks/use-lawyers.ts` | ✅ `hooks/use-lawyers.ts` | Same API |
+| **i18n Library** | next-intl | react-i18next | Different lib, same keys |
+| **Translation Keys** | `@dingo/i18n` | `@dingo/i18n` | ✅ Shared |
+| **Types** | `@dingo/types` | `@dingo/types` | ✅ Shared |
+| **Business Logic** | `calculateOverallRating` | `calculateOverallRating` | ✅ Shared |
+| **Components** | HTML + Tailwind | React Native + StyleSheet | Different |
+| **Testing** | Jest + Playwright | Jest + React Native Testing Library | Same patterns |
+
+**Goal:** Maximum pattern consistency, platform-appropriate implementation.
+
+---
+
+## API & Services (Web)
+
+### Service Structure
+
+```typescript
+// File: src/services/lawyer-service.ts
+import { Lawyer } from '@dingo/types';
+import { ENV } from '@/config/env';
+
+interface FetchLawyersParams {
+  specialties?: string[];
+  city?: string;
+}
+
+export class LawyerService {
+  private readonly baseUrl: string;
+
+  constructor(baseUrl?: string) {
+    this.baseUrl = baseUrl || ENV.API_URL;
+  }
+
+  async fetchLawyers(params?: FetchLawyersParams): Promise<Lawyer[]> {
+    try {
+      const queryParams = new URLSearchParams();
+      if (params?.specialties) {
+        queryParams.append('specialties', params.specialties.join(','));
+      }
+      if (params?.city) {
+        queryParams.append('city', params.city);
+      }
+
+      const url = `${this.baseUrl}/lawyers?${queryParams.toString()}`;
+
+      // Next.js enhanced fetch with caching
+      const response = await fetch(url, {
+        next: { revalidate: 60 }, // Revalidate every 60 seconds
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch lawyers: ${response.statusText}`);
+      }
+
+      return response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('An unknown error occurred');
+    }
+  }
+}
+
+export const lawyerService = new LawyerService();
+```
+
 ### Rules
 
+- **HTTP Client:** MUST use Next.js enhanced `fetch` with caching options (not plain fetch or axios)
+- **Environment Config:** API URLs MUST come from centralized config file (`config/env.ts`), never inline strings
 - **Service Naming:** `{resource}-service.ts` (e.g., `lawyer-service.ts`)
 - **Service Location:** `services/` directory in app root
 - **Error Handling:** Services must catch and transform errors to user-friendly messages
 - **Loading States:** Services should not manage loading states (let hooks handle it)
 - **API Response Types:** Always type responses with interfaces from `@dingo/types`
+- **Caching:** Use Next.js `fetch` options (`next: { revalidate }`) for data caching
 
 ---
 

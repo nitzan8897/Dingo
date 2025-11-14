@@ -1,4 +1,5 @@
 import { Lawyer } from '@dingo/types';
+import { ENV } from '@/config/env';
 
 /**
  * Parameters for fetching lawyers
@@ -12,12 +13,13 @@ export interface FetchLawyersParams {
  * Lawyer Service
  * Handles all API requests related to lawyers
  * Following Single Responsibility Principle - only handles lawyer data fetching
+ * Uses Next.js enhanced fetch with automatic caching and revalidation
  */
 export class LawyerService {
   private readonly baseUrl: string;
 
   constructor(baseUrl?: string) {
-    this.baseUrl = baseUrl || process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/v1';
+    this.baseUrl = baseUrl || ENV.API_URL;
   }
 
   /**
@@ -37,7 +39,11 @@ export class LawyerService {
       }
 
       const url = `${this.baseUrl}/lawyers${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
-      const response = await fetch(url);
+
+      // Next.js enhanced fetch with caching
+      const response = await fetch(url, {
+        next: { revalidate: 60 }, // Revalidate every 60 seconds
+      });
 
       if (!response.ok) {
         throw new Error(`Failed to fetch lawyers: ${response.statusText}`);
@@ -45,8 +51,10 @@ export class LawyerService {
 
       return await response.json();
     } catch (error) {
-      console.error('Error fetching lawyers:', error);
-      throw error;
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('An unknown error occurred');
     }
   }
 }
