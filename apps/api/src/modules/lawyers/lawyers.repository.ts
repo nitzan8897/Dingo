@@ -24,9 +24,9 @@ export class LawyersRepository {
       };
     }
 
-    if (filter.specialty) {
+    if (filter.specialties && filter.specialties.length > 0) {
       where.specialties = {
-        has: filter.specialty,
+        hasSome: filter.specialties,
       };
     }
 

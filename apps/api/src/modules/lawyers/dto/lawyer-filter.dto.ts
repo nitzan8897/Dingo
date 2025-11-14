@@ -1,5 +1,5 @@
-import { IsOptional, IsString, IsInt, Min } from 'class-validator';
-import { Type } from 'class-transformer';
+import { IsOptional, IsString, IsInt, Min, IsArray } from 'class-validator';
+import { Type, Transform } from 'class-transformer';
 
 /**
  * Lawyer filter DTO
@@ -7,8 +7,15 @@ import { Type } from 'class-transformer';
  */
 export class LawyerFilterDto {
   @IsOptional()
-  @IsString()
-  specialty?: string;
+  @IsArray()
+  @IsString({ each: true })
+  @Transform(({ value }) => {
+    if (typeof value === 'string') {
+      return value.split(',').map(s => s.trim()).filter(s => s.length > 0);
+    }
+    return value;
+  })
+  specialties?: string[];
 
   @IsOptional()
   @IsString()

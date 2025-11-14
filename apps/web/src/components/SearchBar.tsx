@@ -2,21 +2,25 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { LawyerSpecialty } from '@dingo/types';
+import SpecialtyTag from './SpecialtyTag';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
-  onFilterSpecialty?: (specialty: string) => void;
+  onFilterSpecialties?: (specialties: string[]) => void;
   onFilterCity?: (city: string) => void;
+  selectedSpecialties?: string[];
 }
 
 /**
  * SearchBar component - Web implementation
- * Search and filter interface
+ * Search and filter interface with multi-select specialty filtering
  */
 const SearchBar: React.FC<SearchBarProps> = ({
   onSearch,
-  onFilterSpecialty,
+  onFilterSpecialties,
   onFilterCity,
+  selectedSpecialties = [],
 }) => {
   const t = useTranslations();
   const [query, setQuery] = useState('');
@@ -27,44 +31,58 @@ const SearchBar: React.FC<SearchBarProps> = ({
     onSearch(value);
   };
 
+  const handleSpecialtyToggle = (specialty: string) => {
+    if (!onFilterSpecialties) return;
+
+    const newSpecialties = selectedSpecialties.includes(specialty)
+      ? selectedSpecialties.filter((s) => s !== specialty)
+      : [...selectedSpecialties, specialty];
+
+    onFilterSpecialties(newSpecialties);
+  };
+
+  const allSpecialties = Object.values(LawyerSpecialty);
+
   return (
     <div className="mb-8">
-      <div className="flex flex-col md:flex-row gap-4">
-        <div className="flex-1">
-          <input
-            type="text"
-            value={query}
-            onChange={handleSearch}
-            placeholder={t('search.placeholder')}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
-          />
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1">
+            <input
+              type="text"
+              value={query}
+              onChange={handleSearch}
+              placeholder={t('search.placeholder')}
+              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+            />
+          </div>
+
+          {onFilterCity && (
+            <input
+              type="text"
+              onChange={(e) => onFilterCity(e.target.value)}
+              placeholder={t('search.filterByCity')}
+              className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+            />
+          )}
         </div>
 
-        {onFilterSpecialty && (
-          <select
-            onChange={(e) => onFilterSpecialty(e.target.value)}
-            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none bg-white"
-          >
-            <option value="">{t('search.allSpecialties')}</option>
-            <option value="CRIMINAL">{t('specialties.CRIMINAL')}</option>
-            <option value="CIVIL">{t('specialties.CIVIL')}</option>
-            <option value="CORPORATE">{t('specialties.CORPORATE')}</option>
-            <option value="FAMILY">{t('specialties.FAMILY')}</option>
-            <option value="LABOR">{t('specialties.LABOR')}</option>
-            <option value="TAX">{t('specialties.TAX')}</option>
-            <option value="IMMIGRATION">{t('specialties.IMMIGRATION')}</option>
-            <option value="REAL_ESTATE">{t('specialties.REAL_ESTATE')}</option>
-            <option value="INTELLECTUAL_PROPERTY">{t('specialties.INTELLECTUAL_PROPERTY')}</option>
-          </select>
-        )}
-
-        {onFilterCity && (
-          <input
-            type="text"
-            onChange={(e) => onFilterCity(e.target.value)}
-            placeholder={t('search.filterByCity')}
-            className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
-          />
+        {onFilterSpecialties && (
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-gray-700">
+              {t('search.specialties')}
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {allSpecialties.map((specialty) => (
+                <SpecialtyTag
+                  key={specialty}
+                  specialty={t(`specialties.${specialty}`)}
+                  onClick={() => handleSpecialtyToggle(specialty)}
+                  selected={selectedSpecialties.includes(specialty)}
+                />
+              ))}
+            </div>
+          </div>
         )}
       </div>
     </div>

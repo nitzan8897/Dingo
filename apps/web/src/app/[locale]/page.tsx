@@ -12,18 +12,21 @@ export default function Home() {
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
   const [filteredLawyers, setFilteredLawyers] = useState<Lawyer[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedSpecialties, setSelectedSpecialties] = useState<string[]>([]);
 
   useEffect(() => {
     fetchLawyers();
   }, []);
 
-  const fetchLawyers = async (params?: { specialty?: string; city?: string }) => {
+  const fetchLawyers = async (params?: { specialties?: string[]; city?: string }) => {
     try {
       setLoading(true);
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/v1';
       const queryParams = new URLSearchParams();
 
-      if (params?.specialty) queryParams.append('specialty', params.specialty);
+      if (params?.specialties && params.specialties.length > 0) {
+        queryParams.append('specialties', params.specialties.join(','));
+      }
       if (params?.city) queryParams.append('city', params.city);
 
       const url = `${apiUrl}/lawyers${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
@@ -54,12 +57,21 @@ export default function Home() {
     setFilteredLawyers(filtered);
   };
 
-  const handleFilterSpecialty = (specialty: string) => {
-    fetchLawyers({ specialty });
+  const handleFilterSpecialties = (specialties: string[]) => {
+    setSelectedSpecialties(specialties);
+    fetchLawyers({ specialties });
   };
 
   const handleFilterCity = (city: string) => {
-    fetchLawyers({ city });
+    fetchLawyers({ specialties: selectedSpecialties, city });
+  };
+
+  const handleSpecialtyClick = (specialty: string) => {
+    const newSpecialties = selectedSpecialties.includes(specialty)
+      ? selectedSpecialties
+      : [...selectedSpecialties, specialty];
+    setSelectedSpecialties(newSpecialties);
+    fetchLawyers({ specialties: newSpecialties });
   };
 
   return (
@@ -80,8 +92,9 @@ export default function Home() {
 
         <SearchBar
           onSearch={handleSearch}
-          onFilterSpecialty={handleFilterSpecialty}
+          onFilterSpecialties={handleFilterSpecialties}
           onFilterCity={handleFilterCity}
+          selectedSpecialties={selectedSpecialties}
         />
 
         {loading ? (
@@ -92,7 +105,11 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredLawyers.map((lawyer) => (
-              <LawyerCard key={lawyer.id} lawyer={lawyer} />
+              <LawyerCard
+                key={lawyer.id}
+                lawyer={lawyer}
+                onSpecialtyClick={handleSpecialtyClick}
+              />
             ))}
           </div>
         )}
