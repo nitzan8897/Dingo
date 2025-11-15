@@ -10,7 +10,8 @@ describe('LawyersRepository', () => {
 
   const mockPrismaLawyer = {
     id: '1',
-    fullName: 'Test Lawyer',
+    fullNameEn: 'Test Lawyer',
+    fullNameHe: 'עורך דין לבדיקה',
     city: 'Tel Aviv',
     specialties: ['CRIMINAL'],
     yearsOfExperience: 5,
@@ -157,7 +158,8 @@ describe('LawyersRepository', () => {
   describe('create', () => {
     it('should create a new lawyer', async () => {
       const createDto: CreateLawyerDto = {
-        fullName: 'Test Lawyer',
+        fullNameEn: 'Test Lawyer',
+        fullNameHe: 'עורך דין לבדיקה',
         city: 'Tel Aviv',
         specialties: ['CRIMINAL'],
         yearsOfExperience: 5,
@@ -175,7 +177,8 @@ describe('LawyersRepository', () => {
       expect(result).toEqual(mockPrismaLawyer);
       expect(prisma.lawyer.create).toHaveBeenCalledWith({
         data: {
-          fullName: createDto.fullName,
+          fullNameEn: createDto.fullNameEn,
+          fullNameHe: createDto.fullNameHe,
           city: createDto.city,
           specialties: createDto.specialties,
           yearsOfExperience: createDto.yearsOfExperience,
@@ -186,7 +189,8 @@ describe('LawyersRepository', () => {
 
     it('should handle creation with multiple specialties', async () => {
       const createDto: CreateLawyerDto = {
-        fullName: 'Multi Specialty Lawyer',
+        fullNameEn: 'Multi Specialty Lawyer',
+        fullNameHe: 'עורך דין רב תחומי',
         city: 'Jerusalem',
         specialties: ['CRIMINAL', 'CIVIL', 'FAMILY'],
         yearsOfExperience: 10,
@@ -197,7 +201,15 @@ describe('LawyersRepository', () => {
           cost: 70,
         },
       };
-      const multiSpecialtyLawyer = { ...mockPrismaLawyer, ...createDto };
+      const multiSpecialtyLawyer = {
+        ...mockPrismaLawyer,
+        fullNameEn: createDto.fullNameEn,
+        fullNameHe: createDto.fullNameHe,
+        city: createDto.city,
+        specialties: createDto.specialties,
+        yearsOfExperience: createDto.yearsOfExperience,
+        ratingVector: createDto.ratingVector,
+      };
       mockPrismaService.lawyer.create.mockResolvedValue(multiSpecialtyLawyer);
 
       const result = await repository.create(createDto);

@@ -24,7 +24,11 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer, onSpecialtyClick }) => 
   return (
     <Card className="hover:shadow-xl transition-all duration-300">
       <CardContent className="p-6">
-        <LawyerCardHeader fullName={lawyer.fullName} city={lawyer.city} />
+        <LawyerCardHeader
+          fullNameEn={lawyer.fullNameEn}
+          fullNameHe={lawyer.fullNameHe}
+          city={lawyer.city}
+        />
 
         <div className="mb-4">
           <div className="flex flex-wrap gap-2">

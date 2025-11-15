@@ -41,7 +41,10 @@ class RatingVectorDto {
  */
 export class CreateLawyerDto {
   @IsString()
-  fullName: string;
+  fullNameEn: string;
+
+  @IsString()
+  fullNameHe: string;
 
   @IsString()
   city: string;
