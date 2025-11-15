@@ -12,7 +12,9 @@
     "clean": "turbo run clean && rm -rf node_modules",
     "db:push": "pnpm --filter @dingo/api db:push",
     "db:seed": "pnpm --filter @dingo/api db:seed",
-    "db:studio": "pnpm --filter @dingo/api db:studio"
+    "db:studio": "pnpm --filter @dingo/api db:studio",
+    "differ:dev": "pnpm --filter @dingo/differ dev",
+    "differ:start": "pnpm --filter @dingo/differ start"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
