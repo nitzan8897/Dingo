@@ -12,8 +12,11 @@ export class ClaudeClient {
   }
 
   async analyze(prompt: string): Promise<string> {
+    // Try to use the model specified in env, or fall back to claude-3-haiku-20240307
+    const model = process.env.ANTHROPIC_MODEL || 'claude-3-haiku-20240307';
+
     const completion = await this.client.messages.create({
-      model: 'claude-3-5-sonnet-20240620',
+      model,
       max_tokens: 2000,
       temperature: 0.2,
       messages: [{
