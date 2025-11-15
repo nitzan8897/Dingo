@@ -100,13 +100,24 @@ npm start
 ```
 apps/differ/
 ├── src/
-│   ├── index.ts          # Main entrypoint
-│   ├── types.ts          # TypeScript types
-│   ├── fetchCases.ts     # Fetch raw case data
-│   ├── analyzeCase.ts    # AI analysis
-│   └── saveToDb.ts       # Database persistence
+│   ├── ai/                       # AI-related modules
+│   │   ├── claude-client.ts      # Anthropic Claude API client
+│   │   ├── prompt-builder.ts     # Constructs prompts for AI
+│   │   └── response-parser.ts    # Parses and validates AI responses
+│   ├── repositories/             # Data access layer
+│   │   ├── case-repository.ts    # Case database operations
+│   │   ├── lawyer-repository.ts  # Lawyer database operations
+│   │   └── lawyer-case-repository.ts  # Junction table operations
+│   ├── services/                 # Business logic layer
+│   │   ├── case-analysis-service.ts  # Orchestrates AI analysis
+│   │   └── case-save-service.ts      # Orchestrates data persistence
+│   ├── index.ts                  # Main entrypoint
+│   ├── types.ts                  # TypeScript types
+│   ├── fetchCases.ts             # Fetch raw case data
+│   ├── analyzeCase.ts            # AI analysis (public API)
+│   └── saveToDb.ts               # Database persistence (public API)
 ├── prisma/
-│   └── schema-extension.prisma  # Suggested DB schema
+│   └── schema-extension.prisma   # Reference schema (merged into main)
 ├── package.json
 ├── tsconfig.json
 └── README.md
@@ -119,42 +130,20 @@ apps/differ/
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `ANTHROPIC_API_KEY` | No | For Claude AI (future) |
-| `OPENAI_API_KEY` | No | For OpenAI GPT (future) |
+| `ANTHROPIC_API_KEY` | Yes | For Claude AI analysis |
 | `LOG_LEVEL` | No | `info` or `debug` |
 | `STOP_ON_ERROR` | No | `true` to stop on first error |
 
 ## 🤖 AI Integration
 
-Currently returns placeholder data. To enable real AI:
+The service uses Anthropic Claude for case analysis. To configure:
 
-### Option 1: Anthropic Claude
-
-1. Install SDK:
-   ```bash
-   npm install @anthropic-ai/sdk
-   ```
-
-2. Set API key:
+1. Set your API key:
    ```bash
    export ANTHROPIC_API_KEY="your-key-here"
    ```
 
-3. Uncomment the Claude integration code in `src/analyzeCase.ts`
-
-### Option 2: OpenAI GPT
-
-1. Install SDK:
-   ```bash
-   npm install openai
-   ```
-
-2. Set API key:
-   ```bash
-   export OPENAI_API_KEY="your-key-here"
-   ```
-
-3. Uncomment the OpenAI integration code in `src/analyzeCase.ts`
+2. Run the service - AI integration is already active!
 
 ## 📊 Data Flow
 
@@ -228,7 +217,9 @@ npm run dev
 ## 📝 TODO
 
 - [ ] Implement real court case fetching (scraping/API)
-- [ ] Integrate Claude/OpenAI for AI analysis
+- [x] Integrate Claude AI for case analysis
+- [x] Refactor code following SOLID principles
+- [x] Add "pending verification" status for new lawyers
 - [ ] Add fuzzy matching for lawyer name lookup
 - [ ] Implement incremental fetching (track processed cases)
 - [ ] Add retry logic with exponential backoff
