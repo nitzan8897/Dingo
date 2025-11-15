@@ -4,7 +4,6 @@ A production-ready monorepo for a smart ratings platform that starts with lawyer
 
 ## 🏗️ Architecture
 
-```
 Dingo
 ### Clients
 1) Web using React + Next.js + ShadcnUI.
@@ -14,7 +13,7 @@ Clients shares common headless components
 ### Services
 1) Dingo API - NestJS for simple CRUD actions on `lawyers` table and `cases` table
 2) Differ - Simple service that acts as Pipeline for analyzing cases data and updating `lawyer_case`, `cases` tables.
-```
+
 ## 🚀 Quick Start
 
 ### Prerequisites
