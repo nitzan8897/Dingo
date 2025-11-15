@@ -13,7 +13,7 @@ export class ClaudeClient {
 
   async analyze(prompt: string): Promise<string> {
     const completion = await this.client.messages.create({
-      model: 'claude-3-5-sonnet-20241022',
+      model: 'claude-3-5-sonnet-20240620',
       max_tokens: 2000,
       temperature: 0.2,
       messages: [{
