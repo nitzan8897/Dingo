@@ -1,4 +1,6 @@
 import React from 'react';
+import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface SpecialtyTagProps {
   specialty: string;
@@ -10,6 +12,7 @@ interface SpecialtyTagProps {
  * SpecialtyTag component
  * Displays a small specialty badge with optional click handler
  * Used on lawyer cards
+ * Now using shadcn/ui Badge component with custom emerald/primary styling
  */
 const SpecialtyTag: React.FC<SpecialtyTagProps> = ({
   specialty,
@@ -23,18 +26,18 @@ const SpecialtyTag: React.FC<SpecialtyTagProps> = ({
   };
 
   return (
-    <span
+    <Badge
       onClick={handleClick}
-      className={`px-2 py-1 text-xs rounded-full transition-colors ${
-        onClick ? 'cursor-pointer hover:opacity-80' : ''
-      } ${
+      className={cn(
+        'px-2 py-1 text-xs rounded-full transition-colors',
+        onClick && 'cursor-pointer hover:opacity-80',
         selected
-          ? 'bg-primary-600 dark:bg-primary-500 text-white'
+          ? 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-600 dark:hover:bg-primary-500'
           : 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
-      }`}
+      )}
     >
       {specialty}
-    </span>
+    </Badge>
   );
 };
 

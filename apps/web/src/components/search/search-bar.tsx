@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
+import { Input } from '@/components/ui/input';
 import SpecialtyDropdown from './specialty-dropdown';
 
 interface SearchBarProps {
@@ -40,12 +41,12 @@ const SearchBar: React.FC<SearchBarProps> = ({
     <div className="mb-8">
       <div className="flex flex-col md:flex-row gap-4">
         <div className="flex-1">
-          <input
+          <Input
             type="text"
             value={query}
             onChange={handleSearch}
             placeholder={t('search.placeholder')}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none placeholder-gray-400 dark:placeholder-gray-500"
+            className="w-full px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
           />
         </div>
 
@@ -59,12 +60,14 @@ const SearchBar: React.FC<SearchBarProps> = ({
         )}
 
         {onFilterCity && (
-          <input
-            type="text"
-            onChange={(e) => onFilterCity(e.target.value)}
-            placeholder={t('search.filterByCity')}
-            className="px-4 py-3 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none placeholder-gray-400 dark:placeholder-gray-500"
-          />
+          <div className="flex-1 md:flex-initial md:w-48">
+            <Input
+              type="text"
+              onChange={(e) => onFilterCity(e.target.value)}
+              placeholder={t('search.filterByCity')}
+              className="w-full px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            />
+          </div>
         )}
       </div>
     </div>

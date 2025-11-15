@@ -1,15 +1,23 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { locales, type Locale } from '@dingo/i18n';
-import LanguageSwitcherButton from './language-switcher-button';
-import LanguageDropdown from './language-dropdown';
+import { Globe } from 'lucide-react';
+import { Check } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
 
 /**
  * LanguageSwitcher component
  * Allows users to switch between supported languages via a dropdown menu
+ * Now using shadcn/ui DropdownMenu for better accessibility and UX
  */
 const LanguageSwitcher: React.FC = () => {
   const t = useTranslations('language');
@@ -17,54 +25,45 @@ const LanguageSwitcher: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const currentLocale = params.locale as Locale;
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const switchLanguage = (newLocale: Locale): void => {
     if (newLocale === currentLocale) {
-      setIsOpen(false);
       return;
     }
 
     // Replace the locale in the pathname
     const newPathname = pathname.replace(`/${currentLocale}`, `/${newLocale}`);
     router.push(newPathname);
-    setIsOpen(false);
   };
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
   return (
-    <div className="relative" ref={dropdownRef} dir="ltr">
-      <LanguageSwitcherButton
-        isOpen={isOpen}
-        onClick={() => setIsOpen(!isOpen)}
-        ariaLabel={t('switchLanguage')}
-      />
-
-      {isOpen && (
-        <LanguageDropdown
-          locales={locales}
-          currentLocale={currentLocale}
-          onLanguageSelect={switchLanguage}
-          getLocaleName={(locale) => t(locale)}
-        />
-      )}
+    <div dir="ltr">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t('switchLanguage')}
+            className="hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
+            <Globe className="h-5 w-5" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          {locales.map((locale) => (
+            <DropdownMenuItem
+              key={locale}
+              onClick={() => switchLanguage(locale)}
+              className="flex items-center justify-between cursor-pointer"
+            >
+              <span>{t(locale)}</span>
+              {currentLocale === locale && (
+                <Check className="h-4 w-4 ml-2" />
+              )}
+            </DropdownMenuItem>
+          ))}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

@@ -59,9 +59,9 @@ describe('SearchBar', () => {
   describe('Specialty filter integration', () => {
     it('renders SpecialtyDropdown when onFilterSpecialties is provided', () => {
       render(<SearchBar {...defaultProps} />);
-      // SpecialtyDropdown button should be present
-      const buttons = screen.getAllByRole('button');
-      expect(buttons.length).toBeGreaterThan(0);
+      // SpecialtyDropdown combobox should be present
+      const combobox = screen.getByRole('combobox');
+      expect(combobox).toBeInTheDocument();
     });
 
     it('does not render SpecialtyDropdown when onFilterSpecialties is not provided', () => {
@@ -71,9 +71,9 @@ describe('SearchBar', () => {
       };
       render(<SearchBar {...propsWithoutSpecialtyFilter} />);
 
-      // Only city input should be present, no dropdown button
-      const buttons = screen.queryAllByRole('button');
-      expect(buttons.length).toBe(0);
+      // Only city input should be present, no dropdown combobox
+      const combobox = screen.queryByRole('combobox');
+      expect(combobox).not.toBeInTheDocument();
     });
 
     it('passes selectedSpecialties to SpecialtyDropdown', () => {
@@ -88,7 +88,7 @@ describe('SearchBar', () => {
       render(<SearchBar {...defaultProps} />);
 
       // Open dropdown and select a specialty
-      const dropdownButton = screen.getByRole('button');
+      const dropdownButton = screen.getByRole('combobox');
       fireEvent.click(dropdownButton);
 
       const specialty = await screen.findByText('specialties.CRIMINAL');
@@ -134,7 +134,7 @@ describe('SearchBar', () => {
       render(<SearchBar {...defaultProps} />);
 
       const searchInput = screen.getByPlaceholderText('search.placeholder');
-      const dropdownButton = screen.getByRole('button');
+      const dropdownButton = screen.getByRole('combobox');
       const cityInput = screen.getByPlaceholderText('search.filterByCity');
 
       // Verify all elements exist in document
@@ -155,7 +155,7 @@ describe('SearchBar', () => {
       expect(defaultProps.onSearch).toHaveBeenCalledWith('lawyer');
 
       // Specialty
-      const dropdownButton = screen.getByRole('button');
+      const dropdownButton = screen.getByRole('combobox');
       fireEvent.click(dropdownButton);
       const specialty = await screen.findByText('specialties.CRIMINAL');
       fireEvent.click(specialty);
