@@ -50,7 +50,8 @@ export class LawyersRepository {
   async create(createLawyerDto: CreateLawyerDto): Promise<Lawyer> {
     const lawyer = await this.prisma.lawyer.create({
       data: {
-        fullName: createLawyerDto.fullName,
+        fullNameEn: createLawyerDto.fullNameEn,
+        fullNameHe: createLawyerDto.fullNameHe,
         city: createLawyerDto.city,
         specialties: createLawyerDto.specialties,
         yearsOfExperience: createLawyerDto.yearsOfExperience,
@@ -69,7 +70,8 @@ export class LawyersRepository {
   private mapToLawyer(lawyer: Prisma.LawyerGetPayload<object>): Lawyer {
     return {
       id: lawyer.id,
-      fullName: lawyer.fullName,
+      fullNameEn: lawyer.fullNameEn,
+      fullNameHe: lawyer.fullNameHe,
       city: lawyer.city,
       specialties: lawyer.specialties,
       yearsOfExperience: lawyer.yearsOfExperience,

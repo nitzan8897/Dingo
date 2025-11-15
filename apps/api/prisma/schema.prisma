@@ -11,7 +11,8 @@ datasource db {
 
 model Lawyer {
   id                String   @id @default(uuid())
-  fullName          String
+  fullNameEn        String
+  fullNameHe        String
   city              String
   specialties       String[]
   yearsOfExperience Int

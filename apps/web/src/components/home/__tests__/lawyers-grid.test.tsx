@@ -6,7 +6,7 @@ import { Lawyer } from '@dingo/types';
 // Mock LawyerCard component
 jest.mock('@/components/lawyer/lawyer-card', () => {
   return function MockLawyerCard({ lawyer }: { lawyer: Lawyer }) {
-    return <div data-testid="lawyer-card">{lawyer.fullName}</div>;
+    return <div data-testid="lawyer-card">{lawyer.fullNameEn}</div>;
   };
 });
 
@@ -14,35 +14,35 @@ describe('LawyersGrid', () => {
   const mockLawyers: Lawyer[] = [
     {
       id: '1',
-      fullName: 'John Doe',
+      fullNameEn: 'John Doe',
+      fullNameHe: 'ג\'ון דו',
       city: 'Tel Aviv',
       specialties: ['CRIMINAL'],
-      phoneNumber: '123',
-      email: 'john@example.com',
-      experienceYears: 10,
-      ratings: {
-        overall: 85,
+      yearsOfExperience: 10,
+      ratingVector: {
         professionalism: 90,
-        communication: 80,
-        expertise: 85,
+        availability: 80,
+        empathy: 85,
         cost: 75,
       },
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
     {
       id: '2',
-      fullName: 'Jane Smith',
+      fullNameEn: 'Jane Smith',
+      fullNameHe: 'ג\'יין סמית\'',
       city: 'Jerusalem',
       specialties: ['CIVIL'],
-      phoneNumber: '456',
-      email: 'jane@example.com',
-      experienceYears: 8,
-      ratings: {
-        overall: 90,
+      yearsOfExperience: 8,
+      ratingVector: {
         professionalism: 95,
-        communication: 85,
-        expertise: 90,
+        availability: 85,
+        empathy: 90,
         cost: 80,
       },
+      createdAt: new Date(),
+      updatedAt: new Date(),
     },
   ];
 

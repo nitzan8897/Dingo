@@ -11,7 +11,8 @@ describe('LawyersController', () => {
 
   const mockLawyer: Lawyer = {
     id: '1',
-    fullName: 'Test Lawyer',
+    fullNameEn: 'Test Lawyer',
+    fullNameHe: 'עורך דין לבדיקה',
     city: 'Tel Aviv',
     specialties: ['CRIMINAL'],
     yearsOfExperience: 5,
@@ -90,7 +91,8 @@ describe('LawyersController', () => {
   describe('create', () => {
     it('should create a new lawyer', async () => {
       const createDto: CreateLawyerDto = {
-        fullName: 'Test Lawyer',
+        fullNameEn: 'Test Lawyer',
+        fullNameHe: 'עורך דין לבדיקה',
         city: 'Tel Aviv',
         specialties: ['CRIMINAL'],
         yearsOfExperience: 5,
@@ -109,7 +111,8 @@ describe('LawyersController', () => {
 
     it('should handle creation with minimal data', async () => {
       const createDto: CreateLawyerDto = {
-        fullName: 'Minimal Lawyer',
+        fullNameEn: 'Minimal Lawyer',
+        fullNameHe: 'עורך דין מינימלי',
         city: 'Jerusalem',
         specialties: ['CIVIL'],
         yearsOfExperience: 1,

@@ -8,7 +8,8 @@ describe('LawyersService', () => {
 
   const mockLawyer = {
     id: '1',
-    fullName: 'John Doe',
+    fullNameEn: 'John Doe',
+    fullNameHe: 'ג\'ון דו',
     city: 'New York',
     specialties: ['CRIMINAL', 'CIVIL'],
     yearsOfExperience: 10,
@@ -98,7 +99,8 @@ describe('LawyersService', () => {
   describe('create', () => {
     it('should create a lawyer', async () => {
       const createDto = {
-        fullName: 'John Doe',
+        fullNameEn: 'John Doe',
+        fullNameHe: 'ג\'ון דו',
         city: 'New York',
         specialties: ['CRIMINAL', 'CIVIL'],
         yearsOfExperience: 10,

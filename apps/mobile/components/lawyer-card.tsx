@@ -13,16 +13,20 @@ interface LawyerCardProps {
 /**
  * LawyerCard component - React Native implementation
  * Displays lawyer information with FIFA-style ratings
+ * Shows name in current language, defaulting to Hebrew for unsupported locales
  */
 const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const overallRating = Math.round(calculateOverallRating(lawyer.ratingVector));
+
+  // Use English only if locale is explicitly 'en', otherwise default to Hebrew
+  const displayName = i18n.language === 'en' ? lawyer.fullNameEn : lawyer.fullNameHe;
 
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.info}>
-          <Text style={styles.name}>{lawyer.fullName}</Text>
+          <Text style={styles.name}>{displayName}</Text>
           <Text style={styles.city}>{lawyer.city}</Text>
         </View>
         <View style={styles.ratingContainer}>

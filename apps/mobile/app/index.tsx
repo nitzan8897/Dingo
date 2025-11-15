@@ -13,7 +13,7 @@ import LawyerCard from '@/components/lawyer-card';
 import { styles } from './index.styles';
 
 export default function Index() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { lawyers, loading, fetchLawyers } = useLawyers();
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -27,12 +27,18 @@ export default function Index() {
     }
 
     return lawyers.filter(
-      (lawyer) =>
-        lawyer.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lawyer.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lawyer.specialties.some((s) =>
-          s.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+      (lawyer) => {
+        // Search in both English and Hebrew names
+        const nameMatch =
+          lawyer.fullNameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lawyer.fullNameHe.toLowerCase().includes(searchQuery.toLowerCase());
+
+        return nameMatch ||
+          lawyer.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lawyer.specialties.some((s) =>
+            s.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+      }
     );
   }, [lawyers, searchQuery]);
 

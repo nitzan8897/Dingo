@@ -5,7 +5,8 @@ import { Lawyer } from '@dingo/types';
 
 const mockLawyer: Lawyer = {
   id: '1',
-  fullName: 'John Doe',
+  fullNameEn: 'John Doe',
+  fullNameHe: 'ג\'ון דו',
   city: 'Tel Aviv',
   specialties: ['CRIMINAL', 'CIVIL'],
   yearsOfExperience: 10,
@@ -20,9 +21,10 @@ const mockLawyer: Lawyer = {
 };
 
 describe('LawyerCard', () => {
-  it('renders lawyer name', () => {
+  it('renders lawyer name in Hebrew by default', () => {
     render(<LawyerCard lawyer={mockLawyer} />);
-    expect(screen.getByText('John Doe')).toBeTruthy();
+    // Default language is Hebrew, so it should show Hebrew name
+    expect(screen.getByText('ג\'ון דו')).toBeTruthy();
   });
 
   it('renders lawyer city', () => {

@@ -12,7 +12,8 @@ async function main() {
   const lawyers = await Promise.all([
     prisma.lawyer.create({
       data: {
-        fullName: 'איתי לוי',
+        fullNameEn: 'Itay Levi',
+        fullNameHe: 'איתי לוי',
         city: 'יבנה',
         specialties: ['CRIMINAL', 'CIVIL'],
         yearsOfExperience: 15,
@@ -26,7 +27,8 @@ async function main() {
     }),
     prisma.lawyer.create({
       data: {
-        fullName: 'ניצן אברגיל',
+        fullNameEn: 'Nitzan Avargil',
+        fullNameHe: 'ניצן אברגיל',
         city: 'יבנה',
         specialties: ['CORPORATE', 'INTELLECTUAL_PROPERTY'],
         yearsOfExperience: 300,
@@ -40,7 +42,8 @@ async function main() {
     }),
     prisma.lawyer.create({
       data: {
-        fullName: 'ניר שקיבי',
+        fullNameEn: 'Nir Shakibi',
+        fullNameHe: 'ניר שקיבי',
         city: 'יבנה',
         specialties: ['FAMILY', 'IMMIGRATION'],
         yearsOfExperience: 8,
@@ -54,7 +57,8 @@ async function main() {
     }),
     prisma.lawyer.create({
       data: {
-        fullName: 'שחר קורן',
+        fullNameEn: 'Shachar Koren',
+        fullNameHe: 'שחר קורן',
         city: 'הרצליה',
         specialties: ['LABOR', 'CIVIL'],
         yearsOfExperience: 20,
@@ -68,7 +72,8 @@ async function main() {
     }),
     prisma.lawyer.create({
       data: {
-        fullName: 'בן בוכריס',
+        fullNameEn: 'Ben Buchris',
+        fullNameHe: 'בן בוכריס',
         city: 'נוקדים',
         specialties: ['TAX', 'CORPORATE'],
         yearsOfExperience: 10,
@@ -86,7 +91,7 @@ async function main() {
 }
 
 main()
-  .catch((e) => {
+  .catch(e => {
     console.error('❌ Seed error:', e);
     process.exit(1);
   })

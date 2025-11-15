@@ -18,7 +18,8 @@ export enum LawyerSpecialty {
 
 export interface Lawyer {
   id: string;
-  fullName: string;
+  fullNameEn: string;
+  fullNameHe: string;
   city: string;
   specialties: string[];
   yearsOfExperience: number;
@@ -28,7 +29,8 @@ export interface Lawyer {
 }
 
 export interface CreateLawyerDTO {
-  fullName: string;
+  fullNameEn: string;
+  fullNameHe: string;
   city: string;
   specialties: string[];
   yearsOfExperience: number;
