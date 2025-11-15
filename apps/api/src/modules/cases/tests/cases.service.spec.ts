@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { BadRequestException } from '@nestjs/common';
-import { CasesService } from './cases.service';
-import { CasesRepository } from './cases.repository';
-import { LawyersRepository } from '../lawyers/lawyers.repository';
-import { CreateCaseDto } from './dto/create-case.dto';
+import { CasesService } from '../cases.service';
+import { CasesRepository } from '../cases.repository';
+import { LawyersRepository } from '../../lawyers/lawyers.repository';
+import { CreateCaseDto } from '../dto/create-case.dto';
 
 describe('CasesService', () => {
   let service: CasesService;

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { CasesRepository } from './cases.repository';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateCaseDto } from './dto/create-case.dto';
+import { CasesRepository } from '../cases.repository';
+import { PrismaService } from '../../prisma/prisma.service';
+import { CreateCaseDto } from '../dto/create-case.dto';
 
 describe('CasesRepository', () => {
   let repository: CasesRepository;
