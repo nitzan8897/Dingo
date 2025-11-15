@@ -19,7 +19,7 @@ const ThemeToggle: React.FC = () => {
   if (!mounted) {
     // Return a placeholder with the same dimensions to avoid layout shift
     return (
-      <button className="p-2 rounded-lg border border-gray-300 dark:border-gray-600">
+      <button className="p-2 rounded-lg">
         <div className="w-5 h-5" />
       </button>
     );
