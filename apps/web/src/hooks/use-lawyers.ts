@@ -22,8 +22,10 @@ export function useLawyers() {
       setLoading(true);
       setError(null);
       const data = await lawyerService.fetchLawyers(params);
-      setLawyers(data);
-      setFilteredLawyers(data);
+      // Filter out lawyers with "Pending Verification" city
+      const verifiedLawyers = data.filter(lawyer => lawyer.city !== 'Pending Verification');
+      setLawyers(verifiedLawyers);
+      setFilteredLawyers(verifiedLawyers);
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to fetch lawyers'));
       console.error('Error fetching lawyers:', err);
@@ -45,7 +47,8 @@ export function useLawyers() {
 
       const filtered = lawyers.filter(
         (lawyer) =>
-          lawyer.fullName.toLowerCase().includes(query.toLowerCase()) ||
+          lawyer.fullNameEn.toLowerCase().includes(query.toLowerCase()) ||
+          lawyer.fullNameHe.toLowerCase().includes(query.toLowerCase()) ||
           lawyer.city.toLowerCase().includes(query.toLowerCase()) ||
           lawyer.specialties.some((s) => s.toLowerCase().includes(query.toLowerCase()))
       );
