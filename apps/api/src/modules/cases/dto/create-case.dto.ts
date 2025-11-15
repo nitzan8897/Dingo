@@ -1,7 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsOptional, IsNumber, Min, Max, IsArray, IsDateString } from 'class-validator';
+import { IsString, IsOptional, IsNumber, Min, Max, IsArray, IsDateString, IsEnum } from 'class-validator';
+import { CreateCaseDTO, CaseResult } from '@dingo/types';
 
-export class CreateCaseDto {
+export class CreateCaseDto implements CreateCaseDTO {
   @ApiProperty({ description: 'Unique case ID from court system', example: '12345-01-24' })
   @IsString()
   externalId: string;
@@ -14,9 +15,13 @@ export class CreateCaseDto {
   @IsString()
   specialty: string;
 
-  @ApiProperty({ description: 'Case result', example: 'win', enum: ['win', 'lose', 'settlement', 'dismissed', 'other'] })
-  @IsString()
-  result: string;
+  @ApiProperty({
+    description: 'Case result',
+    example: 'win',
+    enum: ['win', 'lose', 'settlement', 'dismissed', 'other']
+  })
+  @IsEnum(['win', 'lose', 'settlement', 'dismissed', 'other'])
+  result: CaseResult;
 
   @ApiProperty({ description: 'Judge name', required: false, example: 'Judge David Cohen' })
   @IsOptional()
