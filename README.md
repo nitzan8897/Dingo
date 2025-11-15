@@ -3,8 +3,6 @@
 A production-ready monorepo for a smart ratings platform that starts with lawyers and will expand to other professionals. Built with **SOLID principles**, **Clean Architecture**, and **vendor-agnostic infrastructure**.
 
 ## 🏗️ Architecture
-
-Dingo
 ### Clients
 1) Web using React + Next.js + ShadcnUI.
 2) Mobile using Expo + React Native
