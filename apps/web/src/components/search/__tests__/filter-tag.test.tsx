@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import FilterTag from '../FilterTag';
+import FilterTag from '../filter-tag';
 
 describe('FilterTag', () => {
   const defaultProps = {

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateLawyerDto } from './dto/create-lawyer.dto';
 import { LawyerFilterDto } from './dto/lawyer-filter.dto';
@@ -15,7 +16,7 @@ export class LawyersRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findAll(filter: LawyerFilterDto): Promise<Lawyer[]> {
-    const where: any = {};
+    const where: Prisma.LawyerWhereInput = {};
 
     if (filter.city) {
       where.city = {
@@ -65,14 +66,14 @@ export class LawyersRepository {
     return this.mapToLawyer(lawyer);
   }
 
-  private mapToLawyer(lawyer: any): Lawyer {
+  private mapToLawyer(lawyer: Prisma.LawyerGetPayload<object>): Lawyer {
     return {
       id: lawyer.id,
       fullName: lawyer.fullName,
       city: lawyer.city,
       specialties: lawyer.specialties,
       yearsOfExperience: lawyer.yearsOfExperience,
-      ratingVector: lawyer.ratingVector,
+      ratingVector: lawyer.ratingVector as unknown as Lawyer['ratingVector'],
       createdAt: lawyer.createdAt,
       updatedAt: lawyer.updatedAt,
     };

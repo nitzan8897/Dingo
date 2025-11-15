@@ -10,6 +10,7 @@ interface RatingBarProps {
 /**
  * RatingBar component - Web implementation
  * Displays a horizontal rating bar (FIFA-style)
+ * Using custom implementation to preserve exact color behavior
  */
 const RatingBar: React.FC<RatingBarProps> = ({
   label,

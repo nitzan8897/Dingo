@@ -1,13 +1,23 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { locales, type Locale } from '@dingo/i18n';
+import { Globe } from 'lucide-react';
+import { Check } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
 
 /**
  * LanguageSwitcher component
  * Allows users to switch between supported languages via a dropdown menu
+ * Now using shadcn/ui DropdownMenu for better accessibility and UX
  */
 const LanguageSwitcher: React.FC = () => {
   const t = useTranslations('language');
@@ -15,82 +25,45 @@ const LanguageSwitcher: React.FC = () => {
   const pathname = usePathname();
   const router = useRouter();
   const currentLocale = params.locale as Locale;
-  const [isOpen, setIsOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const switchLanguage = (newLocale: Locale) => {
+  const switchLanguage = (newLocale: Locale): void => {
     if (newLocale === currentLocale) {
-      setIsOpen(false);
       return;
     }
 
     // Replace the locale in the pathname
     const newPathname = pathname.replace(`/${currentLocale}`, `/${newLocale}`);
     router.push(newPathname);
-    setIsOpen(false);
   };
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isOpen]);
-
   return (
-    <div className="relative" ref={dropdownRef} dir="ltr">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="p-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-        aria-label={t('switchLanguage')}
-        aria-expanded={isOpen}
-        aria-haspopup="true"
-      >
-        {/* Language/Globe icon */}
-        <svg
-          className="w-5 h-5 text-gray-700 dark:text-gray-200"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"
-          />
-        </svg>
-      </button>
-
-      {/* Dropdown menu */}
-      {isOpen && (
-        <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden z-50">
+    <div dir="ltr">
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label={t('switchLanguage')}
+            className="hover:bg-gray-100 dark:hover:bg-gray-800"
+          >
+            <Globe className="h-5 w-5" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
           {locales.map((locale) => (
-            <button
+            <DropdownMenuItem
               key={locale}
               onClick={() => switchLanguage(locale)}
-              className={`w-full px-4 py-2 text-left text-sm font-medium transition-colors ${
-                locale === currentLocale
-                  ? 'bg-primary-600 dark:bg-primary-500 text-white'
-                  : 'text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700'
-              }`}
-              aria-label={`Switch to ${t(locale)}`}
+              className="flex items-center justify-between cursor-pointer"
             >
-              {t(locale)}
-            </button>
+              <span>{t(locale)}</span>
+              {currentLocale === locale && (
+                <Check className="h-4 w-4 ml-2" />
+              )}
+            </DropdownMenuItem>
           ))}
-        </div>
-      )}
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };

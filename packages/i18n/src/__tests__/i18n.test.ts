@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { getDirection, type Locale, locales, defaultLocale, getLocaleMessages } from '../index';
 
 describe('i18n utilities', () => {
