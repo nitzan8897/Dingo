@@ -67,6 +67,12 @@ export class LawyersRepository {
     return this.mapToLawyer(lawyer);
   }
 
+  async findById(id: string): Promise<Prisma.LawyerGetPayload<object> | null> {
+    return this.prisma.lawyer.findUnique({
+      where: { id },
+    });
+  }
+
   async findByName(name: string): Promise<Prisma.LawyerGetPayload<object> | null> {
     return this.prisma.lawyer.findFirst({
       where: {

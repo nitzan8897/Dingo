@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useTranslations } from 'next-intl';
-import { LawyerSpecialty } from '@dingo/types';
+import { Specialty } from '@dingo/types';
 import { Check, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -38,7 +38,7 @@ const SpecialtyDropdown: React.FC<SpecialtyDropdownProps> = ({
   const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
 
-  const allSpecialties = Object.values(LawyerSpecialty);
+  const allSpecialties = Object.values(Specialty);
 
   const handleSpecialtyToggle = (specialty: string): void => {
     const newSpecialties = selectedSpecialties.includes(specialty)
