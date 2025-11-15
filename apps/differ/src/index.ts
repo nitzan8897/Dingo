@@ -1,21 +1,7 @@
 import 'dotenv/config';
-import { PrismaClient } from '@prisma/client';
 import { fetchNewCases } from './fetchCases';
 import { analyzeCaseWithAI } from './analyzeCase';
 import { saveCaseAnalysis } from './saveToDb';
-
-/**
- * Differ - Background Service for Court Case Analysis
- *
- * This service periodically:
- * 1. Fetches new court cases from external sources
- * 2. Analyzes them using AI to extract structured data
- * 3. Saves the results to the database for use in the Dingo platform
- *
- * Usage:
- * - One-time run: `npm run dev` or `npm start`
- * - Scheduled: Use cron, systemd timer, or cloud scheduler to run periodically
- */
 
 async function main() {
   console.log('');
@@ -25,9 +11,6 @@ async function main() {
   console.log('');
 
   const startTime = Date.now();
-  const prisma = new PrismaClient({
-    log: process.env.LOG_LEVEL === 'debug' ? ['query', 'info', 'warn', 'error'] : ['warn', 'error'],
-  });
 
   try {
     // ========================================================================
@@ -70,8 +53,8 @@ async function main() {
         console.log(`  👥 Lawyers: ${analysis.lawyers.length}`);
         console.log('');
 
-        // Save to database
-        await saveCaseAnalysis(rawCase, analysis, prisma);
+        // Save to database via API
+        await saveCaseAnalysis(rawCase, analysis);
         console.log('');
 
         successCount++;
@@ -115,11 +98,6 @@ async function main() {
     console.error(error);
     console.error('');
     process.exit(1);
-  } finally {
-    await prisma.$disconnect();
-    console.log('');
-    console.log('👋 Differ service shut down gracefully');
-    console.log('');
   }
 }
 

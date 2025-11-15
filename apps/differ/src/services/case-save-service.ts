@@ -1,15 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import { ApiClient } from '../api/api-client';
 import { CaseAnalysis, RawCase } from '../types';
-import { CaseRepository } from '../repositories/case-repository';
-import { LawyerRepository } from '../repositories/lawyer-repository';
 
 export class CaseSaveService {
-  private caseRepo: CaseRepository;
-  private lawyerRepo: LawyerRepository;
+  private apiClient: ApiClient;
 
-  constructor(private prisma: PrismaClient) {
-    this.caseRepo = new CaseRepository(prisma);
-    this.lawyerRepo = new LawyerRepository(prisma);
+  constructor() {
+    this.apiClient = new ApiClient();
   }
 
   async save(rawCase: RawCase, analysis: CaseAnalysis): Promise<void> {
@@ -20,12 +16,10 @@ export class CaseSaveService {
     };
 
     for (const analyzedLawyer of analysis.lawyers) {
-      let lawyer = await this.lawyerRepo.findByName(analyzedLawyer.lawyerName);
+      let lawyer = await this.apiClient.findLawyerByName(analyzedLawyer.lawyerName);
 
       if (!lawyer) {
-        lawyer = await this.lawyerRepo.createPendingVerification(
-          analyzedLawyer.lawyerName
-        );
+        lawyer = await this.apiClient.createPendingLawyer(analyzedLawyer.lawyerName);
         console.log(`  ✨ Created pending lawyer: ${analyzedLawyer.lawyerName}`);
       }
 
@@ -38,17 +32,25 @@ export class CaseSaveService {
       }
     }
 
-    const savedCase = await this.caseRepo.upsertCase(
-      rawCase.id,
-      rawCase.text,
-      analysis,
-      lawyerIdsBySide
-    );
+    const savedCase = await this.apiClient.upsertCase({
+      externalId: rawCase.id,
+      title: analysis.title,
+      specialty: analysis.specialty,
+      result: analysis.result,
+      judgeName: analysis.judgeName,
+      openedAt: analysis.openedAt.toISOString(),
+      closedAt: analysis.closedAt.toISOString(),
+      complexityScore: analysis.complexityScore,
+      rawText: rawCase.text,
+      plaintiffLawyerIds: lawyerIdsBySide.plaintiff,
+      defendantLawyerIds: lawyerIdsBySide.defendant,
+      associatedLawyerIds: lawyerIdsBySide.associated,
+    });
 
     for (const analyzedLawyer of analysis.lawyers) {
-      const lawyer = await this.lawyerRepo.findByName(analyzedLawyer.lawyerName);
-      if (lawyer && !lawyer.caseIds.includes(savedCase.id)) {
-        await this.lawyerRepo.addCaseToLawyer(lawyer.id, savedCase.id);
+      const lawyer = await this.apiClient.findLawyerByName(analyzedLawyer.lawyerName);
+      if (lawyer && !lawyer.caseIds?.includes(savedCase.id)) {
+        await this.apiClient.addCaseToLawyer(lawyer.id, savedCase.id);
       }
     }
 

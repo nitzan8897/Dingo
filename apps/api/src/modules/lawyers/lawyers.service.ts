@@ -21,4 +21,16 @@ export class LawyersService {
   async create(createLawyerDto: CreateLawyerDto): Promise<Lawyer> {
     return this.lawyersRepository.create(createLawyerDto);
   }
+
+  async findByName(name: string) {
+    return this.lawyersRepository.findByName(name);
+  }
+
+  async createPending(name: string) {
+    return this.lawyersRepository.createPending(name);
+  }
+
+  async addCaseToLawyer(lawyerId: string, caseId: string): Promise<void> {
+    return this.lawyersRepository.addCaseToLawyer(lawyerId, caseId);
+  }
 }
