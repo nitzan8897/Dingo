@@ -10,16 +10,53 @@ datasource db {
 }
 
 model Lawyer {
-  id                String   @id @default(uuid())
+  id                String        @id @default(uuid())
   fullNameEn        String
   fullNameHe        String
   city              String
   specialties       String[]
   yearsOfExperience Int
-  ratingVector      Json     // { professionalism, availability, empathy, cost }
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  ratingVector      Json          // { professionalism, availability, empathy, cost }
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  cases             LawyerCase[]
 
   @@index([city])
   @@index([specialties])
+}
+
+model Case {
+  id              String        @id @default(uuid())
+  externalId      String        @unique
+  title           String
+  specialty       String
+  result          String
+  judgeName       String?
+  openedAt        DateTime?
+  closedAt        DateTime?
+  complexityScore Float         @default(0.5)
+  rawText         String        @db.Text
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  lawyers         LawyerCase[]
+
+  @@index([externalId])
+  @@index([specialty])
+  @@index([result])
+  @@index([closedAt])
+}
+
+model LawyerCase {
+  id        String   @id @default(uuid())
+  case      Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+  caseId    String
+  lawyer    Lawyer   @relation(fields: [lawyerId], references: [id], onDelete: Cascade)
+  lawyerId  String
+  side      String
+  createdAt DateTime @default(now())
+
+  @@unique([caseId, lawyerId])
+  @@index([caseId])
+  @@index([lawyerId])
+  @@index([side])
 }
