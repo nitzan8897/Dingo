@@ -1,6 +1,6 @@
 # 🐕 Dingo - Smart Ratings Platform
 
-A Monorepo for a smart analyzed ratings & searching platform that starts with lawyers and will expand to other professionals. Built with **SOLID principles**, **Clean Architecture**, and **vendor-agnostic infrastructure**.
+A Monorepo for a smart analyzed ratings & searching platform that starts with lawyers and will expand to other professionals.
 
 ## 🏗️ Architecture
 ### Clients
