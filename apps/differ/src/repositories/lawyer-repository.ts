@@ -22,6 +22,7 @@ export class LawyerRepository {
         city: 'Pending Verification',
         specialties: [],
         yearsOfExperience: 0,
+        caseIds: [],
         ratingVector: {
           overall: 0,
           communication: 0,
@@ -30,6 +31,15 @@ export class LawyerRepository {
           professionalism: 0,
           availability: 0,
         },
+      },
+    });
+  }
+
+  async addCaseToLawyer(lawyerId: string, caseId: string): Promise<void> {
+    await this.prisma.lawyer.update({
+      where: { id: lawyerId },
+      data: {
+        caseIds: { push: caseId },
       },
     });
   }
