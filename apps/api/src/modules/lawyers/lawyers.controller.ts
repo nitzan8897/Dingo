@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Query, Param } from '@nestjs/common';
 import { LawyersService } from './lawyers.service';
 import { CreateLawyerDto } from './dto/create-lawyer.dto';
 import { LawyerFilterDto } from './dto/lawyer-filter.dto';
@@ -16,6 +16,11 @@ export class LawyersController {
   @Get()
   async findAll(@Query() filter: LawyerFilterDto): Promise<Lawyer[]> {
     return this.lawyersService.findAll(filter);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<Lawyer> {
+    return this.lawyersService.findOne(id);
   }
 
   @Post()

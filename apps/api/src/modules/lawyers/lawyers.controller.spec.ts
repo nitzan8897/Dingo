@@ -28,6 +28,7 @@ describe('LawyersController', () => {
 
   const mockLawyersService = {
     findAll: jest.fn(),
+    findOne: jest.fn(),
     create: jest.fn(),
   };
 
@@ -85,6 +86,26 @@ describe('LawyersController', () => {
 
       expect(result).toEqual([]);
       expect(service.findAll).toHaveBeenCalledWith(filter);
+    });
+  });
+
+  describe('findOne', () => {
+    it('should return a single lawyer by ID', async () => {
+      const id = '123';
+      mockLawyersService.findOne.mockResolvedValue(mockLawyer);
+
+      expect(await controller.findOne(id)).toBe(mockLawyer);
+      expect(service.findOne).toHaveBeenCalledWith(id);
+    });
+
+    it('should throw NotFoundException when lawyer not found', async () => {
+      const id = 'non-existent';
+      mockLawyersService.findOne.mockRejectedValue(
+        new Error('Lawyer not found'),
+      );
+
+      await expect(controller.findOne(id)).rejects.toThrow('Lawyer not found');
+      expect(service.findOne).toHaveBeenCalledWith(id);
     });
   });
 

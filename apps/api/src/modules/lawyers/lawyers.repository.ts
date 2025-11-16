@@ -47,6 +47,18 @@ export class LawyersRepository {
     return lawyers.map(this.mapToLawyer);
   }
 
+  async findOne(id: string): Promise<Lawyer | null> {
+    const lawyer = await this.prisma.lawyer.findUnique({
+      where: { id },
+    });
+
+    if (!lawyer) {
+      return null;
+    }
+
+    return this.mapToLawyer(lawyer);
+  }
+
   async create(createLawyerDto: CreateLawyerDto): Promise<Lawyer> {
     const lawyer = await this.prisma.lawyer.create({
       data: {
