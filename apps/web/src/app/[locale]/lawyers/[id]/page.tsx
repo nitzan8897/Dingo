@@ -3,6 +3,7 @@ import { lawyerService } from '@/services/lawyer-service';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import LawyerCardRatings from '@/components/lawyer/lawyer-card-ratings';
 
 interface PageProps {
@@ -26,17 +27,47 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
     const displayName = locale === 'en' ? lawyer.fullNameEn : lawyer.fullNameHe;
     const cityName = locale === 'en' ? lawyer.city.nameEn : lawyer.city.nameHe;
 
+    // Get initials for avatar fallback
+    const initials = displayName
+      .split(' ')
+      .map((n) => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+
     return (
       <div className="max-w-4xl mx-auto">
         {/* Header Card */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle className="text-4xl">{displayName}</CardTitle>
-            <p className="text-lg text-gray-600 dark:text-gray-300">
-              {cityName} • {lawyer.yearsOfExperience} {t('lawyer.yearsOfExperience')}
-            </p>
+            <div className="flex items-center gap-6">
+              <Avatar className="h-24 w-24">
+                <AvatarImage src={undefined} alt={displayName} />
+                <AvatarFallback className="text-2xl">{initials}</AvatarFallback>
+              </Avatar>
+              <div>
+                <CardTitle className="text-4xl mb-2">{displayName}</CardTitle>
+                <p className="text-lg text-gray-600 dark:text-gray-300">
+                  {cityName} • {lawyer.yearsOfExperience} {t('lawyer.yearsOfExperience')}
+                </p>
+              </div>
+            </div>
           </CardHeader>
         </Card>
+
+        {/* Bio Card */}
+        {(lawyer.bioEn || lawyer.bioHe) && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-2xl">{t('lawyer.about')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
+                {locale === 'en' ? lawyer.bioEn : lawyer.bioHe}
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Specialties Card */}
         <Card className="mb-6">

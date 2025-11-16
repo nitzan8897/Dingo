@@ -47,6 +47,8 @@ async function main() {
       data: {
         fullNameEn: 'Itay Levi',
         fullNameHe: 'איתי לוי',
+        bioEn: 'Experienced criminal and civil law attorney with 15 years of practice. Specializes in complex litigation and dispute resolution.',
+        bioHe: 'עורך דין מנוסה במשפט פלילי ואזרחי עם 15 שנות ניסיון. מתמחה בתביעות מורכבות ופתרון סכסוכים.',
         cityId: yavne.id,
         specialties: ['CRIMINAL', 'CIVIL'],
         yearsOfExperience: 15,

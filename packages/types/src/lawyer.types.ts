@@ -29,6 +29,8 @@ export interface Lawyer {
   id: string;
   fullNameEn: string;
   fullNameHe: string;
+  bioEn?: string;
+  bioHe?: string;
   cityId: string;
   city: City;
   specialties: string[];
@@ -41,6 +43,8 @@ export interface Lawyer {
 export interface CreateLawyerDTO {
   fullNameEn: string;
   fullNameHe: string;
+  bioEn?: string;
+  bioHe?: string;
   cityId: string;
   specialties: string[];
   yearsOfExperience: number;

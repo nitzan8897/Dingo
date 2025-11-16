@@ -72,6 +72,8 @@ export class LawyersRepository {
       data: {
         fullNameEn: createLawyerDto.fullNameEn,
         fullNameHe: createLawyerDto.fullNameHe,
+        bioEn: createLawyerDto.bioEn,
+        bioHe: createLawyerDto.bioHe,
         cityId: createLawyerDto.cityId,
         specialties: createLawyerDto.specialties,
         yearsOfExperience: createLawyerDto.yearsOfExperience,
@@ -97,6 +99,8 @@ export class LawyersRepository {
       id: lawyer.id,
       fullNameEn: lawyer.fullNameEn,
       fullNameHe: lawyer.fullNameHe,
+      bioEn: lawyer.bioEn || undefined,
+      bioHe: lawyer.bioHe || undefined,
       cityId: lawyer.cityId,
       city: {
         id: lawyer.city.id,

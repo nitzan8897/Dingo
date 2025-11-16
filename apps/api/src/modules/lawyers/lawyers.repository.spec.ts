@@ -227,6 +227,8 @@ describe('LawyersRepository', () => {
         data: {
           fullNameEn: createDto.fullNameEn,
           fullNameHe: createDto.fullNameHe,
+          bioEn: undefined,
+          bioHe: undefined,
           cityId: createDto.cityId,
           specialties: createDto.specialties,
           yearsOfExperience: createDto.yearsOfExperience,
@@ -265,6 +267,48 @@ describe('LawyersRepository', () => {
 
       expect(result).toEqual(multiSpecialtyLawyer);
       expect(result.specialties).toHaveLength(3);
+    });
+
+    it('should create a lawyer with bio fields', async () => {
+      const createDto: CreateLawyerDto = {
+        fullNameEn: 'Test Lawyer',
+        fullNameHe: 'עורך דין לבדיקה',
+        bioEn: 'Experienced criminal lawyer',
+        bioHe: 'עורך דין פלילי מנוסה',
+        cityId: 'city-1',
+        specialties: ['CRIMINAL'],
+        yearsOfExperience: 5,
+        ratingVector: {
+          professionalism: 85,
+          availability: 90,
+          empathy: 75,
+          cost: 60,
+        },
+      };
+      const lawyerWithBio = {
+        ...mockPrismaLawyer,
+        bioEn: createDto.bioEn,
+        bioHe: createDto.bioHe,
+      };
+      mockPrismaService.lawyer.create.mockResolvedValue(lawyerWithBio);
+
+      const result = await repository.create(createDto);
+
+      expect(result.bioEn).toBe('Experienced criminal lawyer');
+      expect(result.bioHe).toBe('עורך דין פלילי מנוסה');
+      expect(prisma.lawyer.create).toHaveBeenCalledWith({
+        data: {
+          fullNameEn: createDto.fullNameEn,
+          fullNameHe: createDto.fullNameHe,
+          bioEn: createDto.bioEn,
+          bioHe: createDto.bioHe,
+          cityId: createDto.cityId,
+          specialties: createDto.specialties,
+          yearsOfExperience: createDto.yearsOfExperience,
+          ratingVector: createDto.ratingVector,
+        },
+        include: { city: true },
+      });
     });
   });
 });

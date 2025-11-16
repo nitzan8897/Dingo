@@ -26,6 +26,8 @@ model Lawyer {
   id                String   @id @default(uuid())
   fullNameEn        String
   fullNameHe        String
+  bioEn             String?
+  bioHe             String?
   cityId            String
   city              City     @relation(fields: [cityId], references: [id])
   specialties       String[]
