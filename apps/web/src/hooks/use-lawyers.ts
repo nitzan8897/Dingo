@@ -45,8 +45,10 @@ export function useLawyers() {
 
       const filtered = lawyers.filter(
         (lawyer) =>
-          lawyer.fullName.toLowerCase().includes(query.toLowerCase()) ||
-          lawyer.city.toLowerCase().includes(query.toLowerCase()) ||
+          lawyer.fullNameEn.toLowerCase().includes(query.toLowerCase()) ||
+          lawyer.fullNameHe.toLowerCase().includes(query.toLowerCase()) ||
+          lawyer.city.nameEn.toLowerCase().includes(query.toLowerCase()) ||
+          lawyer.city.nameHe.toLowerCase().includes(query.toLowerCase()) ||
           lawyer.specialties.some((s) => s.toLowerCase().includes(query.toLowerCase()))
       );
       setFilteredLawyers(filtered);

@@ -64,6 +64,8 @@ async function main() {
       data: {
         fullNameEn: 'Nitzan Avargil',
         fullNameHe: 'ניצן אברגיל',
+        bioEn: 'Highly experienced corporate and IP attorney with exceptional expertise. Specializes in tech startups, patent law, and international business transactions.',
+        bioHe: 'עורך דין מנוסה במיוחד בדיני חברות וקניין רוחני. מתמחה בסטארט-אפים טכנולוגיים, דיני פטנטים ועסקאות בינלאומיות.',
         cityId: yavne.id,
         specialties: ['CORPORATE', 'INTELLECTUAL_PROPERTY'],
         yearsOfExperience: 300,
@@ -79,6 +81,8 @@ async function main() {
       data: {
         fullNameEn: 'Nir Shakibi',
         fullNameHe: 'ניר שקיבי',
+        bioEn: 'Compassionate family and immigration law specialist. Dedicated to helping families navigate complex legal processes with empathy and professionalism.',
+        bioHe: 'מומחה אמפתי לדיני משפחה והגירה. מוקדש לסייע למשפחות לנווט בתהליכים משפטיים מורכבים עם אמפתיה ומקצועיות.',
         cityId: yavne.id,
         specialties: ['FAMILY', 'IMMIGRATION'],
         yearsOfExperience: 8,
@@ -94,6 +98,8 @@ async function main() {
       data: {
         fullNameEn: 'Shachar Koren',
         fullNameHe: 'שחר קורן',
+        bioEn: 'Veteran labor and civil rights attorney with 20 years of experience. Known for strong advocacy and successful outcomes in employment disputes.',
+        bioHe: 'עורך דין ותיק בדיני עבודה וזכויות אזרחיות עם 20 שנות ניסיון. ידוע בסנגור חזק ובתוצאות מוצלחות בסכסוכי עבודה.',
         cityId: herzliya.id,
         specialties: ['LABOR', 'CIVIL'],
         yearsOfExperience: 20,
@@ -109,6 +115,8 @@ async function main() {
       data: {
         fullNameEn: 'Ben Buchris',
         fullNameHe: 'בן בוכריס',
+        bioEn: 'Expert tax and corporate attorney. Provides strategic tax planning and corporate structuring services for businesses of all sizes.',
+        bioHe: 'עורך דין מומחה במיסים ודיני חברות. מספק שירותי תכנון מס אסטרטגי ומבנה תאגידי לעסקים בכל הגדלים.',
         cityId: nokdim.id,
         specialties: ['TAX', 'CORPORATE'],
         yearsOfExperience: 10,
