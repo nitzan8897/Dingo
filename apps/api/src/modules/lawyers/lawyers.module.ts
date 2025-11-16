@@ -10,6 +10,6 @@ import { LawyersRepository } from './lawyers.repository';
 @Module({
   controllers: [LawyersController],
   providers: [LawyersService, LawyersRepository],
-  exports: [LawyersService],
+  exports: [LawyersService, LawyersRepository],
 })
 export class LawyersModule {}

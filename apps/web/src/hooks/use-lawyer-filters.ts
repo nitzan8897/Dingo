@@ -8,7 +8,11 @@ import { useSpecialtyFilter } from './use-specialty-filter';
  * Handles server-side filtering with API calls
  */
 export function useLawyerFilters(initialLawyers: Lawyer[]) {
-  const [lawyers, setLawyers] = useState<Lawyer[]>(initialLawyers);
+  const filterPendingLawyers = (lawyers: Lawyer[]): Lawyer[] => {
+    return lawyers.filter(lawyer => lawyer.city !== 'Pending Verification');
+  };
+
+  const [lawyers, setLawyers] = useState<Lawyer[]>(filterPendingLawyers(initialLawyers));
   const [cityFilter, setCityFilter] = useState('');
   const { selectedSpecialties, addSpecialty, setSpecialties } =
     useSpecialtyFilter();
@@ -21,7 +25,7 @@ export function useLawyerFilters(initialLawyers: Lawyer[]) {
       specialties,
       city: cityFilter || undefined,
     });
-    setLawyers(data);
+    setLawyers(filterPendingLawyers(data));
   };
 
   const handleFilterCity = async (city: string): Promise<void> => {
@@ -30,7 +34,7 @@ export function useLawyerFilters(initialLawyers: Lawyer[]) {
       specialties: selectedSpecialties,
       city: city || undefined,
     });
-    setLawyers(data);
+    setLawyers(filterPendingLawyers(data));
   };
 
   const handleSpecialtyClick = async (specialty: string): Promise<void> => {
@@ -41,7 +45,7 @@ export function useLawyerFilters(initialLawyers: Lawyer[]) {
     const data = await lawyerService.fetchLawyers({
       specialties: newSpecialties,
     });
-    setLawyers(data);
+    setLawyers(filterPendingLawyers(data));
   };
 
   return {

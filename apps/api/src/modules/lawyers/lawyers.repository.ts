@@ -67,6 +67,44 @@ export class LawyersRepository {
     return this.mapToLawyer(lawyer);
   }
 
+  async findById(id: string): Promise<Prisma.LawyerGetPayload<object> | null> {
+    return this.prisma.lawyer.findUnique({
+      where: { id },
+    });
+  }
+
+  async findByName(name: string): Promise<Prisma.LawyerGetPayload<object> | null> {
+    return this.prisma.lawyer.findFirst({
+      where: {
+        OR: [
+          { fullNameEn: { contains: name, mode: 'insensitive' } },
+          { fullNameHe: { contains: name, mode: 'insensitive' } },
+        ],
+      },
+    });
+  }
+
+  async createPending(name: string): Promise<Prisma.LawyerGetPayload<object>> {
+    return this.prisma.lawyer.create({
+      data: {
+        fullNameEn: name,
+        fullNameHe: name,
+        city: 'Pending Verification',
+        specialties: [],
+        yearsOfExperience: 0,
+        caseIds: [],
+        ratingVector: { professionalism: 0, availability: 0, empathy: 0, cost: 0 },
+      },
+    });
+  }
+
+  async addCaseToLawyer(lawyerId: string, caseId: string): Promise<void> {
+    await this.prisma.lawyer.update({
+      where: { id: lawyerId },
+      data: { caseIds: { push: caseId } },
+    });
+  }
+
   private mapToLawyer(lawyer: Prisma.LawyerGetPayload<object>): Lawyer {
     return {
       id: lawyer.id,

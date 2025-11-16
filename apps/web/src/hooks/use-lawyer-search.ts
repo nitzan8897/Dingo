@@ -15,7 +15,8 @@ export function useLawyerSearch(lawyers: Lawyer[]) {
 
     return lawyers.filter(
       (lawyer) =>
-        lawyer.fullName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lawyer.fullNameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        lawyer.fullNameHe.toLowerCase().includes(searchQuery.toLowerCase()) ||
         lawyer.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
         lawyer.specialties.some((s) =>
           s.toLowerCase().includes(searchQuery.toLowerCase())

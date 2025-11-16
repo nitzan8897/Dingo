@@ -1,20 +1,12 @@
 import { RatingVector } from './rating.types';
+import { Specialty } from './specialty.types';
 
 /**
  * Lawyer-related types and DTOs
  */
 
-export enum LawyerSpecialty {
-  CRIMINAL = 'CRIMINAL',
-  CIVIL = 'CIVIL',
-  CORPORATE = 'CORPORATE',
-  FAMILY = 'FAMILY',
-  LABOR = 'LABOR',
-  TAX = 'TAX',
-  IMMIGRATION = 'IMMIGRATION',
-  REAL_ESTATE = 'REAL_ESTATE',
-  INTELLECTUAL_PROPERTY = 'INTELLECTUAL_PROPERTY',
-}
+// Re-export Specialty enum for convenience
+export { Specialty };
 
 export interface Lawyer {
   id: string;
