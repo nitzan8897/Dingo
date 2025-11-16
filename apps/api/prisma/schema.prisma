@@ -1,5 +1,3 @@
-// Prisma schema for Dingo
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,17 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model City {
+  id        String   @id @default(uuid())
+  nameEn    String   @unique
+  nameHe    String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lawyers Lawyer[]
+
+  @@index([nameEn])
+  @@index([nameHe])
+  @@index([slug])
+}
+
 model Lawyer {
   id                String   @id @default(uuid())
   fullNameEn        String
   fullNameHe        String
-  city              String
+  cityId            String
+  city              City     @relation(fields: [cityId], references: [id])
   specialties       String[]
   yearsOfExperience Int
-  ratingVector      Json     // { professionalism, availability, empathy, cost }
+  ratingVector      Json
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  @@index([city])
+  @@index([cityId])
   @@index([specialties])
 }

@@ -31,7 +31,8 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer, onSpecialtyClick }) => 
           <LawyerCardHeader
             fullNameEn={lawyer.fullNameEn}
             fullNameHe={lawyer.fullNameHe}
-            city={lawyer.city}
+            cityNameEn={lawyer.city.nameEn}
+            cityNameHe={lawyer.city.nameHe}
           />
 
           <div className="mb-4">

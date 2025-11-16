@@ -20,8 +20,10 @@ export class LawyersRepository {
 
     if (filter.city) {
       where.city = {
-        contains: filter.city,
-        mode: 'insensitive',
+        OR: [
+          { nameEn: { contains: filter.city, mode: 'insensitive' } },
+          { nameHe: { contains: filter.city, mode: 'insensitive' } },
+        ],
       };
     }
 
@@ -39,6 +41,9 @@ export class LawyersRepository {
 
     const lawyers = await this.prisma.lawyer.findMany({
       where,
+      include: {
+        city: true,
+      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -50,6 +55,9 @@ export class LawyersRepository {
   async findOne(id: string): Promise<Lawyer | null> {
     const lawyer = await this.prisma.lawyer.findUnique({
       where: { id },
+      include: {
+        city: true,
+      },
     });
 
     if (!lawyer) {
@@ -64,7 +72,7 @@ export class LawyersRepository {
       data: {
         fullNameEn: createLawyerDto.fullNameEn,
         fullNameHe: createLawyerDto.fullNameHe,
-        city: createLawyerDto.city,
+        cityId: createLawyerDto.cityId,
         specialties: createLawyerDto.specialties,
         yearsOfExperience: createLawyerDto.yearsOfExperience,
         ratingVector: {
@@ -74,17 +82,30 @@ export class LawyersRepository {
           cost: createLawyerDto.ratingVector.cost,
         },
       },
+      include: {
+        city: true,
+      },
     });
 
     return this.mapToLawyer(lawyer);
   }
 
-  private mapToLawyer(lawyer: Prisma.LawyerGetPayload<object>): Lawyer {
+  private mapToLawyer(
+    lawyer: Prisma.LawyerGetPayload<{ include: { city: true } }>,
+  ): Lawyer {
     return {
       id: lawyer.id,
       fullNameEn: lawyer.fullNameEn,
       fullNameHe: lawyer.fullNameHe,
-      city: lawyer.city,
+      cityId: lawyer.cityId,
+      city: {
+        id: lawyer.city.id,
+        nameEn: lawyer.city.nameEn,
+        nameHe: lawyer.city.nameHe,
+        slug: lawyer.city.slug,
+        createdAt: lawyer.city.createdAt,
+        updatedAt: lawyer.city.updatedAt,
+      },
       specialties: lawyer.specialties,
       yearsOfExperience: lawyer.yearsOfExperience,
       ratingVector: lawyer.ratingVector as unknown as Lawyer['ratingVector'],

@@ -7,6 +7,39 @@ async function main() {
 
   // Clear existing data
   await prisma.lawyer.deleteMany();
+  await prisma.city.deleteMany();
+
+  // Seed cities
+  const cities = await Promise.all([
+    prisma.city.create({
+      data: {
+        nameEn: 'Yavne',
+        nameHe: 'יבנה',
+        slug: 'yavne',
+      },
+    }),
+    prisma.city.create({
+      data: {
+        nameEn: 'Herzliya',
+        nameHe: 'הרצליה',
+        slug: 'herzliya',
+      },
+    }),
+    prisma.city.create({
+      data: {
+        nameEn: 'Nokdim',
+        nameHe: 'נוקדים',
+        slug: 'nokdim',
+      },
+    }),
+  ]);
+
+  console.log(`✅ Seeded ${cities.length} cities`);
+
+  // Get city IDs
+  const yavne = cities.find(c => c.slug === 'yavne')!;
+  const herzliya = cities.find(c => c.slug === 'herzliya')!;
+  const nokdim = cities.find(c => c.slug === 'nokdim')!;
 
   // Seed lawyers
   const lawyers = await Promise.all([
@@ -14,7 +47,7 @@ async function main() {
       data: {
         fullNameEn: 'Itay Levi',
         fullNameHe: 'איתי לוי',
-        city: 'יבנה',
+        cityId: yavne.id,
         specialties: ['CRIMINAL', 'CIVIL'],
         yearsOfExperience: 15,
         ratingVector: {
@@ -29,7 +62,7 @@ async function main() {
       data: {
         fullNameEn: 'Nitzan Avargil',
         fullNameHe: 'ניצן אברגיל',
-        city: 'יבנה',
+        cityId: yavne.id,
         specialties: ['CORPORATE', 'INTELLECTUAL_PROPERTY'],
         yearsOfExperience: 300,
         ratingVector: {
@@ -44,7 +77,7 @@ async function main() {
       data: {
         fullNameEn: 'Nir Shakibi',
         fullNameHe: 'ניר שקיבי',
-        city: 'יבנה',
+        cityId: yavne.id,
         specialties: ['FAMILY', 'IMMIGRATION'],
         yearsOfExperience: 8,
         ratingVector: {
@@ -59,7 +92,7 @@ async function main() {
       data: {
         fullNameEn: 'Shachar Koren',
         fullNameHe: 'שחר קורן',
-        city: 'הרצליה',
+        cityId: herzliya.id,
         specialties: ['LABOR', 'CIVIL'],
         yearsOfExperience: 20,
         ratingVector: {
@@ -74,7 +107,7 @@ async function main() {
       data: {
         fullNameEn: 'Ben Buchris',
         fullNameHe: 'בן בוכריס',
-        city: 'נוקדים',
+        cityId: nokdim.id,
         specialties: ['TAX', 'CORPORATE'],
         yearsOfExperience: 10,
         ratingVector: {

@@ -8,11 +8,21 @@ describe('LawyersRepository', () => {
   let repository: LawyersRepository;
   let prisma: PrismaService;
 
+  const mockCity = {
+    id: 'city-1',
+    nameEn: 'Tel Aviv',
+    nameHe: 'תל אביב',
+    slug: 'tel-aviv',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   const mockPrismaLawyer = {
     id: '1',
     fullNameEn: 'Test Lawyer',
     fullNameHe: 'עורך דין לבדיקה',
-    city: 'Tel Aviv',
+    cityId: 'city-1',
+    city: mockCity,
     specialties: ['CRIMINAL'],
     yearsOfExperience: 5,
     ratingVector: {
@@ -28,6 +38,7 @@ describe('LawyersRepository', () => {
   const mockPrismaService = {
     lawyer: {
       findMany: jest.fn(),
+      findUnique: jest.fn(),
       create: jest.fn(),
     },
   };
@@ -65,6 +76,7 @@ describe('LawyersRepository', () => {
       expect(result).toEqual([mockPrismaLawyer]);
       expect(prisma.lawyer.findMany).toHaveBeenCalledWith({
         where: {},
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -78,10 +90,13 @@ describe('LawyersRepository', () => {
       expect(prisma.lawyer.findMany).toHaveBeenCalledWith({
         where: {
           city: {
-            contains: 'Tel Aviv',
-            mode: 'insensitive',
+            OR: [
+              { nameEn: { contains: 'Tel Aviv', mode: 'insensitive' } },
+              { nameHe: { contains: 'Tel Aviv', mode: 'insensitive' } },
+            ],
           },
         },
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -98,6 +113,7 @@ describe('LawyersRepository', () => {
             hasSome: ['CRIMINAL', 'CIVIL'],
           },
         },
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -114,6 +130,7 @@ describe('LawyersRepository', () => {
             gte: 3,
           },
         },
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -131,8 +148,10 @@ describe('LawyersRepository', () => {
       expect(prisma.lawyer.findMany).toHaveBeenCalledWith({
         where: {
           city: {
-            contains: 'Tel Aviv',
-            mode: 'insensitive',
+            OR: [
+              { nameEn: { contains: 'Tel Aviv', mode: 'insensitive' } },
+              { nameHe: { contains: 'Tel Aviv', mode: 'insensitive' } },
+            ],
           },
           specialties: {
             hasSome: ['CRIMINAL'],
@@ -141,6 +160,7 @@ describe('LawyersRepository', () => {
             gte: 5,
           },
         },
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -155,12 +175,40 @@ describe('LawyersRepository', () => {
     });
   });
 
+  describe('findOne', () => {
+    it('should return a lawyer by ID', async () => {
+      const id = '1';
+      mockPrismaService.lawyer.findUnique.mockResolvedValue(mockPrismaLawyer);
+
+      const result = await repository.findOne(id);
+
+      expect(result).toEqual(mockPrismaLawyer);
+      expect(prisma.lawyer.findUnique).toHaveBeenCalledWith({
+        where: { id },
+        include: { city: true },
+      });
+    });
+
+    it('should return null when lawyer not found', async () => {
+      const id = 'non-existent';
+      mockPrismaService.lawyer.findUnique.mockResolvedValue(null);
+
+      const result = await repository.findOne(id);
+
+      expect(result).toBeNull();
+      expect(prisma.lawyer.findUnique).toHaveBeenCalledWith({
+        where: { id },
+        include: { city: true },
+      });
+    });
+  });
+
   describe('create', () => {
     it('should create a new lawyer', async () => {
       const createDto: CreateLawyerDto = {
         fullNameEn: 'Test Lawyer',
         fullNameHe: 'עורך דין לבדיקה',
-        city: 'Tel Aviv',
+        cityId: 'city-1',
         specialties: ['CRIMINAL'],
         yearsOfExperience: 5,
         ratingVector: {
@@ -179,11 +227,12 @@ describe('LawyersRepository', () => {
         data: {
           fullNameEn: createDto.fullNameEn,
           fullNameHe: createDto.fullNameHe,
-          city: createDto.city,
+          cityId: createDto.cityId,
           specialties: createDto.specialties,
           yearsOfExperience: createDto.yearsOfExperience,
           ratingVector: createDto.ratingVector,
         },
+        include: { city: true },
       });
     });
 
@@ -191,7 +240,7 @@ describe('LawyersRepository', () => {
       const createDto: CreateLawyerDto = {
         fullNameEn: 'Multi Specialty Lawyer',
         fullNameHe: 'עורך דין רב תחומי',
-        city: 'Jerusalem',
+        cityId: 'city-1',
         specialties: ['CRIMINAL', 'CIVIL', 'FAMILY'],
         yearsOfExperience: 10,
         ratingVector: {
@@ -205,7 +254,7 @@ describe('LawyersRepository', () => {
         ...mockPrismaLawyer,
         fullNameEn: createDto.fullNameEn,
         fullNameHe: createDto.fullNameHe,
-        city: createDto.city,
+        cityId: createDto.cityId,
         specialties: createDto.specialties,
         yearsOfExperience: createDto.yearsOfExperience,
         ratingVector: createDto.ratingVector,

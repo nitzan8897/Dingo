@@ -6,11 +6,21 @@ describe('LawyersService', () => {
   let service: LawyersService;
   let repository: LawyersRepository;
 
+  const mockCity = {
+    id: 'city-1',
+    nameEn: 'New York',
+    nameHe: 'ניו יורק',
+    slug: 'new-york',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   const mockLawyer = {
     id: '1',
     fullNameEn: 'John Doe',
     fullNameHe: 'ג\'ון דו',
-    city: 'New York',
+    cityId: 'city-1',
+    city: mockCity,
     specialties: ['CRIMINAL', 'CIVIL'],
     yearsOfExperience: 10,
     ratingVector: {
@@ -101,7 +111,7 @@ describe('LawyersService', () => {
       const createDto = {
         fullNameEn: 'John Doe',
         fullNameHe: 'ג\'ון דו',
-        city: 'New York',
+        cityId: 'city-1',
         specialties: ['CRIMINAL', 'CIVIL'],
         yearsOfExperience: 10,
         ratingVector: {

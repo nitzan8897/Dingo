@@ -47,7 +47,7 @@ export class CreateLawyerDto {
   fullNameHe: string;
 
   @IsString()
-  city: string;
+  cityId: string;
 
   @IsArray()
   @ArrayMinSize(1)

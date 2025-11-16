@@ -9,11 +9,21 @@ describe('LawyersController', () => {
   let controller: LawyersController;
   let service: LawyersService;
 
+  const mockCity = {
+    id: 'city-1',
+    nameEn: 'Tel Aviv',
+    nameHe: 'תל אביב',
+    slug: 'tel-aviv',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   const mockLawyer: Lawyer = {
     id: '1',
     fullNameEn: 'Test Lawyer',
     fullNameHe: 'עורך דין לבדיקה',
-    city: 'Tel Aviv',
+    cityId: 'city-1',
+    city: mockCity,
     specialties: ['CRIMINAL'],
     yearsOfExperience: 5,
     ratingVector: {
@@ -114,7 +124,7 @@ describe('LawyersController', () => {
       const createDto: CreateLawyerDto = {
         fullNameEn: 'Test Lawyer',
         fullNameHe: 'עורך דין לבדיקה',
-        city: 'Tel Aviv',
+        cityId: 'city-1',
         specialties: ['CRIMINAL'],
         yearsOfExperience: 5,
         ratingVector: {
@@ -134,7 +144,7 @@ describe('LawyersController', () => {
       const createDto: CreateLawyerDto = {
         fullNameEn: 'Minimal Lawyer',
         fullNameHe: 'עורך דין מינימלי',
-        city: 'Jerusalem',
+        cityId: 'city-2',
         specialties: ['CIVIL'],
         yearsOfExperience: 1,
         ratingVector: {

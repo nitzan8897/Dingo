@@ -16,11 +16,21 @@ export enum LawyerSpecialty {
   INTELLECTUAL_PROPERTY = 'INTELLECTUAL_PROPERTY',
 }
 
+export interface City {
+  id: string;
+  nameEn: string;
+  nameHe: string;
+  slug: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Lawyer {
   id: string;
   fullNameEn: string;
   fullNameHe: string;
-  city: string;
+  cityId: string;
+  city: City;
   specialties: string[];
   yearsOfExperience: number;
   ratingVector: RatingVector;
@@ -31,7 +41,7 @@ export interface Lawyer {
 export interface CreateLawyerDTO {
   fullNameEn: string;
   fullNameHe: string;
-  city: string;
+  cityId: string;
   specialties: string[];
   yearsOfExperience: number;
   ratingVector: RatingVector;

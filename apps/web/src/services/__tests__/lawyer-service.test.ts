@@ -19,7 +19,15 @@ describe('LawyerService', () => {
         id: 'abc-123',
         fullNameEn: 'John Doe',
         fullNameHe: 'ג\'ון דו',
-        city: 'Tel Aviv',
+        cityId: 'city-1',
+        city: {
+          id: 'city-1',
+          nameEn: 'Tel Aviv',
+          nameHe: 'תל אביב',
+          slug: 'tel-aviv',
+          createdAt: new Date('2024-01-01'),
+          updatedAt: new Date('2024-01-01'),
+        },
         specialties: ['CRIMINAL'],
         yearsOfExperience: 10,
         ratingVector: {
