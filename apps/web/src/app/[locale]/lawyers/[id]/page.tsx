@@ -16,6 +16,22 @@ interface PageProps {
 }
 
 /**
+ * Generate static params for pre-rendering lawyer pages
+ * This significantly improves first-load performance
+ */
+export async function generateStaticParams() {
+  try {
+    const lawyers = await lawyerService.fetchLawyers();
+    return lawyers.map((lawyer) => ({
+      id: lawyer.id,
+    }));
+  } catch (error) {
+    console.error('Failed to generate static params:', error);
+    return [];
+  }
+}
+
+/**
  * Lawyer Profile Page - Server Component
  * Fetches lawyer data server-side for SEO and performance
  * Uses locale-aware name display and shadcn/ui components

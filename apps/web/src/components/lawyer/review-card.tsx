@@ -54,7 +54,7 @@ const ReviewCard = ({ review, locale }: ReviewCardProps): JSX.Element => {
       </CardHeader>
       <CardContent>
         <p className="text-gray-700 dark:text-gray-300 leading-relaxed italic">
-          "{comment}"
+          &ldquo;{comment}&rdquo;
         </p>
       </CardContent>
     </Card>
