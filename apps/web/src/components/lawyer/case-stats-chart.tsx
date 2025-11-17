@@ -1,12 +1,12 @@
 'use client';
 
-import { Case, CaseOutcome } from '@dingo/types';
+import { ProfileCase, CaseOutcome } from '@dingo/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslations } from 'next-intl';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 interface CaseStatsChartProps {
-  cases: Case[];
+  cases: ProfileCase[];
 }
 
 /**
@@ -36,7 +36,7 @@ const CaseStatsChart = ({ cases }: CaseStatsChartProps): JSX.Element => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-xl">Case Outcomes</CardTitle>
+        <CardTitle className="text-xl">{t('chart.caseOutcomes')}</CardTitle>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={250}>

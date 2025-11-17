@@ -19,8 +19,10 @@ const SpecialtyTag: React.FC<SpecialtyTagProps> = ({
   onClick,
   selected = false,
 }) => {
-  const handleClick = () => {
+  const handleClick = (e: React.MouseEvent) => {
     if (onClick) {
+      e.preventDefault();
+      e.stopPropagation();
       onClick(specialty);
     }
   };

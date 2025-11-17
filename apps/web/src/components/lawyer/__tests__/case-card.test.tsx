@@ -15,7 +15,7 @@ jest.mock('next-intl', () => ({
 }));
 
 describe('CaseCard', () => {
-  const mockCase: Case = {
+  const mockCase: ProfileCase = {
     id: '1',
     lawyerId: 'lawyer-1',
     titleEn: 'Test Case English',

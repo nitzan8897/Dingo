@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import CaseStatsChart from '../case-stats-chart';
-import { Case } from '@dingo/types';
+import { ProfileCase } from '@dingo/types';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
@@ -9,6 +9,7 @@ jest.mock('next-intl', () => ({
       'caseOutcome.LOST': 'Lost',
       'caseOutcome.SETTLED': 'Settled',
       'caseOutcome.ONGOING': 'Ongoing',
+      'chart.caseOutcomes': 'Case Outcomes',
     };
     return translations[key] || key;
   },
@@ -33,7 +34,7 @@ jest.mock('recharts', () => ({
 }));
 
 describe('CaseStatsChart', () => {
-  const createMockCase = (outcome: 'WON' | 'LOST' | 'SETTLED' | 'ONGOING', id: string): Case => ({
+  const createMockCase = (outcome: 'WON' | 'LOST' | 'SETTLED' | 'ONGOING', id: string): ProfileCase => ({
     id,
     lawyerId: 'lawyer-1',
     titleEn: `Case ${id}`,

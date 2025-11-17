@@ -1,12 +1,12 @@
 'use client';
 
-import { Case, CaseOutcome } from '@dingo/types';
+import { ProfileCase, CaseOutcome } from '@dingo/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { useTranslations } from 'next-intl';
 
 interface CaseCardProps {
-  case_: Case;
+  case_: ProfileCase;
   locale: string;
 }
 

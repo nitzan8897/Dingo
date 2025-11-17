@@ -24,7 +24,7 @@ export enum CaseOutcome {
   ONGOING = 'ONGOING',
 }
 
-export interface Case {
+export interface ProfileCase {
   id: string;
   lawyerId: string;
   titleEn: string;
@@ -60,7 +60,8 @@ export interface Lawyer {
   specialties: string[];
   yearsOfExperience: number;
   ratingVector: RatingVector;
-  cases?: Case[];
+  caseIds?: string[]; // Array of court case IDs from differ app
+  cases?: ProfileCase[]; // Profile showcase cases
   reviews?: Review[];
   createdAt: Date;
   updatedAt: Date;

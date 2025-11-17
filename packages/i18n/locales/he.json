@@ -61,6 +61,9 @@
     "SETTLED": "הסדר",
     "ONGOING": "בטיפול"
   },
+  "chart": {
+    "caseOutcomes": "תוצאות תיקים"
+  },
   "language": {
     "he": "עברית",
     "en": "English",
