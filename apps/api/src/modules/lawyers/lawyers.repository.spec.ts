@@ -17,6 +17,35 @@ describe('LawyersRepository', () => {
     updatedAt: new Date(),
   };
 
+  const mockCases = [
+    {
+      id: 'case-1',
+      lawyerId: '1',
+      titleEn: 'Test Case',
+      titleHe: 'תיק בדיקה',
+      descriptionEn: 'Test description',
+      descriptionHe: 'תיאור בדיקה',
+      outcome: 'WON',
+      year: 2023,
+      isFeatured: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
+
+  const mockReviews = [
+    {
+      id: 'review-1',
+      lawyerId: '1',
+      reviewerName: 'Test Reviewer',
+      rating: 5,
+      commentEn: 'Great lawyer!',
+      commentHe: 'עורך דין מצוין!',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
+
   const mockPrismaLawyer = {
     id: '1',
     fullNameEn: 'Test Lawyer',
@@ -33,6 +62,12 @@ describe('LawyersRepository', () => {
     },
     createdAt: new Date(),
     updatedAt: new Date(),
+  };
+
+  const mockPrismaLawyerWithRelations = {
+    ...mockPrismaLawyer,
+    cases: mockCases,
+    reviews: mockReviews,
   };
 
   const mockPrismaService = {
@@ -176,16 +211,31 @@ describe('LawyersRepository', () => {
   });
 
   describe('findOne', () => {
-    it('should return a lawyer by ID', async () => {
+    it('should return a lawyer by ID with cases and reviews', async () => {
       const id = '1';
-      mockPrismaService.lawyer.findUnique.mockResolvedValue(mockPrismaLawyer);
+      mockPrismaService.lawyer.findUnique.mockResolvedValue(
+        mockPrismaLawyerWithRelations,
+      );
 
       const result = await repository.findOne(id);
 
-      expect(result).toEqual(mockPrismaLawyer);
+      expect(result).toBeDefined();
+      expect(result.id).toBe('1');
+      expect(result.cases).toBeDefined();
+      expect(result.cases).toHaveLength(1);
+      expect(result.reviews).toBeDefined();
+      expect(result.reviews).toHaveLength(1);
       expect(prisma.lawyer.findUnique).toHaveBeenCalledWith({
         where: { id },
-        include: { city: true },
+        include: {
+          city: true,
+          cases: {
+            orderBy: { year: 'desc' },
+          },
+          reviews: {
+            orderBy: { createdAt: 'desc' },
+          },
+        },
       });
     });
 
@@ -198,7 +248,15 @@ describe('LawyersRepository', () => {
       expect(result).toBeNull();
       expect(prisma.lawyer.findUnique).toHaveBeenCalledWith({
         where: { id },
-        include: { city: true },
+        include: {
+          city: true,
+          cases: {
+            orderBy: { year: 'desc' },
+          },
+          reviews: {
+            orderBy: { createdAt: 'desc' },
+          },
+        },
       });
     });
   });

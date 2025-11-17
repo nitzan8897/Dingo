@@ -40,7 +40,13 @@
     "ratings": "דירוגים",
     "about": "אודות",
     "contact": "צור קשר",
-    "viewProfile": "צפה בפרופיל"
+    "viewProfile": "צפה בפרופיל",
+    "cases": "תיקים",
+    "reviews": "ביקורות",
+    "featuredCases": "תיקים מובילים",
+    "noCases": "אין תיקים זמינים",
+    "noReviews": "אין ביקורות עדיין",
+    "reviewsCount": "ביקורות"
   },
   "ratings": {
     "professionalism": "מקצועיות",
@@ -48,6 +54,12 @@
     "empathy": "אמפתיה",
     "cost": "עלות",
     "overall": "ציון כללי"
+  },
+  "caseOutcome": {
+    "WON": "ניצחון",
+    "LOST": "הפסד",
+    "SETTLED": "הסדר",
+    "ONGOING": "בטיפול"
   },
   "language": {
     "he": "עברית",

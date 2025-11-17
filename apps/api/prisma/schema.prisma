@@ -36,6 +36,51 @@ model Lawyer {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
+  cases   Case[]
+  reviews Review[]
+
   @@index([cityId])
   @@index([specialties])
+}
+
+model Case {
+  id            String      @id @default(uuid())
+  lawyerId      String
+  lawyer        Lawyer      @relation(fields: [lawyerId], references: [id], onDelete: Cascade)
+  titleEn       String
+  titleHe       String
+  descriptionEn String      @db.Text
+  descriptionHe String      @db.Text
+  outcome       CaseOutcome
+  year          Int
+  isFeatured    Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([lawyerId])
+  @@index([isFeatured])
+  @@index([year])
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  lawyerId     String
+  lawyer       Lawyer   @relation(fields: [lawyerId], references: [id], onDelete: Cascade)
+  reviewerName String
+  rating       Int
+  commentEn    String   @db.Text
+  commentHe    String   @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([lawyerId])
+  @@index([rating])
+  @@index([createdAt])
+}
+
+enum CaseOutcome {
+  WON
+  LOST
+  SETTLED
+  ONGOING
 }

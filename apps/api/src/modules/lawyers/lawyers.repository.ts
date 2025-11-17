@@ -57,6 +57,12 @@ export class LawyersRepository {
       where: { id },
       include: {
         city: true,
+        cases: {
+          orderBy: { year: 'desc' },
+        },
+        reviews: {
+          orderBy: { createdAt: 'desc' },
+        },
       },
     });
 
@@ -64,7 +70,7 @@ export class LawyersRepository {
       return null;
     }
 
-    return this.mapToLawyer(lawyer);
+    return this.mapToLawyerWithRelations(lawyer);
   }
 
   async create(createLawyerDto: CreateLawyerDto): Promise<Lawyer> {
@@ -115,6 +121,39 @@ export class LawyersRepository {
       ratingVector: lawyer.ratingVector as unknown as Lawyer['ratingVector'],
       createdAt: lawyer.createdAt,
       updatedAt: lawyer.updatedAt,
+    };
+  }
+
+  private mapToLawyerWithRelations(
+    lawyer: Prisma.LawyerGetPayload<{
+      include: { city: true; cases: true; reviews: true };
+    }>,
+  ): Lawyer {
+    return {
+      ...this.mapToLawyer({ ...lawyer, city: lawyer.city }),
+      cases: lawyer.cases.map((c) => ({
+        id: c.id,
+        lawyerId: c.lawyerId,
+        titleEn: c.titleEn,
+        titleHe: c.titleHe,
+        descriptionEn: c.descriptionEn,
+        descriptionHe: c.descriptionHe,
+        outcome: c.outcome as Lawyer['cases'][number]['outcome'],
+        year: c.year,
+        isFeatured: c.isFeatured,
+        createdAt: c.createdAt,
+        updatedAt: c.updatedAt,
+      })),
+      reviews: lawyer.reviews.map((r) => ({
+        id: r.id,
+        lawyerId: r.lawyerId,
+        reviewerName: r.reviewerName,
+        rating: r.rating,
+        commentEn: r.commentEn,
+        commentHe: r.commentHe,
+        createdAt: r.createdAt,
+        updatedAt: r.updatedAt,
+      })),
     };
   }
 }

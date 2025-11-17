@@ -5,6 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import LawyerCardRatings from '@/components/lawyer/lawyer-card-ratings';
+import ProfileAnimatedSections from '@/components/lawyer/profile-animated-sections';
+import CaseCard from '@/components/lawyer/case-card';
+import ReviewCard from '@/components/lawyer/review-card';
+import CaseStatsChart from '@/components/lawyer/case-stats-chart';
+import ReviewsStats from '@/components/lawyer/reviews-stats';
 
 interface PageProps {
   params: Promise<{ id: string; locale: string }>;
@@ -35,8 +40,13 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
       .toUpperCase()
       .slice(0, 2);
 
+    // Get featured and all cases
+    const featuredCases = lawyer.cases?.filter((c) => c.isFeatured) || [];
+    const allCases = lawyer.cases || [];
+    const reviews = lawyer.reviews || [];
+
     return (
-      <div className="max-w-4xl mx-auto">
+      <ProfileAnimatedSections>
         {/* Header Card */}
         <Card className="mb-6">
           <CardHeader>
@@ -86,7 +96,7 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
         </Card>
 
         {/* Ratings Card */}
-        <Card>
+        <Card className="mb-6">
           <CardHeader>
             <CardTitle className="text-2xl">{t('lawyer.ratings')}</CardTitle>
           </CardHeader>
@@ -102,7 +112,73 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
             />
           </CardContent>
         </Card>
-      </div>
+
+        {/* Stats Grid - Cases and Reviews */}
+        {(allCases.length > 0 || reviews.length > 0) && (
+          <div className="grid md:grid-cols-2 gap-6 mb-6">
+            {allCases.length > 0 && <CaseStatsChart cases={allCases} />}
+            {reviews.length > 0 && <ReviewsStats reviews={reviews} />}
+          </div>
+        )}
+
+        {/* Featured Cases Section */}
+        {featuredCases.length > 0 && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-2xl">{t('lawyer.featuredCases')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {featuredCases.map((case_) => (
+                  <CaseCard key={case_.id} case_={case_} locale={locale} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* All Cases Section */}
+        {allCases.length > 0 && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-2xl">{t('lawyer.cases')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {allCases.map((case_) => (
+                  <CaseCard key={case_.id} case_={case_} locale={locale} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Reviews Section */}
+        {reviews.length > 0 && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-2xl">{t('lawyer.reviews')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {reviews.map((review) => (
+                  <ReviewCard key={review.id} review={review} locale={locale} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Empty state */}
+        {allCases.length === 0 && reviews.length === 0 && (
+          <Card className="mb-6">
+            <CardContent className="py-12 text-center text-gray-500 dark:text-gray-400">
+              <p>{t('lawyer.noCases')}</p>
+              <p className="mt-2">{t('lawyer.noReviews')}</p>
+            </CardContent>
+          </Card>
+        )}
+      </ProfileAnimatedSections>
     );
   } catch (error) {
     // If lawyer not found, show 404

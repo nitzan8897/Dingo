@@ -25,6 +25,38 @@ export interface City {
   updatedAt: Date;
 }
 
+export enum CaseOutcome {
+  WON = 'WON',
+  LOST = 'LOST',
+  SETTLED = 'SETTLED',
+  ONGOING = 'ONGOING',
+}
+
+export interface Case {
+  id: string;
+  lawyerId: string;
+  titleEn: string;
+  titleHe: string;
+  descriptionEn: string;
+  descriptionHe: string;
+  outcome: CaseOutcome;
+  year: number;
+  isFeatured: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Review {
+  id: string;
+  lawyerId: string;
+  reviewerName: string;
+  rating: number;
+  commentEn: string;
+  commentHe: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface Lawyer {
   id: string;
   fullNameEn: string;
@@ -36,6 +68,8 @@ export interface Lawyer {
   specialties: string[];
   yearsOfExperience: number;
   ratingVector: RatingVector;
+  cases?: Case[];
+  reviews?: Review[];
   createdAt: Date;
   updatedAt: Date;
 }
