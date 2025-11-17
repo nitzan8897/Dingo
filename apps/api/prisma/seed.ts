@@ -7,7 +7,7 @@ async function main() {
 
   // Clear existing data
   await prisma.review.deleteMany();
-  await prisma.case.deleteMany();
+  await prisma.profileCase.deleteMany();
   await prisma.lawyer.deleteMany();
   await prisma.city.deleteMany();
 
@@ -139,7 +139,7 @@ async function main() {
 
   // Itay Levi - Criminal and Civil cases
   cases.push(
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[0].id,
         titleEn: 'State vs. Cohen - Fraud Case',
@@ -151,7 +151,7 @@ async function main() {
         isFeatured: true,
       },
     }),
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[0].id,
         titleEn: 'Civil Dispute - Property Rights',
@@ -163,7 +163,7 @@ async function main() {
         isFeatured: true,
       },
     }),
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[0].id,
         titleEn: 'Criminal Defense - Assault Charges',
@@ -179,7 +179,7 @@ async function main() {
 
   // Nitzan Avargil - Corporate and IP cases
   cases.push(
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[1].id,
         titleEn: 'Tech Startup M&A Transaction',
@@ -191,7 +191,7 @@ async function main() {
         isFeatured: true,
       },
     }),
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[1].id,
         titleEn: 'Patent Infringement Litigation',
@@ -203,7 +203,7 @@ async function main() {
         isFeatured: true,
       },
     }),
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[1].id,
         titleEn: 'International IP Licensing Agreement',
@@ -219,7 +219,7 @@ async function main() {
 
   // Nir Shakibi - Family and Immigration cases
   cases.push(
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[2].id,
         titleEn: 'Child Custody Agreement',
@@ -231,7 +231,7 @@ async function main() {
         isFeatured: true,
       },
     }),
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[2].id,
         titleEn: 'Family Reunification Visa',
@@ -247,7 +247,7 @@ async function main() {
 
   // Shachar Koren - Labor and Civil cases
   cases.push(
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[3].id,
         titleEn: 'Wrongful Termination Lawsuit',
@@ -259,7 +259,7 @@ async function main() {
         isFeatured: true,
       },
     }),
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[3].id,
         titleEn: 'Workplace Discrimination Case',
@@ -275,7 +275,7 @@ async function main() {
 
   // Ben Buchris - Tax and Corporate cases
   cases.push(
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[4].id,
         titleEn: 'Tax Authority Audit Defense',
@@ -287,7 +287,7 @@ async function main() {
         isFeatured: true,
       },
     }),
-    await prisma.case.create({
+    await prisma.profileCase.create({
       data: {
         lawyerId: lawyers[4].id,
         titleEn: 'Corporate Restructuring',
