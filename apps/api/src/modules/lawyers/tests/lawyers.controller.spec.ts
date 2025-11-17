@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LawyersController } from './lawyers.controller';
-import { LawyersService } from './lawyers.service';
-import { CreateLawyerDto } from './dto/create-lawyer.dto';
-import { LawyerFilterDto } from './dto/lawyer-filter.dto';
+import { LawyersController } from '../lawyers.controller';
+import { LawyersService } from '../lawyers.service';
+import { CreateLawyerDto } from '../dto/create-lawyer.dto';
+import { LawyerFilterDto } from '../dto/lawyer-filter.dto';
 import { Lawyer } from '@dingo/types';
 
 describe('LawyersController', () => {

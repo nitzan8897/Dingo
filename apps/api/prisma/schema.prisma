@@ -32,18 +32,44 @@ model Lawyer {
   city              City     @relation(fields: [cityId], references: [id])
   specialties       String[]
   yearsOfExperience Int
-  ratingVector      Json
+  ratingVector      Json     // { professionalism, availability, empathy, cost }
+  caseIds           String[] @default([])
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  cases   Case[]
-  reviews Review[]
+  profileCases   ProfileCase[]
+  reviews        Review[]
 
   @@index([cityId])
   @@index([specialties])
 }
 
+// Legal cases from court system (from differ app)
 model Case {
+  id                    String    @id @default(uuid())
+  externalId            String    @unique
+  title                 String
+  specialty             String
+  result                String
+  judgeName             String?
+  openedAt              DateTime?
+  closedAt              DateTime?
+  complexityScore       Float     @default(0.5)
+  rawText               String    @db.Text
+  plaintiffLawyerIds    String[]  @default([])
+  defendantLawyerIds    String[]  @default([])
+  associatedLawyerIds   String[]  @default([])
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([externalId])
+  @@index([specialty])
+  @@index([result])
+  @@index([closedAt])
+}
+
+// Lawyer profile cases (featured/showcase cases)
+model ProfileCase {
   id            String      @id @default(uuid())
   lawyerId      String
   lawyer        Lawyer      @relation(fields: [lawyerId], references: [id], onDelete: Cascade)

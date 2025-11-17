@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { LawyersRepository } from './lawyers.repository';
-import { PrismaService } from '../prisma/prisma.service';
-import { CreateLawyerDto } from './dto/create-lawyer.dto';
-import { LawyerFilterDto } from './dto/lawyer-filter.dto';
+import { LawyersRepository } from '../lawyers.repository';
+import { PrismaService } from '../../prisma/prisma.service';
+import { CreateLawyerDto } from '../dto/create-lawyer.dto';
+import { LawyerFilterDto } from '../dto/lawyer-filter.dto';
 
 describe('LawyersRepository', () => {
   let repository: LawyersRepository;

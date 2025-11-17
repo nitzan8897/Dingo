@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { HealthModule } from './modules/health/health.module';
 import { LawyersModule } from './modules/lawyers/lawyers.module';
+import { CasesModule } from './modules/cases/cases.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 
 @Module({
@@ -13,6 +14,7 @@ import { PrismaModule } from './modules/prisma/prisma.module';
     PrismaModule,
     HealthModule,
     LawyersModule,
+    CasesModule,
   ],
 })
 export class AppModule {}

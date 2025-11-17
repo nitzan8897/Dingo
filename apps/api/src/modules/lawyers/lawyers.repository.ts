@@ -57,7 +57,7 @@ export class LawyersRepository {
       where: { id },
       include: {
         city: true,
-        cases: {
+        profileCases: {
           orderBy: { year: 'desc' },
         },
         reviews: {
@@ -98,6 +98,44 @@ export class LawyersRepository {
     return this.mapToLawyer(lawyer);
   }
 
+  async findById(id: string): Promise<Prisma.LawyerGetPayload<object> | null> {
+    return this.prisma.lawyer.findUnique({
+      where: { id },
+    });
+  }
+
+  async findByName(name: string): Promise<Prisma.LawyerGetPayload<object> | null> {
+    return this.prisma.lawyer.findFirst({
+      where: {
+        OR: [
+          { fullNameEn: { contains: name, mode: 'insensitive' } },
+          { fullNameHe: { contains: name, mode: 'insensitive' } },
+        ],
+      },
+    });
+  }
+
+  async createPending(name: string, cityId: string): Promise<Prisma.LawyerGetPayload<object>> {
+    return this.prisma.lawyer.create({
+      data: {
+        fullNameEn: name,
+        fullNameHe: name,
+        cityId,
+        specialties: [],
+        yearsOfExperience: 0,
+        caseIds: [],
+        ratingVector: { professionalism: 0, availability: 0, empathy: 0, cost: 0 },
+      },
+    });
+  }
+
+  async addCaseToLawyer(lawyerId: string, caseId: string): Promise<void> {
+    await this.prisma.lawyer.update({
+      where: { id: lawyerId },
+      data: { caseIds: { push: caseId } },
+    });
+  }
+
   private mapToLawyer(
     lawyer: Prisma.LawyerGetPayload<{ include: { city: true } }>,
   ): Lawyer {
@@ -126,12 +164,12 @@ export class LawyersRepository {
 
   private mapToLawyerWithRelations(
     lawyer: Prisma.LawyerGetPayload<{
-      include: { city: true; cases: true; reviews: true };
+      include: { city: true; profileCases: true; reviews: true };
     }>,
   ): Lawyer {
     return {
       ...this.mapToLawyer({ ...lawyer, city: lawyer.city }),
-      cases: lawyer.cases.map((c) => ({
+      cases: lawyer.profileCases.map((c) => ({
         id: c.id,
         lawyerId: c.lawyerId,
         titleEn: c.titleEn,

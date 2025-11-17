@@ -19,6 +19,8 @@ export function useLawyerSearch(lawyers: Lawyer[]) {
       (lawyer) =>
         lawyer.fullNameEn.toLowerCase().includes(query) ||
         lawyer.fullNameHe.toLowerCase().includes(query) ||
+        lawyer.city.nameEn.toLowerCase().includes(query) ||
+        lawyer.city.nameHe.toLowerCase().includes(query) ||
         lawyer.specialties.some((s) => s.toLowerCase().includes(query))
     );
   }, [lawyers, searchQuery]);
