@@ -11,8 +11,15 @@ async function main() {
   await prisma.lawyer.deleteMany();
   await prisma.city.deleteMany();
 
-  // Seed cities
+  // Seed cities (including Unknown for pending lawyers)
   const cities = await Promise.all([
+    prisma.city.create({
+      data: {
+        nameEn: 'Unknown',
+        nameHe: 'לא ידוע',
+        slug: 'unknown',
+      },
+    }),
     prisma.city.create({
       data: {
         nameEn: 'Yavne',
