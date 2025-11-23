@@ -1,53 +1,14 @@
 import { RatingVector } from './rating.types';
 import { Specialty } from './specialty.types';
+import { City } from './city.types';
+import { ProfileCase, Review } from './case.types';
 
 /**
  * Lawyer-related types and DTOs
  */
 
-// Re-export Specialty enum for convenience
+// Re-export for convenience
 export { Specialty };
-
-export interface City {
-  id: string;
-  nameEn: string;
-  nameHe: string;
-  slug: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export enum CaseOutcome {
-  WON = 'WON',
-  LOST = 'LOST',
-  SETTLED = 'SETTLED',
-  ONGOING = 'ONGOING',
-}
-
-export interface ProfileCase {
-  id: string;
-  lawyerId: string;
-  titleEn: string;
-  titleHe: string;
-  descriptionEn: string;
-  descriptionHe: string;
-  outcome: CaseOutcome;
-  year: number;
-  isFeatured: boolean;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-export interface Review {
-  id: string;
-  lawyerId: string;
-  reviewerName: string;
-  rating: number;
-  commentEn: string;
-  commentHe: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
 
 export interface Lawyer {
   id: string;
