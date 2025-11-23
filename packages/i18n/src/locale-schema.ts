@@ -62,8 +62,8 @@ export interface LocaleSchema {
     ONGOING: string;
   };
   caseResult: {
-    win: string;
-    lose: string;
+    DEFENCE_WON: string;
+    ATTACK_WON: string;
     settlement: string;
     dismissed: string;
     other: string;

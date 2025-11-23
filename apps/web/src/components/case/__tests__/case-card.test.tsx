@@ -5,8 +5,8 @@ import CaseCard from '../case-card';
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
-      'caseResult.win': 'Win',
-      'caseResult.lose': 'Loss',
+      'caseResult.DEFENCE_WON': 'Defence Won',
+      'caseResult.ATTACK_WON': 'Attack Won',
       'caseResult.settlement': 'Settlement',
       'specialties.CRIMINAL': 'Criminal Law',
       'specialties.CIVIL': 'Civil Law',
@@ -31,7 +31,7 @@ describe('CaseCard', () => {
     externalId: '12345-01-24',
     title: 'Test Case Title',
     specialty: 'CRIMINAL',
-    result: 'win',
+    result: 'DEFENCE_WON',
     judgeName: 'Judge Smith',
     pdfUrl: 'https://example.com/case.pdf',
     openedAt: new Date('2024-01-15'),
@@ -52,7 +52,7 @@ describe('CaseCard', () => {
 
   it('should render case status badge', () => {
     render(<CaseCard case_={mockCase} />);
-    expect(screen.getByText('Win')).toBeInTheDocument();
+    expect(screen.getByText('Defence Won')).toBeInTheDocument();
   });
 
   it('should render specialty badge', () => {
@@ -95,14 +95,14 @@ describe('CaseCard', () => {
 
   it('should apply correct status color for win', () => {
     render(<CaseCard case_={mockCase} />);
-    const winBadge = screen.getByText('Win');
+    const winBadge = screen.getByText('Defence Won');
     expect(winBadge).toHaveClass('bg-emerald-100');
   });
 
   it('should apply correct status color for lose', () => {
-    const loseCase = { ...mockCase, result: 'lose' as const };
+    const loseCase = { ...mockCase, result: 'ATTACK_WON' as const };
     render(<CaseCard case_={loseCase} />);
-    const loseBadge = screen.getByText('Loss');
+    const loseBadge = screen.getByText('Attack Won');
     expect(loseBadge).toHaveClass('bg-red-100');
   });
 

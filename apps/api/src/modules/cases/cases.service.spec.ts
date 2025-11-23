@@ -50,7 +50,7 @@ describe('CasesService', () => {
       externalId: '12345-01-24',
       title: 'Test Case',
       specialty: 'CRIMINAL',
-      result: 'win',
+      result: 'DEFENCE_WON',
       judgeName: 'Judge Smith',
       pdfUrl: 'https://example.com/case.pdf',
       complexityScore: 0.7,
@@ -164,7 +164,7 @@ describe('CasesService', () => {
         externalId,
         title: 'Test Case',
         specialty: 'CRIMINAL',
-        result: 'win',
+        result: 'DEFENCE_WON',
         judgeName: 'Judge Smith',
         pdfUrl: 'https://example.com/case.pdf',
         openedAt: new Date('2024-01-01'),
@@ -204,7 +204,7 @@ describe('CasesService', () => {
         externalId: '12345-01-24',
         title: 'Case 1',
         specialty: 'CRIMINAL',
-        result: 'win',
+        result: 'DEFENCE_WON',
         judgeName: 'Judge Smith',
         pdfUrl: null,
         openedAt: new Date('2024-01-01'),
@@ -250,7 +250,7 @@ describe('CasesService', () => {
       const filter: CaseFilterDto = {
         search: 'test',
         specialty: 'CRIMINAL',
-        status: 'win',
+        status: 'DEFENCE_WON',
         year: 2024,
       };
 

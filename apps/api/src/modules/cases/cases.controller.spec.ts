@@ -39,7 +39,7 @@ describe('CasesController', () => {
         externalId: '12345-01-24',
         title: 'Test Case',
         specialty: 'CRIMINAL',
-        result: 'win',
+        result: 'DEFENCE_WON',
         judgeName: 'Judge Smith',
         pdfUrl: 'https://example.com/case.pdf',
         complexityScore: 0.7,
@@ -74,7 +74,7 @@ describe('CasesController', () => {
         externalId: '12345-01-24',
         title: 'Case 1',
         specialty: 'CRIMINAL',
-        result: 'win',
+        result: 'DEFENCE_WON',
         judgeName: 'Judge Smith',
         pdfUrl: null,
         openedAt: new Date('2024-01-01'),
@@ -103,7 +103,7 @@ describe('CasesController', () => {
       const filter: CaseFilterDto = {
         search: 'test',
         specialty: 'CRIMINAL',
-        status: 'win',
+        status: 'DEFENCE_WON',
         year: 2024,
       };
 
@@ -124,7 +124,7 @@ describe('CasesController', () => {
         externalId,
         title: 'Test Case',
         specialty: 'CRIMINAL',
-        result: 'win',
+        result: 'DEFENCE_WON',
         judgeName: 'Judge Smith',
         pdfUrl: 'https://example.com/case.pdf',
         openedAt: new Date('2024-01-01'),

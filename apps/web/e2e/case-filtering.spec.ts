@@ -39,7 +39,7 @@ test.describe('Case Filtering', () => {
     await page.goto('/en/cases');
     await page.waitForLoadState('networkidle');
 
-    const winTag = page.getByText('Win', { exact: true });
+    const winTag = page.getByText('Defence Won', { exact: true });
     if (await winTag.isVisible()) {
       await winTag.click();
       await page.waitForLoadState('networkidle');
@@ -198,7 +198,7 @@ test.describe('Case Filtering', () => {
       await criminalTag.click();
     }
 
-    const winTag = page.getByText('Win', { exact: true });
+    const winTag = page.getByText('Defence Won', { exact: true });
     if (await winTag.isVisible()) {
       await winTag.click();
     }

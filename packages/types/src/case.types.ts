@@ -1,4 +1,4 @@
-export type CaseResult = 'win' | 'lose' | 'settlement' | 'dismissed' | 'other';
+export type CaseResult = 'DEFENCE_WON' | 'ATTACK_WON' | 'settlement' | 'dismissed' | 'other';
 
 export enum CaseOutcome {
   WON = 'WON',

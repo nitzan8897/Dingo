@@ -64,8 +64,8 @@ export const en: LocaleSchema = {
     ONGOING: 'Ongoing',
   },
   caseResult: {
-    win: 'Win',
-    lose: 'Loss',
+    DEFENCE_WON: 'Defence Won',
+    ATTACK_WON: 'Attack Won',
     settlement: 'Settlement',
     dismissed: 'Dismissed',
     other: 'Other',

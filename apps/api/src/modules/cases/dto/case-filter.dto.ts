@@ -41,10 +41,10 @@ export class CaseFilterDto implements CaseFilterParams {
 
   @ApiPropertyOptional({
     description: 'Filter by case result/status',
-    example: 'win',
-    enum: ['win', 'lose', 'settlement', 'dismissed', 'other']
+    example: 'DEFENCE_WON',
+    enum: ['DEFENCE_WON', 'ATTACK_WON', 'settlement', 'dismissed', 'other']
   })
   @IsOptional()
-  @IsEnum(['win', 'lose', 'settlement', 'dismissed', 'other'])
+  @IsEnum(['DEFENCE_WON', 'ATTACK_WON', 'settlement', 'dismissed', 'other'])
   status?: CaseResult;
 }

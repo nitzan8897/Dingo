@@ -64,8 +64,8 @@ export const he: LocaleSchema = {
     ONGOING: 'בטיפול',
   },
   caseResult: {
-    win: 'ניצחון',
-    lose: 'הפסד',
+    DEFENCE_WON: 'ההגנה ניצחה',
+    ATTACK_WON: 'התביעה ניצחה',
     settlement: 'הסדר',
     dismissed: 'נדחה',
     other: 'אחר',

@@ -15,7 +15,7 @@ const CaseStatusFilter: React.FC<CaseStatusFilterProps> = ({
   onStatusChange,
 }) => {
   const t = useTranslations();
-  const allStatuses: CaseResult[] = ['win', 'lose', 'settlement', 'dismissed', 'other'];
+  const allStatuses: CaseResult[] = ['DEFENCE_WON', 'ATTACK_WON', 'settlement', 'dismissed', 'other'];
 
   const handleStatusClick = (status: string): void => {
     const caseStatus = status as CaseResult;

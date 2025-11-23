@@ -41,7 +41,7 @@ describe('CasesRepository', () => {
         externalId: '12345-01-24',
         title: 'Test Case',
         specialty: 'CRIMINAL',
-        result: 'win',
+        result: 'DEFENCE_WON',
         judgeName: 'Judge Smith',
         pdfUrl: 'https://example.com/case.pdf',
         openedAt: '2024-01-01',
@@ -126,7 +126,7 @@ describe('CasesRepository', () => {
         externalId,
         title: 'Test Case',
         specialty: 'CRIMINAL',
-        result: 'win',
+        result: 'DEFENCE_WON',
         judgeName: 'Judge Smith',
         pdfUrl: 'https://example.com/case.pdf',
         openedAt: new Date('2024-01-01'),
@@ -168,7 +168,7 @@ describe('CasesRepository', () => {
         externalId: '12345-01-24',
         title: 'Case 1',
         specialty: 'CRIMINAL',
-        result: 'win',
+        result: 'DEFENCE_WON',
         judgeName: 'Judge Smith',
         pdfUrl: null,
         openedAt: new Date('2024-01-01'),
@@ -245,14 +245,14 @@ describe('CasesRepository', () => {
     });
 
     it('should filter cases by status', async () => {
-      const filter: CaseFilterDto = { status: 'win' };
+      const filter: CaseFilterDto = { status: 'DEFENCE_WON' };
       mockPrismaService.case.findMany.mockResolvedValue([mockCases[0]]);
 
       const result = await repository.findAll(filter);
 
       expect(result).toEqual([mockCases[0]]);
       expect(prisma.case.findMany).toHaveBeenCalledWith({
-        where: { result: 'win' },
+        where: { result: 'DEFENCE_WON' },
         orderBy: { closedAt: 'desc' },
       });
     });
@@ -278,7 +278,7 @@ describe('CasesRepository', () => {
     it('should apply multiple filters simultaneously', async () => {
       const filter: CaseFilterDto = {
         specialty: 'CRIMINAL',
-        status: 'win',
+        status: 'DEFENCE_WON',
         year: 2024,
       };
       mockPrismaService.case.findMany.mockResolvedValue([mockCases[0]]);
@@ -289,7 +289,7 @@ describe('CasesRepository', () => {
       expect(prisma.case.findMany).toHaveBeenCalledWith({
         where: {
           specialty: 'CRIMINAL',
-          result: 'win',
+          result: 'DEFENCE_WON',
           closedAt: {
             gte: new Date('2024-01-01'),
             lt: new Date('2025-01-01'),
