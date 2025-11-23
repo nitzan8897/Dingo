@@ -1,5 +1,3 @@
-// Prisma schema for Dingo
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -9,11 +7,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model City {
+  id        String   @id @default(uuid())
+  nameEn    String   @unique
+  nameHe    String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  lawyers Lawyer[]
+
+  @@index([nameEn])
+  @@index([nameHe])
+  @@index([slug])
+}
+
 model Lawyer {
   id                String   @id @default(uuid())
   fullNameEn        String
   fullNameHe        String
-  city              String
+  bioEn             String?
+  bioHe             String?
+  cityId            String
+  city              City     @relation(fields: [cityId], references: [id])
   specialties       String[]
   yearsOfExperience Int
   ratingVector      Json     // { professionalism, availability, empathy, cost }
@@ -21,10 +37,14 @@ model Lawyer {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  @@index([city])
+  profileCases   ProfileCase[]
+  reviews        Review[]
+
+  @@index([cityId])
   @@index([specialties])
 }
 
+// Legal cases from court system (from differ app)
 model Case {
   id                    String    @id @default(uuid())
   externalId            String    @unique
@@ -46,4 +66,47 @@ model Case {
   @@index([specialty])
   @@index([result])
   @@index([closedAt])
+}
+
+// Lawyer profile cases (featured/showcase cases)
+model ProfileCase {
+  id            String      @id @default(uuid())
+  lawyerId      String
+  lawyer        Lawyer      @relation(fields: [lawyerId], references: [id], onDelete: Cascade)
+  titleEn       String
+  titleHe       String
+  descriptionEn String      @db.Text
+  descriptionHe String      @db.Text
+  outcome       CaseOutcome
+  year          Int
+  isFeatured    Boolean     @default(false)
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([lawyerId])
+  @@index([isFeatured])
+  @@index([year])
+}
+
+model Review {
+  id           String   @id @default(uuid())
+  lawyerId     String
+  lawyer       Lawyer   @relation(fields: [lawyerId], references: [id], onDelete: Cascade)
+  reviewerName String
+  rating       Int
+  commentEn    String   @db.Text
+  commentHe    String   @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@index([lawyerId])
+  @@index([rating])
+  @@index([createdAt])
+}
+
+enum CaseOutcome {
+  WON
+  LOST
+  SETTLED
+  ONGOING
 }

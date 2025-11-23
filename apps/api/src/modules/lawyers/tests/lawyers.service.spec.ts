@@ -1,16 +1,27 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LawyersService } from '../lawyers.service';
 import { LawyersRepository } from '../lawyers.repository';
+import { PrismaService } from '../../prisma/prisma.service';
 
 describe('LawyersService', () => {
   let service: LawyersService;
   let repository: LawyersRepository;
 
+  const mockCity = {
+    id: 'city-1',
+    nameEn: 'New York',
+    nameHe: 'ניו יורק',
+    slug: 'new-york',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   const mockLawyer = {
     id: '1',
     fullNameEn: 'John Doe',
     fullNameHe: 'ג\'ון דו',
-    city: 'New York',
+    cityId: 'city-1',
+    city: mockCity,
     specialties: ['CRIMINAL', 'CIVIL'],
     yearsOfExperience: 10,
     ratingVector: {
@@ -25,7 +36,14 @@ describe('LawyersService', () => {
 
   const mockRepository = {
     findAll: jest.fn(),
+    findOne: jest.fn(),
     create: jest.fn(),
+  };
+
+  const mockPrismaService = {
+    city: {
+      findUnique: jest.fn(),
+    },
   };
 
   beforeEach(async () => {
@@ -35,6 +53,10 @@ describe('LawyersService', () => {
         {
           provide: LawyersRepository,
           useValue: mockRepository,
+        },
+        {
+          provide: PrismaService,
+          useValue: mockPrismaService,
         },
       ],
     }).compile();
@@ -101,7 +123,7 @@ describe('LawyersService', () => {
       const createDto = {
         fullNameEn: 'John Doe',
         fullNameHe: 'ג\'ון דו',
-        city: 'New York',
+        cityId: 'city-1',
         specialties: ['CRIMINAL', 'CIVIL'],
         yearsOfExperience: 10,
         ratingVector: {

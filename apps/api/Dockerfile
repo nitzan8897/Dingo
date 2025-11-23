@@ -26,6 +26,9 @@ RUN pnpm build
 # Stage 2: Production
 FROM node:20-alpine AS production
 
+# Install OpenSSL for Prisma
+RUN apk add --no-cache openssl
+
 # Install pnpm
 RUN npm install -g pnpm@8.15.0
 

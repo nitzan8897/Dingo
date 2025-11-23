@@ -57,6 +57,33 @@ export class LawyerService {
       throw new Error('An unknown error occurred');
     }
   }
+
+  /**
+   * Fetch a single lawyer by ID
+   * @param id - Lawyer ID
+   * @returns Promise with lawyer object
+   */
+  async fetchLawyerById(id: string): Promise<Lawyer> {
+    try {
+      const url = `${this.baseUrl}/lawyers/${id}`;
+
+      // Next.js enhanced fetch with caching
+      const response = await fetch(url, {
+        next: { revalidate: 60 }, // Revalidate every 60 seconds
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch lawyer: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('An unknown error occurred');
+    }
+  }
 }
 
 // Export singleton instance

@@ -8,11 +8,50 @@ describe('LawyersRepository', () => {
   let repository: LawyersRepository;
   let prisma: PrismaService;
 
+  const mockCity = {
+    id: 'city-1',
+    nameEn: 'Tel Aviv',
+    nameHe: 'תל אביב',
+    slug: 'tel-aviv',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
+  const mockCases = [
+    {
+      id: 'case-1',
+      lawyerId: '1',
+      titleEn: 'Test Case',
+      titleHe: 'תיק בדיקה',
+      descriptionEn: 'Test description',
+      descriptionHe: 'תיאור בדיקה',
+      outcome: 'WON',
+      year: 2023,
+      isFeatured: true,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
+
+  const mockReviews = [
+    {
+      id: 'review-1',
+      lawyerId: '1',
+      reviewerName: 'Test Reviewer',
+      rating: 5,
+      commentEn: 'Great lawyer!',
+      commentHe: 'עורך דין מצוין!',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  ];
+
   const mockPrismaLawyer = {
     id: '1',
     fullNameEn: 'Test Lawyer',
     fullNameHe: 'עורך דין לבדיקה',
-    city: 'Tel Aviv',
+    cityId: 'city-1',
+    city: mockCity,
     specialties: ['CRIMINAL'],
     yearsOfExperience: 5,
     ratingVector: {
@@ -25,9 +64,16 @@ describe('LawyersRepository', () => {
     updatedAt: new Date(),
   };
 
+  const mockPrismaLawyerWithRelations = {
+    ...mockPrismaLawyer,
+    profileCases: mockCases,
+    reviews: mockReviews,
+  };
+
   const mockPrismaService = {
     lawyer: {
       findMany: jest.fn(),
+      findUnique: jest.fn(),
       create: jest.fn(),
     },
   };
@@ -65,6 +111,7 @@ describe('LawyersRepository', () => {
       expect(result).toEqual([mockPrismaLawyer]);
       expect(prisma.lawyer.findMany).toHaveBeenCalledWith({
         where: {},
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -78,10 +125,13 @@ describe('LawyersRepository', () => {
       expect(prisma.lawyer.findMany).toHaveBeenCalledWith({
         where: {
           city: {
-            contains: 'Tel Aviv',
-            mode: 'insensitive',
+            OR: [
+              { nameEn: { contains: 'Tel Aviv', mode: 'insensitive' } },
+              { nameHe: { contains: 'Tel Aviv', mode: 'insensitive' } },
+            ],
           },
         },
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -98,6 +148,7 @@ describe('LawyersRepository', () => {
             hasSome: ['CRIMINAL', 'CIVIL'],
           },
         },
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -114,6 +165,7 @@ describe('LawyersRepository', () => {
             gte: 3,
           },
         },
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -131,8 +183,10 @@ describe('LawyersRepository', () => {
       expect(prisma.lawyer.findMany).toHaveBeenCalledWith({
         where: {
           city: {
-            contains: 'Tel Aviv',
-            mode: 'insensitive',
+            OR: [
+              { nameEn: { contains: 'Tel Aviv', mode: 'insensitive' } },
+              { nameHe: { contains: 'Tel Aviv', mode: 'insensitive' } },
+            ],
           },
           specialties: {
             hasSome: ['CRIMINAL'],
@@ -141,6 +195,7 @@ describe('LawyersRepository', () => {
             gte: 5,
           },
         },
+        include: { city: true },
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -155,12 +210,63 @@ describe('LawyersRepository', () => {
     });
   });
 
+  describe('findOne', () => {
+    it('should return a lawyer by ID with cases and reviews', async () => {
+      const id = '1';
+      mockPrismaService.lawyer.findUnique.mockResolvedValue(
+        mockPrismaLawyerWithRelations,
+      );
+
+      const result = await repository.findOne(id);
+
+      expect(result).toBeDefined();
+      expect(result.id).toBe('1');
+      expect(result.cases).toBeDefined();
+      expect(result.cases).toHaveLength(1);
+      expect(result.reviews).toBeDefined();
+      expect(result.reviews).toHaveLength(1);
+      expect(prisma.lawyer.findUnique).toHaveBeenCalledWith({
+        where: { id },
+        include: {
+          city: true,
+          profileCases: {
+            orderBy: { year: 'desc' },
+          },
+          reviews: {
+            orderBy: { createdAt: 'desc' },
+          },
+        },
+      });
+    });
+
+    it('should return null when lawyer not found', async () => {
+      const id = 'non-existent';
+      mockPrismaService.lawyer.findUnique.mockResolvedValue(null);
+
+      const result = await repository.findOne(id);
+
+      expect(result).toBeNull();
+      expect(prisma.lawyer.findUnique).toHaveBeenCalledWith({
+        where: { id },
+        include: {
+          city: true,
+          profileCases: {
+            orderBy: { year: 'desc' },
+          },
+          reviews: {
+            orderBy: { createdAt: 'desc' },
+          },
+        },
+      });
+    });
+  });
+
   describe('create', () => {
     it('should create a new lawyer', async () => {
       const createDto: CreateLawyerDto = {
         fullNameEn: 'Test Lawyer',
         fullNameHe: 'עורך דין לבדיקה',
-        city: 'Tel Aviv',
+        cityId: 'city-1',
         specialties: ['CRIMINAL'],
         yearsOfExperience: 5,
         ratingVector: {
@@ -179,11 +285,14 @@ describe('LawyersRepository', () => {
         data: {
           fullNameEn: createDto.fullNameEn,
           fullNameHe: createDto.fullNameHe,
-          city: createDto.city,
+          bioEn: undefined,
+          bioHe: undefined,
+          cityId: createDto.cityId,
           specialties: createDto.specialties,
           yearsOfExperience: createDto.yearsOfExperience,
           ratingVector: createDto.ratingVector,
         },
+        include: { city: true },
       });
     });
 
@@ -191,7 +300,7 @@ describe('LawyersRepository', () => {
       const createDto: CreateLawyerDto = {
         fullNameEn: 'Multi Specialty Lawyer',
         fullNameHe: 'עורך דין רב תחומי',
-        city: 'Jerusalem',
+        cityId: 'city-1',
         specialties: ['CRIMINAL', 'CIVIL', 'FAMILY'],
         yearsOfExperience: 10,
         ratingVector: {
@@ -205,7 +314,7 @@ describe('LawyersRepository', () => {
         ...mockPrismaLawyer,
         fullNameEn: createDto.fullNameEn,
         fullNameHe: createDto.fullNameHe,
-        city: createDto.city,
+        cityId: createDto.cityId,
         specialties: createDto.specialties,
         yearsOfExperience: createDto.yearsOfExperience,
         ratingVector: createDto.ratingVector,
@@ -216,6 +325,48 @@ describe('LawyersRepository', () => {
 
       expect(result).toEqual(multiSpecialtyLawyer);
       expect(result.specialties).toHaveLength(3);
+    });
+
+    it('should create a lawyer with bio fields', async () => {
+      const createDto: CreateLawyerDto = {
+        fullNameEn: 'Test Lawyer',
+        fullNameHe: 'עורך דין לבדיקה',
+        bioEn: 'Experienced criminal lawyer',
+        bioHe: 'עורך דין פלילי מנוסה',
+        cityId: 'city-1',
+        specialties: ['CRIMINAL'],
+        yearsOfExperience: 5,
+        ratingVector: {
+          professionalism: 85,
+          availability: 90,
+          empathy: 75,
+          cost: 60,
+        },
+      };
+      const lawyerWithBio = {
+        ...mockPrismaLawyer,
+        bioEn: createDto.bioEn,
+        bioHe: createDto.bioHe,
+      };
+      mockPrismaService.lawyer.create.mockResolvedValue(lawyerWithBio);
+
+      const result = await repository.create(createDto);
+
+      expect(result.bioEn).toBe('Experienced criminal lawyer');
+      expect(result.bioHe).toBe('עורך דין פלילי מנוסה');
+      expect(prisma.lawyer.create).toHaveBeenCalledWith({
+        data: {
+          fullNameEn: createDto.fullNameEn,
+          fullNameHe: createDto.fullNameHe,
+          bioEn: createDto.bioEn,
+          bioHe: createDto.bioHe,
+          cityId: createDto.cityId,
+          specialties: createDto.specialties,
+          yearsOfExperience: createDto.yearsOfExperience,
+          ratingVector: createDto.ratingVector,
+        },
+        include: { city: true },
+      });
     });
   });
 });

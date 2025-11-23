@@ -9,7 +9,7 @@ import { useSpecialtyFilter } from './use-specialty-filter';
  */
 export function useLawyerFilters(initialLawyers: Lawyer[]) {
   const filterPendingLawyers = (lawyers: Lawyer[]): Lawyer[] => {
-    return lawyers.filter(lawyer => lawyer.city !== 'Pending Verification');
+    return lawyers.filter(lawyer => lawyer.city.slug !== 'unknown');
   };
 
   const [lawyers, setLawyers] = useState<Lawyer[]>(filterPendingLawyers(initialLawyers));

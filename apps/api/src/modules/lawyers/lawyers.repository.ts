@@ -20,8 +20,10 @@ export class LawyersRepository {
 
     if (filter.city) {
       where.city = {
-        contains: filter.city,
-        mode: 'insensitive',
+        OR: [
+          { nameEn: { contains: filter.city, mode: 'insensitive' } },
+          { nameHe: { contains: filter.city, mode: 'insensitive' } },
+        ],
       };
     }
 
@@ -39,6 +41,9 @@ export class LawyersRepository {
 
     const lawyers = await this.prisma.lawyer.findMany({
       where,
+      include: {
+        city: true,
+      },
       orderBy: {
         createdAt: 'desc',
       },
@@ -47,12 +52,35 @@ export class LawyersRepository {
     return lawyers.map(this.mapToLawyer);
   }
 
+  async findOne(id: string): Promise<Lawyer | null> {
+    const lawyer = await this.prisma.lawyer.findUnique({
+      where: { id },
+      include: {
+        city: true,
+        profileCases: {
+          orderBy: { year: 'desc' },
+        },
+        reviews: {
+          orderBy: { createdAt: 'desc' },
+        },
+      },
+    });
+
+    if (!lawyer) {
+      return null;
+    }
+
+    return this.mapToLawyerWithRelations(lawyer);
+  }
+
   async create(createLawyerDto: CreateLawyerDto): Promise<Lawyer> {
     const lawyer = await this.prisma.lawyer.create({
       data: {
         fullNameEn: createLawyerDto.fullNameEn,
         fullNameHe: createLawyerDto.fullNameHe,
-        city: createLawyerDto.city,
+        bioEn: createLawyerDto.bioEn,
+        bioHe: createLawyerDto.bioHe,
+        cityId: createLawyerDto.cityId,
         specialties: createLawyerDto.specialties,
         yearsOfExperience: createLawyerDto.yearsOfExperience,
         ratingVector: {
@@ -61,6 +89,9 @@ export class LawyersRepository {
           empathy: createLawyerDto.ratingVector.empathy,
           cost: createLawyerDto.ratingVector.cost,
         },
+      },
+      include: {
+        city: true,
       },
     });
 
@@ -84,12 +115,12 @@ export class LawyersRepository {
     });
   }
 
-  async createPending(name: string): Promise<Prisma.LawyerGetPayload<object>> {
+  async createPending(name: string, cityId: string): Promise<Prisma.LawyerGetPayload<object>> {
     return this.prisma.lawyer.create({
       data: {
         fullNameEn: name,
         fullNameHe: name,
-        city: 'Pending Verification',
+        cityId,
         specialties: [],
         yearsOfExperience: 0,
         caseIds: [],
@@ -105,17 +136,62 @@ export class LawyersRepository {
     });
   }
 
-  private mapToLawyer(lawyer: Prisma.LawyerGetPayload<object>): Lawyer {
+  private mapToLawyer(
+    lawyer: Prisma.LawyerGetPayload<{ include: { city: true } }>,
+  ): Lawyer {
     return {
       id: lawyer.id,
       fullNameEn: lawyer.fullNameEn,
       fullNameHe: lawyer.fullNameHe,
-      city: lawyer.city,
+      bioEn: lawyer.bioEn || undefined,
+      bioHe: lawyer.bioHe || undefined,
+      cityId: lawyer.cityId,
+      city: {
+        id: lawyer.city.id,
+        nameEn: lawyer.city.nameEn,
+        nameHe: lawyer.city.nameHe,
+        slug: lawyer.city.slug,
+        createdAt: lawyer.city.createdAt,
+        updatedAt: lawyer.city.updatedAt,
+      },
       specialties: lawyer.specialties,
       yearsOfExperience: lawyer.yearsOfExperience,
       ratingVector: lawyer.ratingVector as unknown as Lawyer['ratingVector'],
       createdAt: lawyer.createdAt,
       updatedAt: lawyer.updatedAt,
+    };
+  }
+
+  private mapToLawyerWithRelations(
+    lawyer: Prisma.LawyerGetPayload<{
+      include: { city: true; profileCases: true; reviews: true };
+    }>,
+  ): Lawyer {
+    return {
+      ...this.mapToLawyer({ ...lawyer, city: lawyer.city }),
+      cases: lawyer.profileCases.map((c) => ({
+        id: c.id,
+        lawyerId: c.lawyerId,
+        titleEn: c.titleEn,
+        titleHe: c.titleHe,
+        descriptionEn: c.descriptionEn,
+        descriptionHe: c.descriptionHe,
+        outcome: c.outcome as Lawyer['cases'][number]['outcome'],
+        year: c.year,
+        isFeatured: c.isFeatured,
+        createdAt: c.createdAt,
+        updatedAt: c.updatedAt,
+      })),
+      reviews: lawyer.reviews.map((r) => ({
+        id: r.id,
+        lawyerId: r.lawyerId,
+        reviewerName: r.reviewerName,
+        rating: r.rating,
+        commentEn: r.commentEn,
+        commentHe: r.commentHe,
+        createdAt: r.createdAt,
+        updatedAt: r.updatedAt,
+      })),
     };
   }
 }

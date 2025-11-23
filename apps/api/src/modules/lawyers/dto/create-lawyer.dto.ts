@@ -7,6 +7,7 @@ import {
   Max,
   ValidateNested,
   ArrayMinSize,
+  IsOptional,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
@@ -46,8 +47,16 @@ export class CreateLawyerDto {
   @IsString()
   fullNameHe: string;
 
+  @IsOptional()
   @IsString()
-  city: string;
+  bioEn?: string;
+
+  @IsOptional()
+  @IsString()
+  bioHe?: string;
+
+  @IsString()
+  cityId: string;
 
   @IsArray()
   @ArrayMinSize(1)

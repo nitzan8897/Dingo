@@ -9,11 +9,21 @@ describe('LawyersController', () => {
   let controller: LawyersController;
   let service: LawyersService;
 
+  const mockCity = {
+    id: 'city-1',
+    nameEn: 'Tel Aviv',
+    nameHe: 'תל אביב',
+    slug: 'tel-aviv',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
+
   const mockLawyer: Lawyer = {
     id: '1',
     fullNameEn: 'Test Lawyer',
     fullNameHe: 'עורך דין לבדיקה',
-    city: 'Tel Aviv',
+    cityId: 'city-1',
+    city: mockCity,
     specialties: ['CRIMINAL'],
     yearsOfExperience: 5,
     ratingVector: {
@@ -28,6 +38,7 @@ describe('LawyersController', () => {
 
   const mockLawyersService = {
     findAll: jest.fn(),
+    findOne: jest.fn(),
     create: jest.fn(),
   };
 
@@ -88,12 +99,32 @@ describe('LawyersController', () => {
     });
   });
 
+  describe('findOne', () => {
+    it('should return a single lawyer by ID', async () => {
+      const id = '123';
+      mockLawyersService.findOne.mockResolvedValue(mockLawyer);
+
+      expect(await controller.findOne(id)).toBe(mockLawyer);
+      expect(service.findOne).toHaveBeenCalledWith(id);
+    });
+
+    it('should throw NotFoundException when lawyer not found', async () => {
+      const id = 'non-existent';
+      mockLawyersService.findOne.mockRejectedValue(
+        new Error('Lawyer not found'),
+      );
+
+      await expect(controller.findOne(id)).rejects.toThrow('Lawyer not found');
+      expect(service.findOne).toHaveBeenCalledWith(id);
+    });
+  });
+
   describe('create', () => {
     it('should create a new lawyer', async () => {
       const createDto: CreateLawyerDto = {
         fullNameEn: 'Test Lawyer',
         fullNameHe: 'עורך דין לבדיקה',
-        city: 'Tel Aviv',
+        cityId: 'city-1',
         specialties: ['CRIMINAL'],
         yearsOfExperience: 5,
         ratingVector: {
@@ -113,7 +144,7 @@ describe('LawyersController', () => {
       const createDto: CreateLawyerDto = {
         fullNameEn: 'Minimal Lawyer',
         fullNameHe: 'עורך דין מינימלי',
-        city: 'Jerusalem',
+        cityId: 'city-2',
         specialties: ['CIVIL'],
         yearsOfExperience: 1,
         ratingVector: {

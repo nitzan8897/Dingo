@@ -37,8 +37,16 @@
     "overall": "Overall",
     "yearsOfExperience": "years of experience",
     "specialties": "Specialties",
+    "ratings": "Ratings",
+    "about": "About",
     "contact": "Contact",
-    "viewProfile": "View Profile"
+    "viewProfile": "View Profile",
+    "cases": "Cases",
+    "reviews": "Reviews",
+    "featuredCases": "Featured Cases",
+    "noCases": "No cases available",
+    "noReviews": "No reviews yet",
+    "reviewsCount": "reviews"
   },
   "ratings": {
     "professionalism": "Professionalism",
@@ -46,6 +54,15 @@
     "empathy": "Empathy",
     "cost": "Cost",
     "overall": "Overall Rating"
+  },
+  "caseOutcome": {
+    "WON": "Won",
+    "LOST": "Lost",
+    "SETTLED": "Settled",
+    "ONGOING": "Ongoing"
+  },
+  "chart": {
+    "caseOutcomes": "Case Outcomes"
   },
   "language": {
     "he": "עברית",

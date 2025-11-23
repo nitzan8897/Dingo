@@ -17,6 +17,11 @@ export class LawyersController {
     return this.lawyersService.findAll(filter);
   }
 
+  @Get(':id')
+  async findOne(@Param('id') id: string): Promise<Lawyer> {
+    return this.lawyersService.findOne(id);
+  }
+
   @Post()
   @ApiOperation({ summary: 'Create a lawyer', description: 'Creates a new lawyer record' })
   @ApiResponse({ status: 201, description: 'Lawyer created successfully' })

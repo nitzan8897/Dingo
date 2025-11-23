@@ -13,14 +13,15 @@ export function useLawyerSearch(lawyers: Lawyer[]) {
       return lawyers;
     }
 
+    const query = searchQuery.toLowerCase();
+
     return lawyers.filter(
       (lawyer) =>
-        lawyer.fullNameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lawyer.fullNameHe.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lawyer.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        lawyer.specialties.some((s) =>
-          s.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        lawyer.fullNameEn.toLowerCase().includes(query) ||
+        lawyer.fullNameHe.toLowerCase().includes(query) ||
+        lawyer.city.nameEn.toLowerCase().includes(query) ||
+        lawyer.city.nameHe.toLowerCase().includes(query) ||
+        lawyer.specialties.some((s) => s.toLowerCase().includes(query))
     );
   }, [lawyers, searchQuery]);
 

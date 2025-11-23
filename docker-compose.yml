@@ -73,6 +73,7 @@ services:
     restart: unless-stopped
     environment:
       NEXT_PUBLIC_API_URL: http://localhost:3001/v1
+      API_URL: http://api:3001/v1
       NODE_ENV: production
     ports:
       - '3000:3000'

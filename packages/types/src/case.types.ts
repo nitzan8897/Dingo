@@ -1,5 +1,12 @@
 export type CaseResult = 'win' | 'lose' | 'settlement' | 'dismissed' | 'other';
 
+export enum CaseOutcome {
+  WON = 'WON',
+  LOST = 'LOST',
+  SETTLED = 'SETTLED',
+  ONGOING = 'ONGOING',
+}
+
 export interface Case {
   id: string;
   externalId: string;
@@ -14,6 +21,31 @@ export interface Case {
   plaintiffLawyerIds: string[];
   defendantLawyerIds: string[];
   associatedLawyerIds: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface ProfileCase {
+  id: string;
+  lawyerId: string;
+  titleEn: string;
+  titleHe: string;
+  descriptionEn: string;
+  descriptionHe: string;
+  outcome: CaseOutcome;
+  year: number;
+  isFeatured: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Review {
+  id: string;
+  lawyerId: string;
+  reviewerName: string;
+  rating: number;
+  commentEn: string;
+  commentHe: string;
   createdAt: Date;
   updatedAt: Date;
 }
