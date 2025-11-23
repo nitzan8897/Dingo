@@ -99,17 +99,17 @@ describe('CaseCard', () => {
     expect(winBadge).toHaveClass('bg-emerald-100');
   });
 
-  it('should apply correct status color for lose', () => {
-    const loseCase = { ...mockCase, result: 'ATTACK_WON' as const };
-    render(<CaseCard case_={loseCase} />);
-    const loseBadge = screen.getByText('Attack Won');
-    expect(loseBadge).toHaveClass('bg-red-100');
+  it('should apply correct status color for ATTACK_WON', () => {
+    const attackWonCase = { ...mockCase, result: 'ATTACK_WON' as const };
+    render(<CaseCard case_={attackWonCase} />);
+    const attackWonBadge = screen.getByText('Attack Won');
+    expect(attackWonBadge).toHaveClass('bg-blue-100');
   });
 
   it('should apply correct status color for settlement', () => {
     const settlementCase = { ...mockCase, result: 'settlement' as const };
     render(<CaseCard case_={settlementCase} />);
     const settlementBadge = screen.getByText('Settlement');
-    expect(settlementBadge).toHaveClass('bg-blue-100');
+    expect(settlementBadge).toHaveClass('bg-amber-100');
   });
 });
