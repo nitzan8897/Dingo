@@ -14,6 +14,7 @@ export interface Case {
   specialty: string;
   result: CaseResult;
   judgeName?: string;
+  pdfUrl?: string;
   openedAt?: Date;
   closedAt?: Date;
   complexityScore: number;
@@ -56,8 +57,9 @@ export interface CreateCaseDTO {
   specialty: string;
   result: CaseResult;
   judgeName?: string;
-  openedAt?: string;
-  closedAt?: string;
+  pdfUrl?: string;
+  openedAt?: Date;
+  closedAt?: Date;
   complexityScore: number;
   rawText: string;
   plaintiffLawyerIds: string[];
@@ -82,4 +84,12 @@ export interface CaseAnalysis {
   closedAt: Date;
   complexityScore: number;
   lawyers: AnalyzedLawyer[];
+}
+
+export interface CaseFilterParams {
+  search?: string;
+  specialty?: string;
+  name?: string;
+  year?: number;
+  status?: CaseResult;
 }
