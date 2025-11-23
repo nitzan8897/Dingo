@@ -209,6 +209,7 @@ describe('CasesRepository', () => {
       const result = await repository.findAll();
 
       expect(prismaService.case.findMany).toHaveBeenCalledWith({
+        where: {},
         orderBy: { closedAt: 'desc' },
       });
       expect(result).toEqual(mockCases);
