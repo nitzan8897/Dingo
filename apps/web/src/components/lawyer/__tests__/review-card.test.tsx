@@ -25,12 +25,12 @@ describe('ReviewCard', () => {
 
   it('should render comment in English', () => {
     render(<ReviewCard review={mockReview} locale="en" />);
-    expect(screen.getByText('"Excellent service and professional approach."')).toBeInTheDocument();
+    expect(screen.getByText(/Excellent service and professional approach\./)).toBeInTheDocument();
   });
 
   it('should render comment in Hebrew', () => {
     render(<ReviewCard review={mockReview} locale="he" />);
-    expect(screen.getByText('"שירות מעולה וגישה מקצועית."')).toBeInTheDocument();
+    expect(screen.getByText(/שירות מעולה וגישה מקצועית\./)).toBeInTheDocument();
   });
 
   it('should render 5 stars for 5-star rating', () => {

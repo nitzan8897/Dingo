@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { LawyersService } from '../lawyers.service';
 import { LawyersRepository } from '../lawyers.repository';
+import { PrismaService } from '../../prisma/prisma.service';
 
 describe('LawyersService', () => {
   let service: LawyersService;
@@ -35,7 +36,14 @@ describe('LawyersService', () => {
 
   const mockRepository = {
     findAll: jest.fn(),
+    findOne: jest.fn(),
     create: jest.fn(),
+  };
+
+  const mockPrismaService = {
+    city: {
+      findUnique: jest.fn(),
+    },
   };
 
   beforeEach(async () => {
@@ -45,6 +53,10 @@ describe('LawyersService', () => {
         {
           provide: LawyersRepository,
           useValue: mockRepository,
+        },
+        {
+          provide: PrismaService,
+          useValue: mockPrismaService,
         },
       ],
     }).compile();

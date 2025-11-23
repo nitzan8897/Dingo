@@ -66,7 +66,7 @@ describe('LawyersRepository', () => {
 
   const mockPrismaLawyerWithRelations = {
     ...mockPrismaLawyer,
-    cases: mockCases,
+    profileCases: mockCases,
     reviews: mockReviews,
   };
 
@@ -229,7 +229,7 @@ describe('LawyersRepository', () => {
         where: { id },
         include: {
           city: true,
-          cases: {
+          profileCases: {
             orderBy: { year: 'desc' },
           },
           reviews: {
@@ -250,7 +250,7 @@ describe('LawyersRepository', () => {
         where: { id },
         include: {
           city: true,
-          cases: {
+          profileCases: {
             orderBy: { year: 'desc' },
           },
           reviews: {
