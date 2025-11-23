@@ -32,7 +32,7 @@ const ProfileAnimatedSections = ({ children }: ProfileAnimatedSectionsProps): JS
       variants={container}
       initial="hidden"
       animate="show"
-      className="max-w-4xl mx-auto"
+      className="max-w-7xl mx-auto"
     >
       {Array.isArray(children) ? (
         children.map((child, index) => (

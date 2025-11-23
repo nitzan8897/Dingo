@@ -217,4 +217,17 @@ test.describe('Lawyer Profile Page', () => {
     const hasContent = await page.locator('body').isVisible();
     expect(hasContent).toBe(true);
   });
+
+  test('should use wider layout for profile page', async ({ page }) => {
+    await page.goto('/en');
+    await page.waitForLoadState('networkidle');
+
+    const lawyerCard = page.locator('.shadow-md').first();
+    await lawyerCard.click();
+    await page.waitForLoadState('networkidle');
+
+    // Profile container should have wider max-width than home page
+    const profileContainer = page.locator('.max-w-6xl, .max-w-7xl, .max-w-screen-xl').first();
+    await expect(profileContainer).toBeVisible();
+  });
 });

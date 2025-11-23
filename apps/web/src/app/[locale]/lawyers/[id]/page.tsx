@@ -6,10 +6,12 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import LawyerCardRatings from '@/components/lawyer/lawyer-card-ratings';
 import ProfileAnimatedSections from '@/components/lawyer/profile-animated-sections';
+import ProfileHeader from '@/components/lawyer/profile-header';
 import CaseCard from '@/components/lawyer/case-card';
 import ReviewCard from '@/components/lawyer/review-card';
 import CaseStatsChart from '@/components/lawyer/case-stats-chart';
 import ReviewsStats from '@/components/lawyer/reviews-stats';
+import { type Locale } from '@dingo/i18n';
 
 interface PageProps {
   params: Promise<{ id: string; locale: string }>;
@@ -62,9 +64,11 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
     const reviews = lawyer.reviews || [];
 
     return (
-      <ProfileAnimatedSections>
-        {/* Header Card */}
-        <Card className="mb-6">
+      <>
+        <ProfileHeader locale={locale as Locale} />
+        <ProfileAnimatedSections>
+          {/* Header Card */}
+          <Card className="mb-6">
           <CardHeader>
             <div className="flex items-center gap-6">
               <Avatar className="h-24 w-24">
@@ -194,7 +198,8 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
             </CardContent>
           </Card>
         )}
-      </ProfileAnimatedSections>
+        </ProfileAnimatedSections>
+      </>
     );
   } catch (error) {
     // If lawyer not found, show 404

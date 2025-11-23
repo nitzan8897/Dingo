@@ -20,16 +20,14 @@ jest.mock('recharts', () => ({
   ResponsiveContainer: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="responsive-container">{children}</div>
   ),
-  BarChart: ({ children, data }: { children: React.ReactNode; data: unknown[] }) => (
-    <div data-testid="bar-chart" data-chart-length={data.length}>
-      {children}
-    </div>
+  PieChart: ({ children }: { children: React.ReactNode }) => (
+    <div data-testid="pie-chart">{children}</div>
   ),
-  Bar: ({ dataKey }: { dataKey: string }) => <div data-testid={`bar-${dataKey}`} />,
-  XAxis: () => <div data-testid="x-axis" />,
-  YAxis: () => <div data-testid="y-axis" />,
-  CartesianGrid: () => <div data-testid="cartesian-grid" />,
+  Pie: ({ data, dataKey }: { data: unknown[]; dataKey: string }) => (
+    <div data-testid={`pie-${dataKey}`} data-chart-length={data.length} />
+  ),
   Tooltip: () => <div data-testid="tooltip" />,
+  Legend: () => <div data-testid="legend" />,
   Cell: () => <div data-testid="cell" />,
 }));
 
@@ -58,9 +56,9 @@ describe('CaseStatsChart', () => {
     const cases = [createMockCase('WON', '1'), createMockCase('LOST', '2')];
     render(<CaseStatsChart cases={cases} />);
     expect(screen.getByTestId('responsive-container')).toBeInTheDocument();
-    expect(screen.getByTestId('bar-chart')).toBeInTheDocument();
-    expect(screen.getByTestId('x-axis')).toBeInTheDocument();
-    expect(screen.getByTestId('y-axis')).toBeInTheDocument();
+    expect(screen.getByTestId('pie-chart')).toBeInTheDocument();
+    expect(screen.getByTestId('legend')).toBeInTheDocument();
+    expect(screen.getByTestId('tooltip')).toBeInTheDocument();
   });
 
   it('should render empty fragment when no cases', () => {
@@ -70,9 +68,9 @@ describe('CaseStatsChart', () => {
 
   it('should include only outcomes that have cases', () => {
     const cases = [createMockCase('WON', '1'), createMockCase('WON', '2')];
-    const { container } = render(<CaseStatsChart cases={cases} />);
-    const chart = container.querySelector('[data-chart-length]');
-    expect(chart?.getAttribute('data-chart-length')).toBe('1'); // Only WON outcome
+    render(<CaseStatsChart cases={cases} />);
+    const pie = screen.getByTestId('pie-count');
+    expect(pie.getAttribute('data-chart-length')).toBe('1'); // Only WON outcome
   });
 
   it('should handle multiple different outcomes', () => {
@@ -82,9 +80,9 @@ describe('CaseStatsChart', () => {
       createMockCase('SETTLED', '3'),
       createMockCase('ONGOING', '4'),
     ];
-    const { container } = render(<CaseStatsChart cases={cases} />);
-    const chart = container.querySelector('[data-chart-length]');
-    expect(chart?.getAttribute('data-chart-length')).toBe('4'); // All 4 outcomes
+    render(<CaseStatsChart cases={cases} />);
+    const pie = screen.getByTestId('pie-count');
+    expect(pie.getAttribute('data-chart-length')).toBe('4'); // All 4 outcomes
   });
 
   it('should aggregate multiple cases of same outcome', () => {
@@ -94,8 +92,8 @@ describe('CaseStatsChart', () => {
       createMockCase('WON', '3'),
       createMockCase('LOST', '4'),
     ];
-    const { container } = render(<CaseStatsChart cases={cases} />);
-    const chart = container.querySelector('[data-chart-length]');
-    expect(chart?.getAttribute('data-chart-length')).toBe('2'); // WON and LOST
+    render(<CaseStatsChart cases={cases} />);
+    const pie = screen.getByTestId('pie-count');
+    expect(pie.getAttribute('data-chart-length')).toBe('2'); // WON and LOST
   });
 });

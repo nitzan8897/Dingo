@@ -35,13 +35,13 @@ describe('ProfileAnimatedSections', () => {
     expect(container.textContent).toContain('Child 3');
   });
 
-  it('should apply max-w-4xl mx-auto classes', () => {
+  it('should apply max-w-6xl mx-auto classes', () => {
     const { container } = render(
       <ProfileAnimatedSections>
         <div>Content</div>
       </ProfileAnimatedSections>
     );
-    const wrapper = container.querySelector('.max-w-4xl.mx-auto');
+    const wrapper = container.querySelector('.max-w-6xl.mx-auto');
     expect(wrapper).toBeInTheDocument();
   });
 
