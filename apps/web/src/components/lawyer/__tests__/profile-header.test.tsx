@@ -12,15 +12,19 @@ jest.mock('next-intl', () => ({
 }));
 
 jest.mock('next/link', () => {
-  return ({ children, href }: { children: React.ReactNode; href: string }) => {
+  const MockLink = ({ children, href }: { children: React.ReactNode; href: string }) => {
     return <a href={href}>{children}</a>;
   };
+  MockLink.displayName = 'MockLink';
+  return MockLink;
 });
 
 jest.mock('next/image', () => {
-  return ({ src, alt, width, height }: { src: string; alt: string; width: number; height: number }) => {
+  const MockImage = ({ src, alt, width, height }: { src: string; alt: string; width: number; height: number }) => {
     return <img src={src} alt={alt} width={width} height={height} />;
   };
+  MockImage.displayName = 'MockImage';
+  return MockImage;
 });
 
 describe('ProfileHeader', () => {

@@ -20,6 +20,7 @@ interface PageProps {
 /**
  * Generate static params for pre-rendering lawyer pages
  * This significantly improves first-load performance
+ * Falls back gracefully if API is unavailable during build
  */
 export async function generateStaticParams() {
   try {
@@ -29,14 +30,22 @@ export async function generateStaticParams() {
     }));
   } catch (error) {
     console.error('Failed to generate static params:', error);
+    // Return empty array to allow dynamic rendering as fallback
     return [];
   }
 }
 
 /**
+ * Revalidate static pages every hour to ensure data freshness
+ * This provides a balance between performance and up-to-date content
+ */
+export const revalidate = 3600;
+
+/**
  * Lawyer Profile Page - Server Component
  * Fetches lawyer data server-side for SEO and performance
  * Uses locale-aware name display and shadcn/ui components
+ * Uses ISR (Incremental Static Regeneration) for optimal performance
  */
 const LawyerProfilePage = async ({ params }: PageProps) => {
   const resolvedParams = await params;
