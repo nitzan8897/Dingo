@@ -10,6 +10,15 @@ interface CaseCardProps {
   locale: string;
 }
 
+const OUTCOME_COLORS: Record<CaseOutcome, string> = {
+  WON: 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200',
+  LOST: 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200',
+  SETTLED: 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200',
+  ONGOING: 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200',
+};
+
+const DEFAULT_OUTCOME_COLOR = 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
+
 /**
  * CaseCard component
  * Displays individual case information with bilingual support
@@ -21,18 +30,7 @@ const CaseCard = ({ case_, locale }: CaseCardProps): JSX.Element => {
   const description = locale === 'en' ? case_.descriptionEn : case_.descriptionHe;
 
   const getOutcomeColor = (outcome: CaseOutcome): string => {
-    switch (outcome) {
-      case 'WON':
-        return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'LOST':
-        return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
-      case 'SETTLED':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'ONGOING':
-        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
-    }
+    return OUTCOME_COLORS[outcome] ?? DEFAULT_OUTCOME_COLOR;
   };
 
   return (

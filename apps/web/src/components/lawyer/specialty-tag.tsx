@@ -8,6 +8,9 @@ interface SpecialtyTagProps {
   selected?: boolean;
 }
 
+const SELECTED_STYLES = 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-600 dark:hover:bg-primary-500';
+const DEFAULT_STYLES = 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300';
+
 /**
  * SpecialtyTag component
  * Displays a small specialty badge with optional click handler
@@ -33,9 +36,7 @@ const SpecialtyTag: React.FC<SpecialtyTagProps> = ({
       className={cn(
         'px-2 py-1 text-xs rounded-full transition-colors',
         onClick && 'cursor-pointer hover:opacity-80',
-        selected
-          ? 'bg-primary-600 dark:bg-primary-500 text-white hover:bg-primary-600 dark:hover:bg-primary-500'
-          : 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300'
+        selected ? SELECTED_STYLES : DEFAULT_STYLES
       )}
     >
       {specialty}
