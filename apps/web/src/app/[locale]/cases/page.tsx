@@ -1,4 +1,5 @@
 import { getTranslations } from 'next-intl/server';
+import { Case } from '@dingo/types';
 import { caseService } from '@/services/case-service';
 import CasesClient from './cases-client';
 
@@ -26,7 +27,7 @@ const CasesPage = async ({
   const { locale } = await params;
   const t = await getTranslations({ locale });
 
-  let cases;
+  let cases: Case[];
   try {
     cases = await caseService.fetchCases();
   } catch (error) {
