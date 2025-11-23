@@ -61,6 +61,36 @@
     "SETTLED": "הסדר",
     "ONGOING": "בטיפול"
   },
+  "caseResult": {
+    "win": "ניצחון",
+    "lose": "הפסד",
+    "settlement": "הסדר",
+    "dismissed": "נדחה",
+    "other": "אחר"
+  },
+  "case": {
+    "title": "תיקים",
+    "searchPlaceholder": "חיפוש תיקים...",
+    "filterBySpecialty": "סינון לפי התמחות",
+    "filterByStatus": "סינון לפי סטטוס",
+    "filterByYear": "סינון לפי שנה",
+    "filterByName": "סינון לפי שם תיק",
+    "allCases": "כל התיקים",
+    "noCasesFound": "לא נמצאו תיקים",
+    "caseDetails": "פרטי תיק",
+    "judge": "שופט",
+    "status": "סטטוס",
+    "specialty": "התמחות",
+    "year": "שנה",
+    "openedDate": "נפתח",
+    "closedDate": "נסגר",
+    "viewPDF": "צפה ב-PDF",
+    "plaintiffLawyers": "עורכי דין התובעים",
+    "defendantLawyers": "עורכי דין הנתבעים",
+    "associatedLawyers": "עורכי דין נוספים",
+    "complexityScore": "מורכבות",
+    "noLawyersAssociated": "אין עורכי דין מקושרים"
+  },
   "chart": {
     "caseOutcomes": "תוצאות תיקים"
   },

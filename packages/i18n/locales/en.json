@@ -61,6 +61,36 @@
     "SETTLED": "Settled",
     "ONGOING": "Ongoing"
   },
+  "caseResult": {
+    "win": "Win",
+    "lose": "Loss",
+    "settlement": "Settlement",
+    "dismissed": "Dismissed",
+    "other": "Other"
+  },
+  "case": {
+    "title": "Cases",
+    "searchPlaceholder": "Search cases...",
+    "filterBySpecialty": "Filter by specialty",
+    "filterByStatus": "Filter by status",
+    "filterByYear": "Filter by year",
+    "filterByName": "Filter by case name",
+    "allCases": "All Cases",
+    "noCasesFound": "No cases found",
+    "caseDetails": "Case Details",
+    "judge": "Judge",
+    "status": "Status",
+    "specialty": "Specialty",
+    "year": "Year",
+    "openedDate": "Opened",
+    "closedDate": "Closed",
+    "viewPDF": "View PDF",
+    "plaintiffLawyers": "Plaintiff Lawyers",
+    "defendantLawyers": "Defendant Lawyers",
+    "associatedLawyers": "Associated Lawyers",
+    "complexityScore": "Complexity",
+    "noLawyersAssociated": "No lawyers associated"
+  },
   "chart": {
     "caseOutcomes": "Case Outcomes"
   },
