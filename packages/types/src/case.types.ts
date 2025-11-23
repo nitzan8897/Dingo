@@ -58,8 +58,8 @@ export interface CreateCaseDTO {
   result: CaseResult;
   judgeName?: string;
   pdfUrl?: string;
-  openedAt?: Date;
-  closedAt?: Date;
+  openedAt?: string;
+  closedAt?: string;
   complexityScore: number;
   rawText: string;
   plaintiffLawyerIds: string[];
