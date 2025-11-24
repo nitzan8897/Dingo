@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { useTranslations, useLocale } from 'next-intl';
+import { getLocalizedField } from '@dingo/i18n';
 import { Lawyer } from '@dingo/types';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -33,8 +34,8 @@ const CaseLawyersSection: React.FC<CaseLawyersSectionProps> = ({
   };
 
   const LawyerCard = ({ lawyer, type }: { lawyer: Lawyer; type: string }) => {
-    const displayName = locale === 'en' ? lawyer.fullNameEn : lawyer.fullNameHe;
-    const city = locale === 'en' ? lawyer.city.nameEn : lawyer.city.nameHe;
+    const displayName = getLocalizedField(lawyer, 'fullName', locale);
+    const city = getLocalizedField(lawyer.city, 'name', locale);
 
     return (
       <Link href={`/${locale}/lawyers/${lawyer.id}`}>

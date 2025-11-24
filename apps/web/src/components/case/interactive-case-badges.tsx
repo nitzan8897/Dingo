@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import { getLocalizedField } from '@dingo/i18n';
 import { Badge } from '@/components/ui/badge';
 import {
   Tooltip,
@@ -158,7 +159,7 @@ export const InteractiveCaseBadges: React.FC<InteractiveCaseBadgesProps> = ({
                           className="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 underline text-sm"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          {locale === 'en' ? lawyer.fullNameEn : lawyer.fullNameHe}
+                          {getLocalizedField(lawyer, 'fullName', locale)}
                         </Link>
                       ))}
                     </div>
