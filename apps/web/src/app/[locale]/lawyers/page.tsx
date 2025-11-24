@@ -1,7 +1,11 @@
-import { getTranslations } from 'next-intl/server';
-import LawyersHeader from '@/components/lawyers/lawyers-header';
+import ProfileHeader from '@/components/lawyer/profile-header';
 import LawyersClient from './lawyers-client';
 import { lawyerService } from '@/services/lawyer-service';
+import { type Locale } from '@dingo/i18n';
+
+interface PageProps {
+  params: Promise<{ locale: string }>;
+}
 
 /**
  * Server Component - Lawyers Search Page
@@ -11,13 +15,13 @@ import { lawyerService } from '@/services/lawyer-service';
  * - SSR/SSG: Pre-rendered HTML with data
  * Header with toggles is provided by parent layout
  */
-const LawyersPage = async () => {
-  const t = await getTranslations();
+const LawyersPage = async ({ params }: PageProps) => {
+  const { locale } = await params;
   const initialLawyers = await lawyerService.fetchLawyers();
 
   return (
     <>
-      <LawyersHeader title={t('lawyers.title')} subtitle={t('lawyers.subtitle')} />
+      <ProfileHeader locale={locale as Locale} />
       <LawyersClient initialLawyers={initialLawyers} />
     </>
   );
