@@ -11,25 +11,25 @@ jest.mock('next/image', () => {
 
 describe('PageHeader', () => {
   it('should render logo image', () => {
-    render(<PageHeader title="Dingo" subtitle="Smart Lawyer Ratings Platform" />);
+    render(<PageHeader locale="en" />);
     const logo = screen.getByAltText('Dingo Logo');
     expect(logo).toBeInTheDocument();
     expect(logo).toHaveAttribute('src', '/images/dingo-logo.png');
   });
 
-  it('should render title', () => {
-    render(<PageHeader title="Dingo" subtitle="Smart Lawyer Ratings Platform" />);
-    expect(screen.getByText('Dingo')).toBeInTheDocument();
+  it('should render app name from translations', () => {
+    render(<PageHeader locale="en" />);
+    expect(screen.getByText('common.appName')).toBeInTheDocument();
   });
 
-  it('should render subtitle', () => {
-    render(<PageHeader title="Dingo" subtitle="Smart Lawyer Ratings Platform" />);
-    expect(screen.getByText('Smart Lawyer Ratings Platform')).toBeInTheDocument();
+  it('should render subtitle from translations', () => {
+    render(<PageHeader locale="en" />);
+    expect(screen.getByText('landing.subtitle')).toBeInTheDocument();
   });
 
-  it('should render custom title and subtitle', () => {
-    render(<PageHeader title="Custom Title" subtitle="Custom Subtitle" />);
-    expect(screen.getByText('Custom Title')).toBeInTheDocument();
-    expect(screen.getByText('Custom Subtitle')).toBeInTheDocument();
+  it('should create link with correct locale', () => {
+    render(<PageHeader locale="he" />);
+    const link = screen.getByRole('link');
+    expect(link).toHaveAttribute('href', '/he');
   });
 });
