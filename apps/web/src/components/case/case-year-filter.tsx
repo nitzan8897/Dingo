@@ -1,7 +1,14 @@
 'use client';
 
 import React from 'react';
-import FilterTag from '@/components/search/filter-tag';
+import { useTranslations, useLocale } from 'next-intl';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 interface CaseYearFilterProps {
   selectedYear?: number;
@@ -14,12 +21,15 @@ const CaseYearFilter: React.FC<CaseYearFilterProps> = ({
   onYearChange,
   availableYears,
 }) => {
-  const handleYearClick = (yearStr: string): void => {
-    const year = parseInt(yearStr, 10);
-    if (selectedYear === year) {
+  const t = useTranslations('case');
+  const locale = useLocale();
+  const isRTL = locale === 'he';
+
+  const handleYearChange = (value: string) => {
+    if (value === 'all') {
       onYearChange(undefined);
     } else {
-      onYearChange(year);
+      onYearChange(parseInt(value, 10));
     }
   };
 
@@ -28,17 +38,23 @@ const CaseYearFilter: React.FC<CaseYearFilterProps> = ({
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
-      {availableYears.map((year) => (
-        <FilterTag
-          key={year}
-          label={year.toString()}
-          value={year.toString()}
-          selected={selectedYear === year}
-          onClick={handleYearClick}
-        />
-      ))}
-    </div>
+    <Select
+      value={selectedYear ? selectedYear.toString() : 'all'}
+      onValueChange={handleYearChange}
+      dir={isRTL ? 'rtl' : 'ltr'}
+    >
+      <SelectTrigger className="w-full">
+        <SelectValue placeholder={t('filterByYear')} />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="all">{t('allYears')}</SelectItem>
+        {availableYears.map((year) => (
+          <SelectItem key={year} value={year.toString()}>
+            {year}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
 };
 

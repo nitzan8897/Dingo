@@ -252,8 +252,8 @@ async function main() {
     }),
     prisma.lawyer.create({
       data: {
-        fullNameEn: 'Tzipi Levi',
-        fullNameHe: 'ציפי לוי',
+        fullNameEn: 'Tzippora Elek',
+        fullNameHe: 'ציפורה אלק',
         bioEn: 'Immigration and asylum law expert. Compassionate advocate for refugees and immigrants seeking legal status.',
         bioHe: 'מומחית לדיני הגירה ומקלט. סנגורית רחומה לפליטים ומהגרים המבקשים מעמד חוקי.',
         cityId: jerusalem.id,

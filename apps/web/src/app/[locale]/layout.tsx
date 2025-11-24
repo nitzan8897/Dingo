@@ -7,6 +7,7 @@ import { Heebo } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import LanguageSwitcher from '@/components/common/language-switcher';
 import ThemeToggle from '@/components/common/theme-toggle';
+import { Toaster } from 'sonner';
 import '../globals.css';
 
 const heebo = Heebo({
@@ -77,6 +78,7 @@ export default async function LocaleLayout({
                 {children}
               </div>
             </div>
+            <Toaster position="top-center" richColors />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

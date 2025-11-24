@@ -1,35 +1,33 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
-import { Case } from '@dingo/types';
-import { Badge } from '@/components/ui/badge';
+import { Case, Lawyer } from '@dingo/types';
 import { Button } from '@/components/ui/button';
-import { Calendar, Scale, FileText, ExternalLink } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Card, CardContent } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Calendar, Scale, Download, Eye } from 'lucide-react';
+import { InteractiveCaseBadges } from './interactive-case-badges';
 
 interface CaseDetailHeaderProps {
   case_: Case;
+  winningSideLawyers: Lawyer[];
 }
 
-const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = ({ case_ }) => {
+const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = ({
+  case_,
+  winningSideLawyers,
+}) => {
   const t = useTranslations();
   const locale = useLocale();
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'DEFENCE_WON':
-        return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200';
-      case 'ATTACK_WON':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'settlement':
-        return 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200';
-      case 'dismissed':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
-    }
-  };
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const formatDate = (date?: Date) => {
     if (!date) return null;
@@ -40,26 +38,27 @@ const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = ({ case_ }) => {
     });
   };
 
-  const year = case_.closedAt ? new Date(case_.closedAt).getFullYear() : null;
-
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-3xl md:text-4xl font-bold mb-4">{case_.title}</h1>
-        <div className="flex flex-wrap gap-3">
-          <Badge className={cn('text-sm px-3 py-1', getStatusColor(case_.result))}>
-            {t(`caseResult.${case_.result}`)}
-          </Badge>
-          <Badge variant="secondary" className="text-sm px-3 py-1">
-            {t(`specialties.${case_.specialty}`)}
-          </Badge>
-          {year && (
-            <Badge variant="outline" className="text-sm px-3 py-1">
-              {year}
-            </Badge>
-          )}
-        </div>
+        <InteractiveCaseBadges
+          case_={case_}
+          winningSideLawyers={winningSideLawyers}
+        />
       </div>
+
+      {/* Case Description */}
+      {case_.rawText && (
+        <Card>
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-semibold mb-3">{t('case.description')}</h3>
+            <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+              {case_.rawText}
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {case_.judgeName && (
@@ -94,17 +93,45 @@ const CaseDetailHeader: React.FC<CaseDetailHeaderProps> = ({ case_ }) => {
       </div>
 
       {case_.pdfUrl && (
-        <div>
+        <div className="flex flex-wrap gap-3">
+          <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
+            <DialogTrigger asChild>
+              <Button variant="default" size="lg" className="gap-2">
+                <Eye className="h-5 w-5" />
+                {t('case.previewPDF')}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl h-[80vh]">
+              <DialogHeader>
+                <DialogTitle>{t('case.pdfPreview')}</DialogTitle>
+                <DialogDescription>
+                  {case_.title} - {case_.externalId}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex-1 min-h-0">
+                <iframe
+                  src={case_.pdfUrl}
+                  className="w-full h-full rounded-md border"
+                  title={t('case.pdfPreview')}
+                />
+              </div>
+            </DialogContent>
+          </Dialog>
+
           <Button
             asChild
-            variant="default"
+            variant="outline"
             size="lg"
             className="gap-2"
           >
-            <a href={case_.pdfUrl} target="_blank" rel="noopener noreferrer">
-              <FileText className="h-5 w-5" />
-              {t('case.viewPDF')}
-              <ExternalLink className="h-4 w-4" />
+            <a
+              href={case_.pdfUrl}
+              download={`${case_.externalId}.pdf`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Download className="h-5 w-5" />
+              {t('case.downloadPDF')}
             </a>
           </Button>
         </div>

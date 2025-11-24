@@ -4,7 +4,9 @@
     "loading": "Loading...",
     "error": "Error",
     "noResults": "No results found",
-    "back": "Back"
+    "back": "Back",
+    "cancel": "Cancel",
+    "continue": "Continue"
   },
   "home": {
     "title": "Dingo",
@@ -34,7 +36,10 @@
     "TAX": "Tax Law",
     "IMMIGRATION": "Immigration Law",
     "REAL_ESTATE": "Real Estate Law",
-    "INTELLECTUAL_PROPERTY": "Intellectual Property"
+    "INTELLECTUAL_PROPERTY": "Intellectual Property",
+    "ENVIRONMENTAL": "Environmental Law",
+    "MEDICAL": "Medical Law",
+    "BANKRUPTCY": "Bankruptcy Law"
   },
   "lawyer": {
     "overall": "Overall",
@@ -80,6 +85,7 @@
     "filterByYear": "Filter by year",
     "filterByName": "Filter by case name",
     "allCases": "All Cases",
+    "allYears": "All Years",
     "noCasesFound": "No cases found",
     "caseDetails": "Case Details",
     "judge": "Judge",
@@ -89,6 +95,22 @@
     "openedDate": "Opened",
     "closedDate": "Closed",
     "viewPDF": "View PDF",
+    "previewPDF": "Preview PDF",
+    "downloadPDF": "Download PDF",
+    "pdfPreview": "PDF Preview",
+    "description": "Case Description",
+    "caseIdTooltip": "Click to copy Case ID",
+    "copiedSuccessfully": "Case ID copied to clipboard",
+    "copyFailed": "Failed to copy Case ID",
+    "defenseSuccessful": "Defense was successful",
+    "claimSuccessful": "Claim was successful",
+    "settlementReached": "Settlement was reached",
+    "caseDismissed": "Case was dismissed",
+    "representedBy": "Represented by",
+    "involvedLawyers": "Involved lawyers",
+    "filterBySpecialtyTooltip": "Click to filter cases by this specialty",
+    "filterConfirmTitle": "Filter Cases",
+    "filterConfirmDescription": "Navigate to cases page filtered by {specialty}?",
     "plaintiffLawyers": "Plaintiff Lawyers",
     "defendantLawyers": "Defendant Lawyers",
     "associatedLawyers": "Associated Lawyers",

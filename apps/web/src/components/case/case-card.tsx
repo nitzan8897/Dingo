@@ -74,6 +74,9 @@ const CaseCard: React.FC<CaseCardProps> = ({ case_ }) => {
             )}
           </div>
           <div className="flex flex-wrap gap-2">
+            <Badge variant="outline" className="font-mono text-xs">
+              {case_.externalId}
+            </Badge>
             <Badge className={cn('font-medium', getStatusColor(case_.result))}>
               {t(`caseResult.${case_.result}`)}
             </Badge>

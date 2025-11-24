@@ -63,11 +63,19 @@ const CaseDetailPage = async ({ params }: PageProps) => {
     case_.associatedLawyerIds.includes(l.id)
   );
 
+  // Determine winning side lawyers based on result
+  const winningSideLawyers =
+    case_.result === 'ATTACK_WON'
+      ? plaintiffLawyers
+      : case_.result === 'DEFENCE_WON'
+      ? defendantLawyers
+      : [];
+
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
       <BackButton fallbackUrl={`/${locale}/cases`} />
 
-      <CaseDetailHeader case_={case_} />
+      <CaseDetailHeader case_={case_} winningSideLawyers={winningSideLawyers} />
 
       <Separator className="my-8" />
 

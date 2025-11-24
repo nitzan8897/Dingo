@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Case, CaseResult } from '@dingo/types';
 import CaseFilterBar from '@/components/case/case-filter-bar';
 import CasesGrid from '@/components/case/cases-grid';
@@ -11,10 +12,23 @@ interface CasesClientProps {
 }
 
 const CasesClient: React.FC<CasesClientProps> = ({ initialCases }) => {
+  const searchParams = useSearchParams();
+
+  // Initialize state from URL params
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedSpecialty, setSelectedSpecialty] = useState<string | undefined>();
+  const [selectedSpecialty, setSelectedSpecialty] = useState<string | undefined>(
+    searchParams.get('specialty') || undefined
+  );
   const [selectedStatus, setSelectedStatus] = useState<CaseResult | undefined>();
   const [selectedYear, setSelectedYear] = useState<number | undefined>();
+
+  // Update filter when URL params change
+  useEffect(() => {
+    const specialtyParam = searchParams.get('specialty');
+    if (specialtyParam) {
+      setSelectedSpecialty(specialtyParam);
+    }
+  }, [searchParams]);
 
   const availableYears = useMemo(() => {
     const years = initialCases

@@ -158,9 +158,9 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
         </Card>
 
         {/* Stats Grid - Cases and Reviews */}
-        {(allCases.length > 0 || reviews.length > 0) && (
+        {(courtCases.length > 0 || reviews.length > 0) && (
           <div className="grid md:grid-cols-2 gap-6 mb-6">
-            {allCases.length > 0 && <CaseStatsChart cases={allCases} />}
+            {courtCases.length > 0 && <CaseStatsChart cases={courtCases} />}
             {reviews.length > 0 && <ReviewsStats reviews={reviews} />}
           </div>
         )}
@@ -198,7 +198,7 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
         )}
 
         {/* Empty state */}
-        {allCases.length === 0 && reviews.length === 0 && (
+        {courtCases.length === 0 && reviews.length === 0 && (
           <Card className="mb-6">
             <CardContent className="py-12 text-center text-gray-500 dark:text-gray-400">
               <p>{t('lawyer.noCases')}</p>
