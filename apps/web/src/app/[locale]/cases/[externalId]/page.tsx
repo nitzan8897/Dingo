@@ -1,8 +1,10 @@
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
+import { Locale } from '@dingo/i18n';
 import { caseService } from '@/services/case-service';
 import { lawyerService } from '@/services/lawyer-service';
 import { Lawyer } from '@dingo/types';
+import PageHeader from '@/components/lawyer/page-header';
 import CaseDetailHeader from '@/components/case/case-detail-header';
 import CaseLawyersSection from '@/components/case/case-lawyers-section';
 import { Separator } from '@/components/ui/separator';
@@ -72,19 +74,22 @@ const CaseDetailPage = async ({ params }: PageProps) => {
       : [];
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-5xl">
-      <BackButton fallbackUrl={`/${locale}/cases`} />
+    <>
+      <PageHeader locale={locale as Locale} />
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+        <BackButton fallbackUrl={`/${locale}/cases`} />
 
-      <CaseDetailHeader case_={case_} winningSideLawyers={winningSideLawyers} />
+        <CaseDetailHeader case_={case_} winningSideLawyers={winningSideLawyers} />
 
-      <Separator className="my-8" />
+        <Separator className="my-8" />
 
-      <CaseLawyersSection
-        plaintiffLawyers={plaintiffLawyers}
-        defendantLawyers={defendantLawyers}
-        associatedLawyers={associatedLawyers}
-      />
-    </div>
+        <CaseLawyersSection
+          plaintiffLawyers={plaintiffLawyers}
+          defendantLawyers={defendantLawyers}
+          associatedLawyers={associatedLawyers}
+        />
+      </div>
+    </>
   );
 };
 
