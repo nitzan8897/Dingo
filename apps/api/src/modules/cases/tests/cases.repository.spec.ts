@@ -12,7 +12,7 @@ describe('CasesRepository', () => {
     externalId: '12345-01-24',
     title: 'Cohen vs. Advanced Construction Ltd.',
     specialty: 'CIVIL',
-    result: 'win',
+    result: 'DEFENCE_WON',
     judgeName: 'Judge David Cohen',
     openedAt: new Date('2024-01-15'),
     closedAt: new Date('2024-06-20'),
@@ -57,7 +57,7 @@ describe('CasesRepository', () => {
       externalId: '12345-01-24',
       title: 'Cohen vs. Advanced Construction Ltd.',
       specialty: 'CIVIL',
-      result: 'win',
+      result: 'DEFENCE_WON',
       judgeName: 'Judge David Cohen',
       openedAt: '2024-01-15T00:00:00Z',
       closedAt: '2024-06-20T00:00:00Z',
@@ -108,7 +108,7 @@ describe('CasesRepository', () => {
         externalId: '12345-01-24',
         title: 'Test Case',
         specialty: 'CIVIL',
-        result: 'win',
+        result: 'DEFENCE_WON',
         complexityScore: 0.5,
         rawText: 'Test text',
         plaintiffLawyerIds: [],
@@ -209,6 +209,7 @@ describe('CasesRepository', () => {
       const result = await repository.findAll();
 
       expect(prismaService.case.findMany).toHaveBeenCalledWith({
+        where: {},
         orderBy: { closedAt: 'desc' },
       });
       expect(result).toEqual(mockCases);

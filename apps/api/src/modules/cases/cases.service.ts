@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { Case } from '@prisma/client';
 import { CasesRepository } from './cases.repository';
 import { CreateCaseDto } from './dto/create-case.dto';
+import { CaseFilterDto } from './dto/case-filter.dto';
 import { LawyersRepository } from '../lawyers/lawyers.repository';
 
 @Injectable()
@@ -52,7 +53,7 @@ export class CasesService {
     return this.casesRepository.findByExternalId(externalId);
   }
 
-  async findAll(): Promise<Case[]> {
-    return this.casesRepository.findAll();
+  async findAll(filter?: CaseFilterDto): Promise<Case[]> {
+    return this.casesRepository.findAll(filter);
   }
 }

@@ -3,7 +3,10 @@
     "appName": "דינגו",
     "loading": "טוען...",
     "error": "שגיאה",
-    "noResults": "לא נמצאו תוצאות"
+    "noResults": "לא נמצאו תוצאות",
+    "back": "חזרה",
+    "cancel": "ביטול",
+    "continue": "המשך"
   },
   "landing": {
     "title": "דינגו",
@@ -14,7 +17,9 @@
     "title": "דינגו",
     "subtitle": "פלטפורמה חכמה לדירוג עורכי דין",
     "loadingLawyers": "טוען עורכי דין...",
-    "noLawyersFound": "לא נמצאו עורכי דין"
+    "noLawyersFound": "לא נמצאו עורכי דין",
+    "recentCases": "תיקים אחרונים",
+    "viewAllCases": "צפה בכל התיקים"
   },
   "search": {
     "placeholder": "חפש עורכי דין...",
@@ -36,7 +41,10 @@
     "TAX": "מיסים",
     "IMMIGRATION": "הגירה",
     "REAL_ESTATE": "נדל\"ן",
-    "INTELLECTUAL_PROPERTY": "קניין רוחני"
+    "INTELLECTUAL_PROPERTY": "קניין רוחני",
+    "ENVIRONMENTAL": "דיני סביבה",
+    "MEDICAL": "רשלנות רפואית",
+    "BANKRUPTCY": "פשיטת רגל"
   },
   "lawyer": {
     "overall": "כללי",
@@ -49,6 +57,7 @@
     "cases": "תיקים",
     "reviews": "ביקורות",
     "featuredCases": "תיקים מובילים",
+    "courtCases": "תיקי בית משפט",
     "noCases": "אין תיקים זמינים",
     "noReviews": "אין ביקורות עדיין",
     "reviewsCount": "ביקורות"
@@ -65,6 +74,53 @@
     "LOST": "הפסד",
     "SETTLED": "הסדר",
     "ONGOING": "בטיפול"
+  },
+  "caseResult": {
+    "DEFENCE_WON": "ההגנה ניצחה",
+    "ATTACK_WON": "התביעה ניצחה",
+    "settlement": "הסדר",
+    "dismissed": "נדחה",
+    "other": "אחר"
+  },
+  "case": {
+    "title": "תיקים",
+    "searchPlaceholder": "חיפוש תיקים...",
+    "filterBySpecialty": "סינון לפי התמחות",
+    "filterByStatus": "סינון לפי סטטוס",
+    "filterByYear": "סינון לפי שנה",
+    "filterByName": "סינון לפי שם תיק",
+    "allCases": "כל התיקים",
+    "allYears": "כל השנים",
+    "noCasesFound": "לא נמצאו תיקים",
+    "caseDetails": "פרטי תיק",
+    "judge": "שופט",
+    "status": "סטטוס",
+    "specialty": "התמחות",
+    "year": "שנה",
+    "openedDate": "נפתח",
+    "closedDate": "נסגר",
+    "viewPDF": "צפה ב-PDF",
+    "previewPDF": "תצוגה מקדימה",
+    "downloadPDF": "הורד PDF",
+    "pdfPreview": "תצוגה מקדימה של PDF",
+    "description": "תיאור התיק",
+    "caseIdTooltip": "לחץ להעתקת מספר תיק",
+    "copiedSuccessfully": "מספר התיק הועתק בהצלחה",
+    "copyFailed": "כשלון בהעתקת מספר התיק",
+    "defenseSuccessful": "ההגנה הצליחה",
+    "claimSuccessful": "התביעה הצליחה",
+    "settlementReached": "הושג הסדר",
+    "caseDismissed": "התיק נדחה",
+    "representedBy": "מיוצג על ידי",
+    "involvedLawyers": "עורכי דין מעורבים",
+    "filterBySpecialtyTooltip": "לחץ לסינון תיקים לפי התמחות זו",
+    "filterConfirmTitle": "סינון תיקים",
+    "filterConfirmDescription": "לנווט לעמוד תיקים מסונן לפי {specialty}?",
+    "plaintiffLawyers": "עורכי דין התובעים",
+    "defendantLawyers": "עורכי דין הנתבעים",
+    "associatedLawyers": "עורכי דין נוספים",
+    "complexityScore": "מורכבות",
+    "noLawyersAssociated": "אין עורכי דין מקושרים"
   },
   "chart": {
     "caseOutcomes": "תוצאות תיקים"

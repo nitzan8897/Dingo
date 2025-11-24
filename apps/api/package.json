@@ -13,7 +13,7 @@
     "test:cov": "jest --coverage",
     "lint": "eslint \"{src,test}/**/*.ts\"",
     "db:push": "prisma db push",
-    "db:seed": "ts-node prisma/seed.ts",
+    "db:seed": "ts-node prisma/seed.ts && ts-node prisma/seed-court-cases.ts && ts-node prisma/seed-court-cases-expanded.ts",
     "db:studio": "prisma studio",
     "prisma:generate": "prisma generate"
   },

@@ -52,6 +52,7 @@ model Case {
   specialty             String
   result                String
   judgeName             String?
+  pdfUrl                String?
   openedAt              DateTime?
   closedAt              DateTime?
   complexityScore       Float     @default(0.5)
