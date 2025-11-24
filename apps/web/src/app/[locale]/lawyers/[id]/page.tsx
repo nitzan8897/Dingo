@@ -86,7 +86,7 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
 
     return (
       <>
-        <PageHeader title={t('common.appName')} subtitle={t('landing.subtitle')} />
+        <PageHeader locale={locale as any} />
         <BackButton fallbackUrl={`/${locale}`} />
 
         <ProfileAnimatedSections>
