@@ -7,7 +7,7 @@ import { Case } from '@dingo/types';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Calendar, Scale, FileText, Trophy, Shield, Handshake } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { cn, getCaseStatusColor } from '@/lib/utils';
 
 interface CaseCardProps {
   case_: Case;
@@ -16,21 +16,6 @@ interface CaseCardProps {
 const CaseCard: React.FC<CaseCardProps> = ({ case_ }) => {
   const t = useTranslations();
   const locale = useLocale();
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'DEFENCE_WON':
-        return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200';
-      case 'ATTACK_WON':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'settlement':
-        return 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200';
-      case 'dismissed':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
-    }
-  };
 
   const formatDate = (date?: Date) => {
     if (!date) return null;
@@ -77,7 +62,7 @@ const CaseCard: React.FC<CaseCardProps> = ({ case_ }) => {
             <Badge variant="outline" className="font-mono text-xs">
               {case_.externalId}
             </Badge>
-            <Badge className={cn('font-medium', getStatusColor(case_.result))}>
+            <Badge className={cn('font-medium', getCaseStatusColor(case_.result))}>
               {t(`caseResult.${case_.result}`)}
             </Badge>
             <Badge variant="secondary">

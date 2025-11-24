@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { toast } from 'sonner';
 import { Case, Lawyer } from '@dingo/types';
-import { cn } from '@/lib/utils';
+import { cn, getCaseStatusColor } from '@/lib/utils';
 import Link from 'next/link';
 
 interface InteractiveCaseBadgesProps {
@@ -40,21 +40,6 @@ export const InteractiveCaseBadges: React.FC<InteractiveCaseBadgesProps> = ({
   const locale = useLocale();
   const router = useRouter();
   const [showSpecialtyDialog, setShowSpecialtyDialog] = useState(false);
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'DEFENCE_WON':
-        return 'bg-emerald-100 text-emerald-800 dark:bg-emerald-900 dark:text-emerald-200';
-      case 'ATTACK_WON':
-        return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'settlement':
-        return 'bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200';
-      case 'dismissed':
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
-      default:
-        return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
-    }
-  };
 
   const formatDate = (date?: Date) => {
     if (!date) return null;
@@ -146,7 +131,7 @@ export const InteractiveCaseBadges: React.FC<InteractiveCaseBadgesProps> = ({
           {/* Case Status Badge */}
           <Tooltip>
             <TooltipTrigger asChild>
-              <Badge className={cn('text-sm px-3 py-1', getStatusColor(case_.result))}>
+              <Badge className={cn('text-sm px-3 py-1', getCaseStatusColor(case_.result))}>
                 {t(`caseResult.${case_.result}`)}
               </Badge>
             </TooltipTrigger>
