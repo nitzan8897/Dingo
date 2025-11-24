@@ -16,7 +16,7 @@ export class CasesRepository {
         specialty: createCaseDto.specialty,
         result: createCaseDto.result,
         judgeName: createCaseDto.judgeName,
-        pdfUrl: createCaseDto.pdfUrl,
+        // pdfUrl: createCaseDto.pdfUrl, // TODO: Uncomment after Prisma regeneration
         openedAt: createCaseDto.openedAt ? new Date(createCaseDto.openedAt) : null,
         closedAt: createCaseDto.closedAt ? new Date(createCaseDto.closedAt) : null,
         complexityScore: createCaseDto.complexityScore,
@@ -32,7 +32,7 @@ export class CasesRepository {
         specialty: createCaseDto.specialty,
         result: createCaseDto.result,
         judgeName: createCaseDto.judgeName,
-        pdfUrl: createCaseDto.pdfUrl,
+        // pdfUrl: createCaseDto.pdfUrl, // TODO: Uncomment after Prisma regeneration
         openedAt: createCaseDto.openedAt ? new Date(createCaseDto.openedAt) : null,
         closedAt: createCaseDto.closedAt ? new Date(createCaseDto.closedAt) : null,
         complexityScore: createCaseDto.complexityScore,
