@@ -32,7 +32,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ locale }) => {
           </h1>
         </div>
         <p className="text-lg text-gray-600 dark:text-gray-300">
-          {t('home.subtitle')}
+          {t('landing.subtitle')}
         </p>
       </header>
     </Link>

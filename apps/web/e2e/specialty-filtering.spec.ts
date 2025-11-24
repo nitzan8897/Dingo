@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Specialty Filtering', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
   });
 
@@ -198,7 +198,7 @@ test.describe('Specialty Filtering', () => {
 
 test.describe('Specialty Filtering - Hebrew', () => {
   test('should work in Hebrew language', async ({ page }) => {
-    await page.goto('/he');
+    await page.goto('/he/lawyers');
     await page.waitForLoadState('networkidle');
 
     const dropdownButton = page.getByRole('button').first();
@@ -213,7 +213,7 @@ test.describe('Specialty Filtering - Hebrew', () => {
   });
 
   test('should filter in Hebrew', async ({ page }) => {
-    await page.goto('/he');
+    await page.goto('/he/lawyers');
     await page.waitForLoadState('networkidle');
 
     const dropdownButton = page.getByRole('button').first();

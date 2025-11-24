@@ -5,7 +5,12 @@
     "error": "שגיאה",
     "noResults": "לא נמצאו תוצאות"
   },
-  "home": {
+  "landing": {
+    "title": "דינגו",
+    "subtitle": "פלטפורמה חכמה לדירוג עורכי דין",
+    "findLawyers": "מצא עורכי דין"
+  },
+  "lawyers": {
     "title": "דינגו",
     "subtitle": "פלטפורמה חכמה לדירוג עורכי דין",
     "loadingLawyers": "טוען עורכי דין...",

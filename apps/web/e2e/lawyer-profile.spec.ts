@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Lawyer Profile Page', () => {
   test('should navigate to lawyer profile when card is clicked - English', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
 
     // Wait for lawyer cards to load
@@ -23,7 +23,7 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should navigate to lawyer profile when card is clicked - Hebrew', async ({ page }) => {
-    await page.goto('/he');
+    await page.goto('/he/lawyers');
     await page.waitForLoadState('networkidle');
 
     // Wait for lawyer cards to load
@@ -44,8 +44,8 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should load profile page directly via URL', async ({ page }) => {
-    // First, get a lawyer ID from the home page
-    await page.goto('/en');
+    // First, get a lawyer ID from the lawyers page
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
 
     const firstCard = page.locator('.shadow-md').first();
@@ -66,7 +66,7 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should display profile sections with avatar and bio - English', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
 
     const lawyerCard = page.locator('.shadow-md').first();
@@ -97,7 +97,7 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should display profile sections with avatar and bio - Hebrew', async ({ page }) => {
-    await page.goto('/he');
+    await page.goto('/he/lawyers');
     await page.waitForLoadState('networkidle');
 
     const lawyerCard = page.locator('.shadow-md').first();
@@ -118,7 +118,7 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should display cases section when available - English', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
 
     const lawyerCard = page.locator('.shadow-md').first();
@@ -141,7 +141,7 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should display reviews section when available - English', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
 
     const lawyerCard = page.locator('.shadow-md').first();
@@ -163,7 +163,7 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should display case outcomes chart when cases exist', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
 
     const lawyerCard = page.locator('.shadow-md').first();
@@ -184,7 +184,7 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should display review statistics when reviews exist', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
 
     const lawyerCard = page.locator('.shadow-md').first();
@@ -202,7 +202,7 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should show empty state when no cases or reviews', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
 
     const lawyerCard = page.locator('.shadow-md').first();
@@ -219,7 +219,7 @@ test.describe('Lawyer Profile Page', () => {
   });
 
   test('should use wider layout for profile page', async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
 
     const lawyerCard = page.locator('.shadow-md').first();

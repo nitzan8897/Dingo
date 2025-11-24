@@ -5,7 +5,7 @@ jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
       'common.appName': 'Dingo',
-      'home.subtitle': 'Smart Lawyer Ratings Platform',
+      'landing.subtitle': 'Smart Lawyer Ratings Platform',
     };
     return translations[key] || key;
   },

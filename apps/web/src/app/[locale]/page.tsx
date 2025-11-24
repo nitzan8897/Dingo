@@ -1,26 +1,29 @@
 import { getTranslations } from 'next-intl/server';
-import HomeHeader from '@/components/home/home-header';
-import HomeClient from './home-client';
-import { lawyerService } from '@/services/lawyer-service';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 /**
- * Server Component - Home Page
- * Fetches initial lawyer data server-side for:
- * - SEO: Search engines see full content
- * - Performance: No loading spinner on initial load
- * - SSR/SSG: Pre-rendered HTML with data
- * Header with toggles is provided by parent layout
+ * Server Component - Landing Page
+ * Minimal landing page with CTA to lawyers search
  */
-const HomePage = async () => {
+const LandingPage = async () => {
   const t = await getTranslations();
-  const initialLawyers = await lawyerService.fetchLawyers();
 
   return (
-    <>
-      <HomeHeader title={t('home.title')} subtitle={t('home.subtitle')} />
-      <HomeClient initialLawyers={initialLawyers} />
-    </>
+    <div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
+      <h1 className="text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+        {t('landing.title')}
+      </h1>
+      <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl">
+        {t('landing.subtitle')}
+      </p>
+      <Link href="lawyers">
+        <Button size="lg" className="text-lg px-8 py-6">
+          {t('landing.findLawyers')}
+        </Button>
+      </Link>
+    </div>
   );
 };
 
-export default HomePage;
+export default LandingPage;

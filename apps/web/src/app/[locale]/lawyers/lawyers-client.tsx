@@ -3,21 +3,21 @@
 import { useTranslations } from 'next-intl';
 import { Lawyer } from '@dingo/types';
 import SearchBar from '@/components/search/search-bar';
-import EmptyState from '@/components/home/empty-state';
-import LawyersGrid from '@/components/home/lawyers-grid';
+import EmptyState from '@/components/lawyers/empty-state';
+import LawyersGrid from '@/components/lawyers/lawyers-grid';
 import { useLawyerFilters } from '@/hooks/use-lawyer-filters';
 import { useLawyerSearch } from '@/hooks/use-lawyer-search';
 
-interface HomeClientProps {
+interface LawyersClientProps {
   initialLawyers: Lawyer[];
 }
 
 /**
- * Client Component for interactive home page features
+ * Client Component for interactive lawyers search page features
  * Orchestrates search and filtering using custom hooks
  * Single Responsibility: UI composition and coordination
  */
-const HomeClient = ({ initialLawyers }: HomeClientProps) => {
+const LawyersClient = ({ initialLawyers }: LawyersClientProps) => {
   const t = useTranslations();
 
   const {
@@ -45,10 +45,10 @@ const HomeClient = ({ initialLawyers }: HomeClientProps) => {
       />
 
       {filteredLawyers.length === 0 && (
-        <EmptyState message={t('home.noLawyersFound')} />
+        <EmptyState message={t('lawyers.noLawyersFound')} />
       )}
     </>
   );
 };
 
-export default HomeClient;
+export default LawyersClient;
