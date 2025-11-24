@@ -1,7 +1,9 @@
 import { getTranslations } from 'next-intl/server';
 import { Case } from '@dingo/types';
+import { Locale } from '@dingo/i18n';
 import { caseService } from '@/services/case-service';
 import { BackButton } from '@/components/ui/back-button';
+import PageHeader from '@/components/lawyer/page-header';
 import CasesClient from './cases-client';
 
 export const revalidate = 3600;
@@ -37,18 +39,21 @@ const CasesPage = async ({
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 max-w-7xl">
-      <BackButton fallbackUrl={`/${locale}`} label={t('notFound.backHome')} />
+    <>
+      <PageHeader locale={locale as Locale} />
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        <BackButton fallbackUrl={`/${locale}`} label={t('notFound.backHome')} />
 
-      <div className="mb-8">
-        <h1 className="text-4xl font-bold mb-2">{t('case.title')}</h1>
-        <p className="text-muted-foreground">
-          {t('case.allCases')} ({cases.length})
-        </p>
+        <div className="mb-8">
+          <h1 className="text-4xl font-bold mb-2">{t('case.title')}</h1>
+          <p className="text-muted-foreground">
+            {t('case.allCases')} ({cases.length})
+          </p>
+        </div>
+
+        <CasesClient initialCases={cases} />
       </div>
-
-      <CasesClient initialCases={cases} />
-    </div>
+    </>
   );
 };
 

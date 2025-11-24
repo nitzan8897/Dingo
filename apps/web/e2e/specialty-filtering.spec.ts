@@ -2,17 +2,17 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Specialty Filtering', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto('/en');
+    await page.goto('/en/lawyers');
     await page.waitForLoadState('networkidle');
   });
 
   test('should display specialty dropdown button', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').filter({ hasText: /specialties|choose/i });
+    const dropdownButton = page.getByRole('combobox');
     await expect(dropdownButton).toBeVisible();
   });
 
   test('should open dropdown when clicked', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox');
     await dropdownButton.click();
 
     const searchInput = page.getByPlaceholder(/search.*specialt/i);
@@ -20,20 +20,20 @@ test.describe('Specialty Filtering', () => {
   });
 
   test('should display all specialty options when dropdown opens', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
-    // Check for a few known specialties
-    await expect(page.getByText('Criminal Law')).toBeVisible();
-    await expect(page.getByText('Civil Law')).toBeVisible();
-    await expect(page.getByText('Family Law')).toBeVisible();
+    // Check for a few known specialties within the dropdown
+    await expect(page.getByLabel(/suggestion/i).getByText('Criminal Law')).toBeVisible();
+    await expect(page.getByLabel(/suggestion/i).getByText('Civil Law')).toBeVisible();
+    await expect(page.getByLabel(/suggestion/i).getByText('Family Law')).toBeVisible();
   });
 
   test('should select a specialty when clicked', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
-    const criminalSpecialty = page.getByText('Criminal Law');
+    const criminalSpecialty = page.getByLabel(/suggestion/i).getByText('Criminal Law');
     await criminalSpecialty.click();
 
     // Dropdown button should now show count
@@ -41,20 +41,20 @@ test.describe('Specialty Filtering', () => {
   });
 
   test('should select multiple specialties', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
-    await page.getByText('Criminal Law').click();
-    await page.getByText('Civil Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Criminal Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Civil Law').click();
 
     await expect(dropdownButton).toContainText('2');
   });
 
   test('should deselect a specialty when clicked again', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
-    const criminalSpecialty = page.getByText('Criminal Law');
+    const criminalSpecialty = page.getByLabel(/suggestion/i).getByText('Criminal Law');
     await criminalSpecialty.click();
     await expect(dropdownButton).toContainText('1');
 
@@ -63,20 +63,20 @@ test.describe('Specialty Filtering', () => {
   });
 
   test('should filter specialties based on search query', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
     const searchInput = page.getByPlaceholder(/search.*specialt/i);
     await searchInput.fill('criminal');
 
-    // Criminal Law should be visible
-    await expect(page.getByText('Criminal Law')).toBeVisible();
-    // Other unrelated specialties should not be visible
-    await expect(page.getByText('Family Law')).not.toBeVisible();
+    // Criminal Law should be visible in dropdown
+    await expect(page.getByLabel(/suggestion/i).getByText('Criminal Law')).toBeVisible();
+    // Other unrelated specialties should not be visible in dropdown
+    await expect(page.getByLabel(/suggestion/i).getByText('Family Law')).not.toBeVisible();
   });
 
   test('should show "no results" message when search yields no matches', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
     const searchInput = page.getByPlaceholder(/search.*specialt/i);
@@ -86,32 +86,32 @@ test.describe('Specialty Filtering', () => {
   });
 
   test('should show Clear All button when specialties are selected', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
-    await page.getByText('Criminal Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Criminal Law').click();
 
-    const clearAllButton = page.getByRole('button', { name: /clear all/i });
+    const clearAllButton = page.getByText(/clear all/i);
     await expect(clearAllButton).toBeVisible();
   });
 
   test('should clear all selections when Clear All is clicked', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
-    await page.getByText('Criminal Law').click();
-    await page.getByText('Civil Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Criminal Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Civil Law').click();
 
     await expect(dropdownButton).toContainText('2');
 
-    const clearAllButton = page.getByRole('button', { name: /clear all/i });
+    const clearAllButton = page.getByText(/clear all/i);
     await clearAllButton.click();
 
     await expect(dropdownButton).not.toContainText('2');
   });
 
   test('should close dropdown when clicking outside', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
     const searchInput = page.getByPlaceholder(/search.*specialt/i);
@@ -129,18 +129,16 @@ test.describe('Specialty Filtering', () => {
       // If no data-testid, just wait for any cards to appear
     });
 
-    const initialLawyerCount = await page.locator('.shadow-md').count();
-
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
-    await page.getByText('Criminal Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Criminal Law').click();
 
     // Wait for network request to complete
     await page.waitForLoadState('networkidle');
 
     // Lawyer count may change (could be more, less, or same depending on data)
-    const filteredLawyerCount = await page.locator('.shadow-md').count();
+    const filteredLawyerCount = await page.locator('[class*="shadow"]').count();
     expect(filteredLawyerCount).toBeGreaterThanOrEqual(0);
   });
 
@@ -154,16 +152,16 @@ test.describe('Specialty Filtering', () => {
       await specialtyTag.click();
 
       // Dropdown should show 1 selected specialty
-      const dropdownButton = page.getByRole('button').first();
+      const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
       await expect(dropdownButton).toContainText('1');
     }
   });
 
   test('should persist selected specialties when reopening dropdown', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
-    await page.getByText('Criminal Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Criminal Law').click();
     await dropdownButton.click(); // Close
 
     await dropdownButton.click(); // Reopen
@@ -177,13 +175,13 @@ test.describe('Specialty Filtering', () => {
   });
 
   test('should handle multiple specialty selections and filtering together', async ({ page }) => {
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /special/i });
     await dropdownButton.click();
 
     // Select multiple specialties
-    await page.getByText('Criminal Law').click();
-    await page.getByText('Civil Law').click();
-    await page.getByText('Family Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Criminal Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Civil Law').click();
+    await page.getByLabel(/suggestion/i).getByText('Family Law').click();
 
     await expect(dropdownButton).toContainText('3');
 
@@ -191,37 +189,39 @@ test.describe('Specialty Filtering', () => {
     await page.waitForLoadState('networkidle');
 
     // Lawyers should be filtered (can't assert exact count without test data)
-    const lawyerCards = page.locator('.shadow-md');
+    const lawyerCards = page.locator('[class*="shadow"]');
     await expect(lawyerCards.first()).toBeVisible();
   });
 });
 
 test.describe('Specialty Filtering - Hebrew', () => {
   test('should work in Hebrew language', async ({ page }) => {
-    await page.goto('/he');
+    await page.goto('/he/lawyers');
     await page.waitForLoadState('networkidle');
 
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /התמחויות/ });
     await dropdownButton.click();
 
     // Hebrew text for Criminal Law
-    await expect(page.getByText('פלילי')).toBeVisible();
+    await expect(page.getByLabel(/suggestion/i).getByText('פלילי')).toBeVisible();
 
-    await page.getByText('פלילי').click();
+    await page.getByLabel(/suggestion/i).getByText('פלילי').click();
 
     await expect(dropdownButton).toContainText('1');
   });
 
   test('should filter in Hebrew', async ({ page }) => {
-    await page.goto('/he');
+    await page.goto('/he/lawyers');
     await page.waitForLoadState('networkidle');
 
-    const dropdownButton = page.getByRole('button').first();
+    const dropdownButton = page.getByRole('combobox').filter({ hasText: /התמחויות/ });
     await dropdownButton.click();
 
-    const searchInput = page.getByPlaceholder(/חפש/);
+    const searchInput = page.getByPlaceholder('חפש התמחויות...');
     await searchInput.fill('פלילי');
 
-    await expect(page.getByText('פלילי')).toBeVisible();
+    // After searching, the Hebrew text should still be visible (or visible as a result)
+    const hebrewText = page.getByText('פלילי');
+    await expect(hebrewText.first()).toBeVisible();
   });
 });

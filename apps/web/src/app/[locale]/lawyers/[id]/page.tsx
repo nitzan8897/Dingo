@@ -7,13 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import LawyerCardRatings from '@/components/lawyer/lawyer-card-ratings';
 import ProfileAnimatedSections from '@/components/lawyer/profile-animated-sections';
-import ProfileHeader from '@/components/lawyer/profile-header';
+import PageHeader from '@/components/lawyer/page-header';
 import CaseCard from '@/components/case/case-card';
 import ReviewCard from '@/components/lawyer/review-card';
 import CaseStatsChart from '@/components/lawyer/case-stats-chart';
 import ReviewsStats from '@/components/lawyer/reviews-stats';
 import { BackButton } from '@/components/ui/back-button';
-import { type Locale } from '@dingo/i18n';
 
 interface PageProps {
   params: Promise<{ id: string; locale: string }>;
@@ -87,7 +86,7 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
 
     return (
       <>
-        <ProfileHeader locale={locale as Locale} />
+        <PageHeader locale={locale as any} />
         <BackButton fallbackUrl={`/${locale}`} />
 
         <ProfileAnimatedSections>

@@ -8,7 +8,12 @@
     "cancel": "Cancel",
     "continue": "Continue"
   },
-  "home": {
+  "landing": {
+    "title": "Dingo",
+    "subtitle": "Smart Lawyer Ratings Platform",
+    "findLawyers": "Find Lawyers"
+  },
+  "lawyers": {
     "title": "Dingo",
     "subtitle": "Smart Lawyer Ratings Platform",
     "loadingLawyers": "Loading lawyers...",

@@ -5,15 +5,15 @@ import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { type Locale } from '@dingo/i18n';
 
-interface ProfileHeaderProps {
+interface PageHeaderProps {
   locale: Locale;
 }
 
 /**
- * ProfileHeader component
+ * PageHeader component
  * Displays logo and slogan with navigation back to homepage
  */
-const ProfileHeader: React.FC<ProfileHeaderProps> = ({ locale }) => {
+const PageHeader: React.FC<PageHeaderProps> = ({ locale }) => {
   const t = useTranslations();
 
   return (
@@ -32,11 +32,11 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ locale }) => {
           </h1>
         </div>
         <p className="text-lg text-gray-600 dark:text-gray-300">
-          {t('home.subtitle')}
+          {t('landing.subtitle')}
         </p>
       </header>
     </Link>
   );
 };
 
-export default ProfileHeader;
+export default PageHeader;
