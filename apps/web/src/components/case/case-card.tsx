@@ -6,7 +6,7 @@ import { useTranslations, useLocale } from 'next-intl';
 import { Case } from '@dingo/types';
 import { Card, CardHeader, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Scale, FileText } from 'lucide-react';
+import { Calendar, Scale, FileText, Trophy, Shield, Handshake } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface CaseCardProps {
@@ -41,6 +41,19 @@ const CaseCard: React.FC<CaseCardProps> = ({ case_ }) => {
     });
   };
 
+  const getResultIcon = (result: string) => {
+    switch (result) {
+      case 'ATTACK_WON':
+        return <Trophy className="h-5 w-5 text-amber-600 dark:text-amber-400" />;
+      case 'DEFENCE_WON':
+        return <Shield className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />;
+      case 'settlement':
+        return <Handshake className="h-5 w-5 text-blue-600 dark:text-blue-400" />;
+      default:
+        return null;
+    }
+  };
+
   const year = case_.closedAt ? new Date(case_.closedAt).getFullYear() : null;
 
   return (
@@ -48,9 +61,12 @@ const CaseCard: React.FC<CaseCardProps> = ({ case_ }) => {
       <Card className="hover:shadow-lg transition-shadow duration-200 h-full cursor-pointer">
         <CardHeader className="space-y-2">
           <div className="flex items-start justify-between gap-4">
-            <h3 className="font-semibold text-lg line-clamp-2 flex-1">
-              {case_.title}
-            </h3>
+            <div className="flex items-start gap-2 flex-1">
+              {getResultIcon(case_.result)}
+              <h3 className="font-semibold text-lg line-clamp-2 flex-1">
+                {case_.title}
+              </h3>
+            </div>
             {year && (
               <Badge variant="outline" className="shrink-0">
                 {year}
