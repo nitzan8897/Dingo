@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "turbo run dev --filter=!@dingo/differ --filter=!@dingo/mobile",
     "build": "turbo run build",
-    "test": "turbo run test",
+    "test": "turbo run test --filter=!@dingo/mobile",
+    "test:mobile": "pnpm --filter @dingo/mobile test",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "clean": "turbo run clean && rm -rf node_modules",
