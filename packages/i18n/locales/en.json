@@ -3,13 +3,16 @@
     "appName": "Dingo",
     "loading": "Loading...",
     "error": "Error",
-    "noResults": "No results found"
+    "noResults": "No results found",
+    "back": "Back"
   },
   "home": {
     "title": "Dingo",
     "subtitle": "Smart Lawyer Ratings Platform",
     "loadingLawyers": "Loading lawyers...",
-    "noLawyersFound": "No lawyers found"
+    "noLawyersFound": "No lawyers found",
+    "recentCases": "Recent Cases",
+    "viewAllCases": "View All Cases"
   },
   "search": {
     "placeholder": "Search lawyers...",

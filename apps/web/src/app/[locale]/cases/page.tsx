@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import { Case } from '@dingo/types';
 import { caseService } from '@/services/case-service';
+import { BackButton } from '@/components/ui/back-button';
 import CasesClient from './cases-client';
 
 export const revalidate = 3600;
@@ -37,6 +38,8 @@ const CasesPage = async ({
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-7xl">
+      <BackButton fallbackUrl={`/${locale}`} />
+
       <div className="mb-8">
         <h1 className="text-4xl font-bold mb-2">{t('case.title')}</h1>
         <p className="text-muted-foreground">

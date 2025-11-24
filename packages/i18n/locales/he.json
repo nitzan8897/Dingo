@@ -3,13 +3,16 @@
     "appName": "דינגו",
     "loading": "טוען...",
     "error": "שגיאה",
-    "noResults": "לא נמצאו תוצאות"
+    "noResults": "לא נמצאו תוצאות",
+    "back": "חזרה"
   },
   "home": {
     "title": "דינגו",
     "subtitle": "פלטפורמה חכמה לדירוג עורכי דין",
     "loadingLawyers": "טוען עורכי דין...",
-    "noLawyersFound": "לא נמצאו עורכי דין"
+    "noLawyersFound": "לא נמצאו עורכי דין",
+    "recentCases": "תיקים אחרונים",
+    "viewAllCases": "צפה בכל התיקים"
   },
   "search": {
     "placeholder": "חפש עורכי דין...",

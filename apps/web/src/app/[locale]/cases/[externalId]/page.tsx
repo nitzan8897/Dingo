@@ -6,6 +6,7 @@ import { Lawyer } from '@dingo/types';
 import CaseDetailHeader from '@/components/case/case-detail-header';
 import CaseLawyersSection from '@/components/case/case-lawyers-section';
 import { Separator } from '@/components/ui/separator';
+import { BackButton } from '@/components/ui/back-button';
 
 export const revalidate = 3600;
 
@@ -64,6 +65,8 @@ const CaseDetailPage = async ({ params }: PageProps) => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-5xl">
+      <BackButton fallbackUrl={`/${locale}/cases`} />
+
       <CaseDetailHeader case_={case_} />
 
       <Separator className="my-8" />

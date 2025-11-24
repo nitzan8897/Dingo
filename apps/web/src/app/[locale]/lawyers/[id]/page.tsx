@@ -13,6 +13,7 @@ import CourtCaseCard from '@/components/case/case-card';
 import ReviewCard from '@/components/lawyer/review-card';
 import CaseStatsChart from '@/components/lawyer/case-stats-chart';
 import ReviewsStats from '@/components/lawyer/reviews-stats';
+import { BackButton } from '@/components/ui/back-button';
 import { type Locale } from '@dingo/i18n';
 
 interface PageProps {
@@ -91,6 +92,8 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
     return (
       <>
         <ProfileHeader locale={locale as Locale} />
+        <BackButton fallbackUrl={`/${locale}`} />
+
         <ProfileAnimatedSections>
           {/* Header Card */}
           <Card className="mb-6">
