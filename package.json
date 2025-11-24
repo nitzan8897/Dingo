@@ -4,7 +4,7 @@
   "private": true,
   "description": "Dingo - Smart ratings platform for professionals",
   "scripts": {
-    "dev": "turbo run dev --filter=!@dingo/differ",
+    "dev": "turbo run dev --filter=!@dingo/differ --filter=!@dingo/mobile",
     "build": "turbo run build",
     "test": "turbo run test",
     "lint": "turbo run lint",
