@@ -21,13 +21,14 @@ const LawyerCard: React.FC<LawyerCardProps> = ({ lawyer }) => {
 
   // Use English only if locale is explicitly 'en', otherwise default to Hebrew
   const displayName = i18n.language === 'en' ? lawyer.fullNameEn : lawyer.fullNameHe;
+  const cityName = i18n.language === 'en' ? lawyer.city.nameEn : lawyer.city.nameHe;
 
   return (
     <View style={styles.card}>
       <View style={styles.header}>
         <View style={styles.info}>
           <Text style={styles.name}>{displayName}</Text>
-          <Text style={styles.city}>{lawyer.city}</Text>
+          <Text style={styles.city}>{cityName}</Text>
         </View>
         <View style={styles.ratingContainer}>
           <Text style={styles.overallRating}>{overallRating}</Text>
