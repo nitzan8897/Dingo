@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { lawyerService } from '@/services/lawyer-service';
+import { caseService } from '@/services/case-service';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +9,7 @@ import LawyerCardRatings from '@/components/lawyer/lawyer-card-ratings';
 import ProfileAnimatedSections from '@/components/lawyer/profile-animated-sections';
 import ProfileHeader from '@/components/lawyer/profile-header';
 import CaseCard from '@/components/lawyer/case-card';
+import CourtCaseCard from '@/components/case/case-card';
 import ReviewCard from '@/components/lawyer/review-card';
 import CaseStatsChart from '@/components/lawyer/case-stats-chart';
 import ReviewsStats from '@/components/lawyer/reviews-stats';
@@ -67,10 +69,24 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
       .toUpperCase()
       .slice(0, 2);
 
-    // Get featured and all cases
+    // Get featured and all profile cases
     const featuredCases = lawyer.cases?.filter((c) => c.isFeatured) || [];
     const allCases = lawyer.cases || [];
     const reviews = lawyer.reviews || [];
+
+    // Fetch court cases where this lawyer is involved
+    let courtCases: any[] = [];
+    try {
+      const allCourtCases = await caseService.fetchCases();
+      courtCases = allCourtCases.filter(
+        (c) =>
+          c.plaintiffLawyerIds.includes(lawyer.id) ||
+          c.defendantLawyerIds.includes(lawyer.id) ||
+          c.associatedLawyerIds.includes(lawyer.id)
+      );
+    } catch (error) {
+      console.error('Failed to fetch court cases:', error);
+    }
 
     return (
       <>
@@ -176,6 +192,22 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
               <div className="space-y-4">
                 {allCases.map((case_) => (
                   <CaseCard key={case_.id} case_={case_} locale={locale} />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Court Cases Section */}
+        {courtCases.length > 0 && (
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle className="text-2xl">{t('lawyer.courtCases')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {courtCases.map((case_) => (
+                  <CourtCaseCard key={case_.id} case_={case_} />
                 ))}
               </div>
             </CardContent>
