@@ -1,6 +1,7 @@
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { useLocale } from 'next-intl';
+import { Case } from '@dingo/types';
 import HomeHeader from '@/components/home/home-header';
 import HomeClient from './home-client';
 import { lawyerService } from '@/services/lawyer-service';
@@ -27,7 +28,7 @@ const HomePage = async ({
   const t = await getTranslations();
   const initialLawyers = await lawyerService.fetchLawyers();
 
-  let recentCases = [];
+  let recentCases: Case[] = [];
   try {
     const allCases = await caseService.fetchCases();
     recentCases = allCases.slice(0, 3);
