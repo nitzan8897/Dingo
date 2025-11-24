@@ -1,4 +1,4 @@
-export type CaseResult = 'win' | 'lose' | 'settlement' | 'dismissed' | 'other';
+export type CaseResult = 'DEFENCE_WON' | 'ATTACK_WON' | 'settlement' | 'dismissed' | 'other';
 
 export enum CaseOutcome {
   WON = 'WON',
@@ -14,6 +14,7 @@ export interface Case {
   specialty: string;
   result: CaseResult;
   judgeName?: string;
+  pdfUrl?: string;
   openedAt?: Date;
   closedAt?: Date;
   complexityScore: number;
@@ -56,6 +57,7 @@ export interface CreateCaseDTO {
   specialty: string;
   result: CaseResult;
   judgeName?: string;
+  pdfUrl?: string;
   openedAt?: string;
   closedAt?: string;
   complexityScore: number;
@@ -82,4 +84,12 @@ export interface CaseAnalysis {
   closedAt: Date;
   complexityScore: number;
   lawyers: AnalyzedLawyer[];
+}
+
+export interface CaseFilterParams {
+  search?: string;
+  specialty?: string;
+  name?: string;
+  year?: number;
+  status?: CaseResult;
 }

@@ -7,7 +7,15 @@ const mockLawyer: Lawyer = {
   id: '1',
   fullNameEn: 'John Doe',
   fullNameHe: 'ג\'ון דו',
-  city: 'Tel Aviv',
+  cityId: '1',
+  city: {
+    id: '1',
+    nameEn: 'Tel Aviv',
+    nameHe: 'תל אביב',
+    slug: 'tel-aviv',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
   specialties: ['CRIMINAL', 'CIVIL'],
   yearsOfExperience: 10,
   ratingVector: {
@@ -29,7 +37,8 @@ describe('LawyerCard', () => {
 
   it('renders lawyer city', () => {
     render(<LawyerCard lawyer={mockLawyer} />);
-    expect(screen.getByText('Tel Aviv')).toBeTruthy();
+    // Default language is Hebrew, so it should show Hebrew city name
+    expect(screen.getByText('תל אביב')).toBeTruthy();
   });
 
   it('renders years of experience', () => {

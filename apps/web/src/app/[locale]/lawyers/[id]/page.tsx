@@ -1,5 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 import { lawyerService } from '@/services/lawyer-service';
+import { caseService } from '@/services/case-service';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -7,10 +8,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import LawyerCardRatings from '@/components/lawyer/lawyer-card-ratings';
 import ProfileAnimatedSections from '@/components/lawyer/profile-animated-sections';
 import ProfileHeader from '@/components/lawyer/profile-header';
-import CaseCard from '@/components/lawyer/case-card';
+import CaseCard from '@/components/case/case-card';
 import ReviewCard from '@/components/lawyer/review-card';
 import CaseStatsChart from '@/components/lawyer/case-stats-chart';
 import ReviewsStats from '@/components/lawyer/reviews-stats';
+import { BackButton } from '@/components/ui/back-button';
 import { type Locale } from '@dingo/i18n';
 
 interface PageProps {
@@ -67,14 +69,27 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
       .toUpperCase()
       .slice(0, 2);
 
-    // Get featured and all cases
-    const featuredCases = lawyer.cases?.filter((c) => c.isFeatured) || [];
-    const allCases = lawyer.cases || [];
     const reviews = lawyer.reviews || [];
+
+    // Fetch court cases where this lawyer is involved
+    let courtCases: any[] = [];
+    try {
+      const allCourtCases = await caseService.fetchCases();
+      courtCases = allCourtCases.filter(
+        (c) =>
+          c.plaintiffLawyerIds.includes(lawyer.id) ||
+          c.defendantLawyerIds.includes(lawyer.id) ||
+          c.associatedLawyerIds.includes(lawyer.id)
+      );
+    } catch (error) {
+      console.error('Failed to fetch court cases:', error);
+    }
 
     return (
       <>
         <ProfileHeader locale={locale as Locale} />
+        <BackButton fallbackUrl={`/${locale}`} />
+
         <ProfileAnimatedSections>
           {/* Header Card */}
           <Card className="mb-6">
@@ -143,39 +158,23 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
         </Card>
 
         {/* Stats Grid - Cases and Reviews */}
-        {(allCases.length > 0 || reviews.length > 0) && (
+        {(courtCases.length > 0 || reviews.length > 0) && (
           <div className="grid md:grid-cols-2 gap-6 mb-6">
-            {allCases.length > 0 && <CaseStatsChart cases={allCases} />}
+            {courtCases.length > 0 && <CaseStatsChart cases={courtCases} />}
             {reviews.length > 0 && <ReviewsStats reviews={reviews} />}
           </div>
         )}
 
-        {/* Featured Cases Section */}
-        {featuredCases.length > 0 && (
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="text-2xl">{t('lawyer.featuredCases')}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {featuredCases.map((case_) => (
-                  <CaseCard key={case_.id} case_={case_} locale={locale} />
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* All Cases Section */}
-        {allCases.length > 0 && (
+        {/* Cases Section */}
+        {courtCases.length > 0 && (
           <Card className="mb-6">
             <CardHeader>
               <CardTitle className="text-2xl">{t('lawyer.cases')}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {allCases.map((case_) => (
-                  <CaseCard key={case_.id} case_={case_} locale={locale} />
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                {courtCases.map((case_) => (
+                  <CaseCard key={case_.id} case_={case_} />
                 ))}
               </div>
             </CardContent>
@@ -199,7 +198,7 @@ const LawyerProfilePage = async ({ params }: PageProps) => {
         )}
 
         {/* Empty state */}
-        {allCases.length === 0 && reviews.length === 0 && (
+        {courtCases.length === 0 && reviews.length === 0 && (
           <Card className="mb-6">
             <CardContent className="py-12 text-center text-gray-500 dark:text-gray-400">
               <p>{t('lawyer.noCases')}</p>

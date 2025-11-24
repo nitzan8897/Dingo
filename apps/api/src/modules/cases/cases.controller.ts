@@ -1,7 +1,8 @@
-import { Controller, Post, Get, Param, Body } from '@nestjs/common';
+import { Controller, Post, Get, Param, Body, Query } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { CasesService } from './cases.service';
 import { CreateCaseDto } from './dto/create-case.dto';
+import { CaseFilterDto } from './dto/case-filter.dto';
 
 @ApiTags('cases')
 @Controller('cases')
@@ -22,11 +23,11 @@ export class CasesController {
   @Get()
   @ApiOperation({
     summary: 'Get all cases',
-    description: 'Returns all cases ordered by closed date (descending)'
+    description: 'Returns all cases ordered by closed date (descending). Supports filtering by search, specialty, name, year, and status.'
   })
   @ApiResponse({ status: 200, description: 'Cases retrieved successfully' })
-  async findAll() {
-    return this.casesService.findAll();
+  async findAll(@Query() filter: CaseFilterDto) {
+    return this.casesService.findAll(filter);
   }
 
   @Get(':externalId')

@@ -28,6 +28,11 @@ export class CreateCaseDto implements CreateCaseDTO {
   @IsString()
   judgeName?: string;
 
+  @ApiProperty({ description: 'PDF file URL', required: false, example: 'https://example.com/cases/12345.pdf' })
+  @IsOptional()
+  @IsString()
+  pdfUrl?: string;
+
   @ApiProperty({ description: 'Case opened date', required: false, example: '2024-01-15T00:00:00Z' })
   @IsOptional()
   @IsDateString()

@@ -33,8 +33,13 @@ export default function Index() {
           lawyer.fullNameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
           lawyer.fullNameHe.toLowerCase().includes(searchQuery.toLowerCase());
 
+        // Search in city names (both English and Hebrew)
+        const cityMatch =
+          lawyer.city.nameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          lawyer.city.nameHe.toLowerCase().includes(searchQuery.toLowerCase());
+
         return nameMatch ||
-          lawyer.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          cityMatch ||
           lawyer.specialties.some((s) =>
             s.toLowerCase().includes(searchQuery.toLowerCase())
           );

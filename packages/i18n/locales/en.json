@@ -3,13 +3,18 @@
     "appName": "Dingo",
     "loading": "Loading...",
     "error": "Error",
-    "noResults": "No results found"
+    "noResults": "No results found",
+    "back": "Back",
+    "cancel": "Cancel",
+    "continue": "Continue"
   },
   "home": {
     "title": "Dingo",
     "subtitle": "Smart Lawyer Ratings Platform",
     "loadingLawyers": "Loading lawyers...",
-    "noLawyersFound": "No lawyers found"
+    "noLawyersFound": "No lawyers found",
+    "recentCases": "Recent Cases",
+    "viewAllCases": "View All Cases"
   },
   "search": {
     "placeholder": "Search lawyers...",
@@ -31,7 +36,10 @@
     "TAX": "Tax Law",
     "IMMIGRATION": "Immigration Law",
     "REAL_ESTATE": "Real Estate Law",
-    "INTELLECTUAL_PROPERTY": "Intellectual Property"
+    "INTELLECTUAL_PROPERTY": "Intellectual Property",
+    "ENVIRONMENTAL": "Environmental Law",
+    "MEDICAL": "Medical Law",
+    "BANKRUPTCY": "Bankruptcy Law"
   },
   "lawyer": {
     "overall": "Overall",
@@ -44,6 +52,7 @@
     "cases": "Cases",
     "reviews": "Reviews",
     "featuredCases": "Featured Cases",
+    "courtCases": "Court Cases",
     "noCases": "No cases available",
     "noReviews": "No reviews yet",
     "reviewsCount": "reviews"
@@ -60,6 +69,53 @@
     "LOST": "Lost",
     "SETTLED": "Settled",
     "ONGOING": "Ongoing"
+  },
+  "caseResult": {
+    "DEFENCE_WON": "Defence Won",
+    "ATTACK_WON": "Attack Won",
+    "settlement": "Settlement",
+    "dismissed": "Dismissed",
+    "other": "Other"
+  },
+  "case": {
+    "title": "Cases",
+    "searchPlaceholder": "Search cases...",
+    "filterBySpecialty": "Filter by specialty",
+    "filterByStatus": "Filter by status",
+    "filterByYear": "Filter by year",
+    "filterByName": "Filter by case name",
+    "allCases": "All Cases",
+    "allYears": "All Years",
+    "noCasesFound": "No cases found",
+    "caseDetails": "Case Details",
+    "judge": "Judge",
+    "status": "Status",
+    "specialty": "Specialty",
+    "year": "Year",
+    "openedDate": "Opened",
+    "closedDate": "Closed",
+    "viewPDF": "View PDF",
+    "previewPDF": "Preview PDF",
+    "downloadPDF": "Download PDF",
+    "pdfPreview": "PDF Preview",
+    "description": "Case Description",
+    "caseIdTooltip": "Click to copy Case ID",
+    "copiedSuccessfully": "Case ID copied to clipboard",
+    "copyFailed": "Failed to copy Case ID",
+    "defenseSuccessful": "Defense was successful",
+    "claimSuccessful": "Claim was successful",
+    "settlementReached": "Settlement was reached",
+    "caseDismissed": "Case was dismissed",
+    "representedBy": "Represented by",
+    "involvedLawyers": "Involved lawyers",
+    "filterBySpecialtyTooltip": "Click to filter cases by this specialty",
+    "filterConfirmTitle": "Filter Cases",
+    "filterConfirmDescription": "Navigate to cases page filtered by {specialty}?",
+    "plaintiffLawyers": "Plaintiff Lawyers",
+    "defendantLawyers": "Defendant Lawyers",
+    "associatedLawyers": "Associated Lawyers",
+    "complexityScore": "Complexity",
+    "noLawyersAssociated": "No lawyers associated"
   },
   "chart": {
     "caseOutcomes": "Case Outcomes"
