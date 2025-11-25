@@ -13,13 +13,14 @@ type Mode = 'lawyers' | 'cases';
 interface LandingClientProps {
   lawyers: Lawyer[];
   cases: Case[];
+  locale: string;
 }
 
 /**
  * LandingClient component
  * Client-side landing page with mode switching between lawyers and cases
  */
-const LandingClient = ({ lawyers, cases }: LandingClientProps): JSX.Element => {
+const LandingClient = ({ lawyers, cases, locale }: LandingClientProps): JSX.Element => {
   const t = useTranslations();
   const router = useRouter();
   const [mode, setMode] = useState<Mode>('lawyers');
@@ -67,7 +68,7 @@ const LandingClient = ({ lawyers, cases }: LandingClientProps): JSX.Element => {
 
       <div className={`w-full max-w-7xl px-4 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
         {mode === 'lawyers' ? (
-          <FloatingLawyerIcons lawyers={lawyers} />
+          <FloatingLawyerIcons lawyers={lawyers} locale={locale} />
         ) : (
           <FloatingCaseIcons cases={cases} />
         )}

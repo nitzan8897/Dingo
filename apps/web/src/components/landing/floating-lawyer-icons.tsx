@@ -2,20 +2,19 @@
 
 import { Lawyer } from '@dingo/types';
 import { useRouter } from 'next/navigation';
-import { useLocale } from 'next-intl';
 import { Scale } from 'lucide-react';
 
 interface FloatingLawyerIconsProps {
   lawyers: Lawyer[];
+  locale: string;
 }
 
 /**
  * FloatingLawyerIcons component
  * Displays floating lawyer icons with hover tooltips
  */
-const FloatingLawyerIcons = ({ lawyers }: FloatingLawyerIconsProps): JSX.Element => {
+const FloatingLawyerIcons = ({ lawyers, locale }: FloatingLawyerIconsProps): JSX.Element => {
   const router = useRouter();
-  const locale = useLocale();
 
   const handleLawyerClick = (lawyerId: string): void => {
     router.push(`/lawyers/${lawyerId}`);

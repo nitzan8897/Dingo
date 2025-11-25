@@ -1,15 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { useRouter } from 'next/navigation';
-import { useLocale } from 'next-intl';
 import FloatingLawyerIcons from '../floating-lawyer-icons';
 import { Lawyer } from '@dingo/types';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
-}));
-
-jest.mock('next-intl', () => ({
-  useLocale: jest.fn(),
 }));
 
 describe('FloatingLawyerIcons', () => {
@@ -60,9 +55,7 @@ describe('FloatingLawyerIcons', () => {
   });
 
   it('should render lawyer tooltips with English names when locale is en', () => {
-    (useLocale as jest.Mock).mockReturnValue('en');
-
-    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} />);
+    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} locale="en" />);
 
     // Check that English names are in the DOM
     expect(container.textContent).toContain('John Doe');
@@ -74,9 +67,7 @@ describe('FloatingLawyerIcons', () => {
   });
 
   it('should render lawyer tooltips with Hebrew names when locale is he', () => {
-    (useLocale as jest.Mock).mockReturnValue('he');
-
-    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} />);
+    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} locale="he" />);
 
     // Check that Hebrew names are in the DOM
     expect(container.textContent).toContain('ג\'ון דו');
@@ -88,9 +79,7 @@ describe('FloatingLawyerIcons', () => {
   });
 
   it('should render correct number of lawyer icons', () => {
-    (useLocale as jest.Mock).mockReturnValue('en');
-
-    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} />);
+    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} locale="en" />);
 
     // Find all floating icon elements
     const icons = container.querySelectorAll('.floating-icon');
@@ -98,9 +87,7 @@ describe('FloatingLawyerIcons', () => {
   });
 
   it('should have tooltip text that is not empty', () => {
-    (useLocale as jest.Mock).mockReturnValue('en');
-
-    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} />);
+    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} locale="en" />);
 
     // Find all tooltip divs (they have z-[999] class)
     const tooltips = container.querySelectorAll('.z-\\[999\\]');
@@ -113,9 +100,7 @@ describe('FloatingLawyerIcons', () => {
   });
 
   it('should use correct field names from Lawyer type', () => {
-    (useLocale as jest.Mock).mockReturnValue('en');
-
-    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} />);
+    const { container } = render(<FloatingLawyerIcons lawyers={mockLawyers} locale="en" />);
 
     // Verify that the component accesses fullNameEn/fullNameHe, not fullName
     mockLawyers.forEach((lawyer) => {
