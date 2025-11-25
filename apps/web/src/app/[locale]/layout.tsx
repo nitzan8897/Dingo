@@ -71,7 +71,7 @@ export default async function LocaleLayout({
             <div className="min-h-screen dark:bg-gray-900 transition-colors">
               <div className="max-w-7xl mx-auto p-8">
                 {/* Header with toggles - appears on all pages */}
-                <div className="flex justify-end gap-3 mb-8">
+                <div className="flex gap-3 mb-8" dir="ltr">
                   <ThemeToggle />
                   <LanguageSwitcher />
                 </div>
