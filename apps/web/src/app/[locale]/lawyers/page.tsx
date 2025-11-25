@@ -1,7 +1,6 @@
 import { Locale } from '@dingo/i18n';
 import PageHeader from '@/components/lawyer/page-header';
 import LawyersClient from './lawyers-client';
-import LawyersStatsSection from './lawyers-stats-section';
 import RecentCasesSection from './recent-cases-section';
 import RecentReviewsSection from './recent-reviews-section';
 
@@ -22,7 +21,6 @@ const LawyersPage = async ({ params }: PageProps) => {
     <>
       <PageHeader locale={locale as Locale} />
       <LawyersClient />
-      <LawyersStatsSection />
       <RecentCasesSection locale={locale} />
       <RecentReviewsSection locale={locale} />
     </>
