@@ -21,7 +21,9 @@
     "loadingLawyers": "טוען עורכי דין...",
     "noLawyersFound": "לא נמצאו עורכי דין",
     "recentCases": "תיקים אחרונים",
-    "viewAllCases": "צפה בכל התיקים"
+    "viewAllCases": "צפה בכל התיקים",
+    "recentReviews": "ביקורות אחרונות",
+    "viewAllLawyers": "צפה בכל עורכי הדין"
   },
   "search": {
     "placeholder": "חפש עורכי דין...",
@@ -78,6 +80,10 @@
     "ONGOING": "בטיפול"
   },
   "caseResult": {
+    "WON": "ניצחון",
+    "SETTLED": "הסדר",
+    "DISMISSED": "נדחה",
+    "OTHER": "אחר",
     "DEFENCE_WON": "ההגנה ניצחה",
     "ATTACK_WON": "התביעה ניצחה",
     "settlement": "הסדר",

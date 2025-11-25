@@ -21,7 +21,9 @@
     "loadingLawyers": "Loading lawyers...",
     "noLawyersFound": "No lawyers found",
     "recentCases": "Recent Cases",
-    "viewAllCases": "View All Cases"
+    "viewAllCases": "View All Cases",
+    "recentReviews": "Recent Reviews",
+    "viewAllLawyers": "View All Lawyers"
   },
   "search": {
     "placeholder": "Search lawyers...",
@@ -78,6 +80,10 @@
     "ONGOING": "Ongoing"
   },
   "caseResult": {
+    "WON": "Won",
+    "SETTLED": "Settled",
+    "DISMISSED": "Dismissed",
+    "OTHER": "Other",
     "DEFENCE_WON": "Defence Won",
     "ATTACK_WON": "Attack Won",
     "settlement": "Settlement",
