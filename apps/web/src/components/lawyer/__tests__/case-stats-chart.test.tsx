@@ -1,14 +1,14 @@
 import { render, screen } from '@testing-library/react';
 import CaseStatsChart from '../case-stats-chart';
-import { ProfileCase } from '@dingo/types';
+import { Case, CaseResult } from '@dingo/types';
 
 jest.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
     const translations: Record<string, string> = {
-      'caseOutcome.WON': 'Won',
-      'caseOutcome.LOST': 'Lost',
-      'caseOutcome.SETTLED': 'Settled',
-      'caseOutcome.ONGOING': 'Ongoing',
+      'caseResult.WON': 'Won',
+      'caseResult.SETTLED': 'Settled',
+      'caseResult.DISMISSED': 'Dismissed',
+      'caseResult.OTHER': 'Other',
       'chart.caseOutcomes': 'Case Outcomes',
     };
     return translations[key] || key;
@@ -32,28 +32,29 @@ jest.mock('recharts', () => ({
 }));
 
 describe('CaseStatsChart', () => {
-  const createMockCase = (outcome: 'WON' | 'LOST' | 'SETTLED' | 'ONGOING', id: string): ProfileCase => ({
+  const createMockCase = (result: CaseResult, id: string): Case => ({
     id,
-    lawyerId: 'lawyer-1',
-    titleEn: `Case ${id}`,
-    titleHe: `תיק ${id}`,
-    descriptionEn: 'Description',
-    descriptionHe: 'תיאור',
-    outcome,
-    year: 2023,
-    isFeatured: false,
+    externalId: `EXT-${id}`,
+    title: `Case ${id}`,
+    specialty: 'CRIMINAL',
+    result,
+    complexityScore: 5,
+    rawText: 'Raw text',
+    plaintiffLawyerIds: [],
+    defendantLawyerIds: [],
+    associatedLawyerIds: [],
     createdAt: new Date('2023-01-01'),
     updatedAt: new Date('2023-01-01'),
   });
 
   it('should render chart title', () => {
-    const cases = [createMockCase('WON', '1')];
+    const cases = [createMockCase('ATTACK_WON', '1')];
     render(<CaseStatsChart cases={cases} />);
     expect(screen.getByText('Case Outcomes')).toBeInTheDocument();
   });
 
   it('should render chart components', () => {
-    const cases = [createMockCase('WON', '1'), createMockCase('LOST', '2')];
+    const cases = [createMockCase('ATTACK_WON', '1'), createMockCase('settlement', '2')];
     render(<CaseStatsChart cases={cases} />);
     expect(screen.getByTestId('responsive-container')).toBeInTheDocument();
     expect(screen.getByTestId('pie-chart')).toBeInTheDocument();
@@ -67,33 +68,33 @@ describe('CaseStatsChart', () => {
   });
 
   it('should include only outcomes that have cases', () => {
-    const cases = [createMockCase('WON', '1'), createMockCase('WON', '2')];
+    const cases = [createMockCase('ATTACK_WON', '1'), createMockCase('DEFENCE_WON', '2')];
     render(<CaseStatsChart cases={cases} />);
     const pie = screen.getByTestId('pie-count');
-    expect(pie.getAttribute('data-chart-length')).toBe('1'); // Only WON outcome
+    expect(pie.getAttribute('data-chart-length')).toBe('1'); // Both map to WON
   });
 
   it('should handle multiple different outcomes', () => {
     const cases = [
-      createMockCase('WON', '1'),
-      createMockCase('LOST', '2'),
-      createMockCase('SETTLED', '3'),
-      createMockCase('ONGOING', '4'),
+      createMockCase('ATTACK_WON', '1'),
+      createMockCase('settlement', '2'),
+      createMockCase('dismissed', '3'),
+      createMockCase('other', '4'),
     ];
     render(<CaseStatsChart cases={cases} />);
     const pie = screen.getByTestId('pie-count');
-    expect(pie.getAttribute('data-chart-length')).toBe('4'); // All 4 outcomes
+    expect(pie.getAttribute('data-chart-length')).toBe('4'); // All 4 categories
   });
 
   it('should aggregate multiple cases of same outcome', () => {
     const cases = [
-      createMockCase('WON', '1'),
-      createMockCase('WON', '2'),
-      createMockCase('WON', '3'),
-      createMockCase('LOST', '4'),
+      createMockCase('ATTACK_WON', '1'),
+      createMockCase('DEFENCE_WON', '2'),
+      createMockCase('ATTACK_WON', '3'),
+      createMockCase('settlement', '4'),
     ];
     render(<CaseStatsChart cases={cases} />);
     const pie = screen.getByTestId('pie-count');
-    expect(pie.getAttribute('data-chart-length')).toBe('2'); // WON and LOST
+    expect(pie.getAttribute('data-chart-length')).toBe('2'); // WON and SETTLED
   });
 });

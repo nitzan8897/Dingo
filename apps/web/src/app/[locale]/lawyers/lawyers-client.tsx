@@ -1,24 +1,22 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Lawyer } from '@dingo/types';
 import SearchBar from '@/components/search/search-bar';
 import EmptyState from '@/components/lawyers/empty-state';
 import LawyersGrid from '@/components/lawyers/lawyers-grid';
 import { useLawyerFilters } from '@/hooks/use-lawyer-filters';
 import { useLawyerSearch } from '@/hooks/use-lawyer-search';
-
-interface LawyersClientProps {
-  initialLawyers: Lawyer[];
-}
+import { useLawyers } from '@/contexts/lawyers-context';
 
 /**
  * Client Component for interactive lawyers search page features
- * Orchestrates search and filtering using custom hooks
+ * Uses global context for lawyers data (no fetching needed)
+ * Shows progressive data as it arrives from landing page
  * Single Responsibility: UI composition and coordination
  */
-const LawyersClient = ({ initialLawyers }: LawyersClientProps) => {
+const LawyersClient = () => {
   const t = useTranslations();
+  const { lawyers: contextLawyers, isLoading } = useLawyers();
 
   const {
     lawyers,
@@ -26,7 +24,7 @@ const LawyersClient = ({ initialLawyers }: LawyersClientProps) => {
     handleFilterSpecialties,
     handleFilterCity,
     handleSpecialtyClick,
-  } = useLawyerFilters(initialLawyers);
+  } = useLawyerFilters(contextLawyers);
 
   const { setSearchQuery, filteredLawyers } = useLawyerSearch(lawyers);
 

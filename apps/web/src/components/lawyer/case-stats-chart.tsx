@@ -1,36 +1,48 @@
 'use client';
 
-import { ProfileCase, CaseOutcome } from '@dingo/types';
+import { Case } from '@dingo/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useTranslations } from 'next-intl';
 import { PieChart, Pie, Tooltip, ResponsiveContainer, Cell, Legend } from 'recharts';
 
 interface CaseStatsChartProps {
-  cases: ProfileCase[];
+  cases: Case[];
 }
 
 /**
  * CaseStatsChart component
- * Displays case outcome statistics as a bar chart
+ * Displays case result statistics as a pie chart
+ * Works with Case type from global context
  */
 const CaseStatsChart = ({ cases }: CaseStatsChartProps): JSX.Element => {
   const t = useTranslations();
 
-  // Calculate statistics
+  // Calculate statistics by grouping CaseResult into display categories
   const stats = cases.reduce((acc, case_) => {
-    acc[case_.outcome] = (acc[case_.outcome] || 0) + 1;
+    // Map CaseResult to display categories
+    let category: string;
+    if (case_.result === 'ATTACK_WON' || case_.result === 'DEFENCE_WON') {
+      category = 'WON';
+    } else if (case_.result === 'settlement') {
+      category = 'SETTLED';
+    } else if (case_.result === 'dismissed') {
+      category = 'DISMISSED';
+    } else {
+      category = 'OTHER';
+    }
+    acc[category] = (acc[category] || 0) + 1;
     return acc;
-  }, {} as Record<CaseOutcome, number>);
+  }, {} as Record<string, number>);
 
   const total = cases.length;
   const chartData = [
     { outcome: 'WON', count: stats.WON || 0, color: '#10b981' },
     { outcome: 'SETTLED', count: stats.SETTLED || 0, color: '#3b82f6' },
-    { outcome: 'ONGOING', count: stats.ONGOING || 0, color: '#f59e0b' },
-    { outcome: 'LOST', count: stats.LOST || 0, color: '#ef4444' },
+    { outcome: 'DISMISSED', count: stats.DISMISSED || 0, color: '#f59e0b' },
+    { outcome: 'OTHER', count: stats.OTHER || 0, color: '#6b7280' },
   ].filter(item => item.count > 0).map(item => ({
     ...item,
-    name: t(`caseOutcome.${item.outcome}`),
+    name: t(`caseResult.${item.outcome}`),
     percentage: ((item.count / total) * 100).toFixed(1)
   }));
 

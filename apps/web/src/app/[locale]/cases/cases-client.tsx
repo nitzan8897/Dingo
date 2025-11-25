@@ -2,17 +2,20 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Case, CaseResult } from '@dingo/types';
+import { CaseResult } from '@dingo/types';
+import { useCases } from '@/contexts/cases-context';
 import CaseFilterBar from '@/components/case/case-filter-bar';
 import CasesGrid from '@/components/case/cases-grid';
 import CasesEmptyState from '@/components/case/cases-empty-state';
 
-interface CasesClientProps {
-  initialCases: Case[];
-}
-
-const CasesClient: React.FC<CasesClientProps> = ({ initialCases }) => {
+/**
+ * Client Component for cases page
+ * Uses global context for cases data (no fetching needed)
+ * Shows progressive data as it arrives from landing page
+ */
+const CasesClient: React.FC = () => {
   const searchParams = useSearchParams();
+  const { cases: contextCases, isLoading } = useCases();
 
   // Initialize state from URL params
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,15 +34,15 @@ const CasesClient: React.FC<CasesClientProps> = ({ initialCases }) => {
   }, [searchParams]);
 
   const availableYears = useMemo(() => {
-    const years = initialCases
+    const years = contextCases
       .filter((c) => c.closedAt)
       .map((c) => new Date(c.closedAt!).getFullYear());
     const uniqueYears = Array.from(new Set(years)).sort((a, b) => b - a);
     return uniqueYears;
-  }, [initialCases]);
+  }, [contextCases]);
 
   const filteredCases = useMemo(() => {
-    return initialCases.filter((case_) => {
+    return contextCases.filter((case_) => {
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch =
         !searchQuery ||
@@ -59,7 +62,7 @@ const CasesClient: React.FC<CasesClientProps> = ({ initialCases }) => {
 
       return matchesSearch && matchesSpecialty && matchesStatus && matchesYear;
     });
-  }, [initialCases, searchQuery, selectedSpecialty, selectedStatus, selectedYear]);
+  }, [contextCases, searchQuery, selectedSpecialty, selectedStatus, selectedYear]);
 
   return (
     <div>
