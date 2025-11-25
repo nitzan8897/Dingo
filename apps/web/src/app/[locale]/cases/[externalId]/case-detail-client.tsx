@@ -1,31 +1,21 @@
 'use client';
 
-import { useCases } from '@/contexts/cases-context';
-import { useLawyers } from '@/contexts/lawyers-context';
-import { notFound } from 'next/navigation';
+import { Case, Lawyer } from '@dingo/types';
 import CaseDetailHeader from '@/components/case/case-detail-header';
 import CaseLawyersSection from '@/components/case/case-lawyers-section';
 import { Separator } from '@/components/ui/separator';
 
 interface CaseDetailClientProps {
-  externalId: string;
+  case_: Case;
+  lawyers: Lawyer[];
 }
 
 /**
  * Client Component - Case Detail
- * Uses global contexts for case and lawyers data
- * No fetching needed - reads from global context
+ * Receives case and lawyers as props from Server Component
+ * No context needed - props-based data flow
  */
-const CaseDetailClient = ({ externalId }: CaseDetailClientProps) => {
-  const { getCaseByExternalId } = useCases();
-  const { lawyers: allLawyers } = useLawyers();
-
-  const case_ = getCaseByExternalId(externalId);
-
-  // If case not found in context, show 404
-  if (!case_) {
-    notFound();
-  }
+const CaseDetailClient = ({ case_, lawyers: allLawyers }: CaseDetailClientProps) => {
 
   const plaintiffLawyers = allLawyers.filter((l) =>
     case_.plaintiffLawyerIds.includes(l.id)
