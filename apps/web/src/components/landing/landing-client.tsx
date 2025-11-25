@@ -5,8 +5,12 @@ import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Lawyer, Case } from '@dingo/types';
 import { Button } from '@/components/ui/button';
+import { Marquee } from '@/components/ui/marquee';
 import FloatingLawyerIcons from './floating-lawyer-icons';
 import FloatingCaseIcons from './floating-case-icons';
+import LawyerAvatarMarquee from './lawyer-avatar-marquee';
+import CaseAvatarMarquee from './case-avatar-marquee';
+import { useAfkDetection } from '@/hooks/use-afk-detection';
 
 type Mode = 'lawyers' | 'cases';
 
@@ -19,13 +23,14 @@ interface LandingClientProps {
 /**
  * LandingClient component
  * Client-side landing page with mode switching between lawyers and cases
- * Populates global context with all lawyers and cases for app-wide use
+ * Shows marquee animation when user is AFK, regular floating icons when active
  */
 const LandingClient = ({ lawyers, cases, locale }: LandingClientProps): JSX.Element => {
   const t = useTranslations();
   const router = useRouter();
   const [mode, setMode] = useState<Mode>('lawyers');
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const { isAfk } = useAfkDetection({ timeout: 30000 }); // 30 seconds
 
   // Lawyers and cases are already limited to 5 from server
   // No need to randomize or filter again
@@ -71,10 +76,46 @@ const LandingClient = ({ lawyers, cases, locale }: LandingClientProps): JSX.Elem
       </Button>
 
       <div className={`w-full max-w-7xl px-4 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-        {mode === 'lawyers' ? (
-          <FloatingLawyerIcons lawyers={lawyers} locale={locale} />
+        {isAfk ? (
+          // AFK Mode: Show marquee animation
+          <div className="space-y-8">
+            {mode === 'lawyers' ? (
+              <>
+                <Marquee pauseOnHover className="[--duration:30s]">
+                  {lawyers.map((lawyer) => (
+                    <LawyerAvatarMarquee key={lawyer.id} lawyer={lawyer} locale={locale} />
+                  ))}
+                </Marquee>
+                <Marquee reverse pauseOnHover className="[--duration:30s]">
+                  {lawyers.map((lawyer) => (
+                    <LawyerAvatarMarquee key={`reverse-${lawyer.id}`} lawyer={lawyer} locale={locale} />
+                  ))}
+                </Marquee>
+              </>
+            ) : (
+              <>
+                <Marquee pauseOnHover className="[--duration:30s]">
+                  {cases.map((case_) => (
+                    <CaseAvatarMarquee key={case_.id} case_={case_} />
+                  ))}
+                </Marquee>
+                <Marquee reverse pauseOnHover className="[--duration:30s]">
+                  {cases.map((case_) => (
+                    <CaseAvatarMarquee key={`reverse-${case_.id}`} case_={case_} />
+                  ))}
+                </Marquee>
+              </>
+            )}
+          </div>
         ) : (
-          <FloatingCaseIcons cases={cases} />
+          // Active Mode: Show regular floating icons
+          <>
+            {mode === 'lawyers' ? (
+              <FloatingLawyerIcons lawyers={lawyers} locale={locale} />
+            ) : (
+              <FloatingCaseIcons cases={cases} />
+            )}
+          </>
         )}
       </div>
     </div>
