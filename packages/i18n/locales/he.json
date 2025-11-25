@@ -11,7 +11,9 @@
   "landing": {
     "title": "דינגו",
     "subtitle": "פלטפורמה חכמה לדירוג עורכי דין",
-    "findLawyers": "מצא עורכי דין"
+    "findLawyers": "מצא עורכי דין",
+    "searchLawyers": "חיפוש עורכי דין",
+    "searchCases": "חיפוש תיקים"
   },
   "lawyers": {
     "title": "דינגו",

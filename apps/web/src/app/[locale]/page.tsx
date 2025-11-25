@@ -1,29 +1,29 @@
-import { getTranslations } from 'next-intl/server';
-import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { lawyerService } from '@/services/lawyer-service';
+import { caseService } from '@/services/case-service';
+import LandingClient from '@/components/landing/landing-client';
 
 /**
  * Server Component - Landing Page
- * Minimal landing page with CTA to lawyers search
+ * Fetches random lawyers and cases for the landing page
  */
 const LandingPage = async () => {
-  const t = await getTranslations();
+  // Fetch 5 random lawyers and cases
+  const [allLawyers, allCases] = await Promise.all([
+    lawyerService.fetchLawyers(),
+    caseService.fetchCases(),
+  ]);
 
-  return (
-    <div className="flex flex-col items-center justify-center min-h-[70vh] text-center">
-      <h1 className="text-5xl font-bold mb-4 text-gray-900 dark:text-white">
-        {t('landing.title')}
-      </h1>
-      <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl">
-        {t('landing.subtitle')}
-      </p>
-      <Link href="lawyers">
-        <Button size="lg" className="text-lg px-8 py-6">
-          {t('landing.findLawyers')}
-        </Button>
-      </Link>
-    </div>
-  );
+  // Select 5 random lawyers
+  const randomLawyers = allLawyers
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 5);
+
+  // Select 5 random cases
+  const randomCases = allCases
+    .sort(() => Math.random() - 0.5)
+    .slice(0, 5);
+
+  return <LandingClient lawyers={randomLawyers} cases={randomCases} />;
 };
 
 export default LandingPage;

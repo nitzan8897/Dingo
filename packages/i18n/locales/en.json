@@ -11,7 +11,9 @@
   "landing": {
     "title": "Dingo",
     "subtitle": "Smart Lawyer Ratings Platform",
-    "findLawyers": "Find Lawyers"
+    "findLawyers": "Find Lawyers",
+    "searchLawyers": "Search Lawyers",
+    "searchCases": "Search Cases"
   },
   "lawyers": {
     "title": "Dingo",
