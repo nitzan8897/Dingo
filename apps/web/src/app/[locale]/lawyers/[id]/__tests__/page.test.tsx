@@ -1,10 +1,25 @@
 import { render, screen } from '@testing-library/react';
 import LawyerProfilePage from '../page';
 import { lawyerService } from '@/services/lawyer-service';
+import { caseService } from '@/services/case-service';
 import { Lawyer } from '@dingo/types';
 
 // Mock dependencies
 jest.mock('@/services/lawyer-service');
+jest.mock('@/services/case-service');
+jest.mock('next/navigation', () => ({
+  notFound: jest.fn(() => {
+    throw new Error('NEXT_NOT_FOUND');
+  }),
+  useRouter: jest.fn(() => ({
+    push: jest.fn(),
+    back: jest.fn(),
+    forward: jest.fn(),
+    refresh: jest.fn(),
+    prefetch: jest.fn(),
+  })),
+  usePathname: jest.fn(() => '/en/lawyers/1'),
+}));
 jest.mock('next-intl/server', () => ({
   getTranslations: jest.fn(() =>
     Promise.resolve((key: string) => {
@@ -56,6 +71,7 @@ describe('LawyerProfilePage', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     (lawyerService.fetchLawyerById as jest.Mock).mockResolvedValue(mockLawyer);
+    (caseService.fetchCases as jest.Mock).mockResolvedValue([]);
   });
 
   it('should display lawyer name in English locale', async () => {

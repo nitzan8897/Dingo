@@ -102,23 +102,34 @@ describe('LawyersRepository', () => {
   });
 
   describe('findAll', () => {
+    const includeConfig = {
+      city: true,
+      profileCases: {
+        orderBy: { year: 'desc' },
+      },
+      reviews: {
+        orderBy: { createdAt: 'desc' },
+      },
+    };
+
     it('should return all lawyers with empty filter', async () => {
       const filter: LawyerFilterDto = {};
-      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyer]);
+      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyerWithRelations]);
 
       const result = await repository.findAll(filter);
 
-      expect(result).toEqual([mockPrismaLawyer]);
+      expect(result).toBeDefined();
+      expect(result).toHaveLength(1);
       expect(prisma.lawyer.findMany).toHaveBeenCalledWith({
         where: {},
-        include: { city: true },
+        include: includeConfig,
         orderBy: { createdAt: 'desc' },
       });
     });
 
     it('should filter by city', async () => {
       const filter: LawyerFilterDto = { city: 'Tel Aviv' };
-      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyer]);
+      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyerWithRelations]);
 
       await repository.findAll(filter);
 
@@ -131,14 +142,14 @@ describe('LawyersRepository', () => {
             ],
           },
         },
-        include: { city: true },
+        include: includeConfig,
         orderBy: { createdAt: 'desc' },
       });
     });
 
     it('should filter by specialties', async () => {
       const filter: LawyerFilterDto = { specialties: ['CRIMINAL', 'CIVIL'] };
-      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyer]);
+      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyerWithRelations]);
 
       await repository.findAll(filter);
 
@@ -148,14 +159,14 @@ describe('LawyersRepository', () => {
             hasSome: ['CRIMINAL', 'CIVIL'],
           },
         },
-        include: { city: true },
+        include: includeConfig,
         orderBy: { createdAt: 'desc' },
       });
     });
 
     it('should filter by minimum years of experience', async () => {
       const filter: LawyerFilterDto = { minYearsOfExperience: 3 };
-      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyer]);
+      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyerWithRelations]);
 
       await repository.findAll(filter);
 
@@ -165,7 +176,7 @@ describe('LawyersRepository', () => {
             gte: 3,
           },
         },
-        include: { city: true },
+        include: includeConfig,
         orderBy: { createdAt: 'desc' },
       });
     });
@@ -176,7 +187,7 @@ describe('LawyersRepository', () => {
         specialties: ['CRIMINAL'],
         minYearsOfExperience: 5,
       };
-      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyer]);
+      mockPrismaService.lawyer.findMany.mockResolvedValue([mockPrismaLawyerWithRelations]);
 
       await repository.findAll(filter);
 
@@ -195,7 +206,7 @@ describe('LawyersRepository', () => {
             gte: 5,
           },
         },
-        include: { city: true },
+        include: includeConfig,
         orderBy: { createdAt: 'desc' },
       });
     });

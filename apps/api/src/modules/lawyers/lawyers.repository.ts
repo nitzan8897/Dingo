@@ -175,7 +175,7 @@ export class LawyersRepository {
   ): Lawyer {
     return {
       ...this.mapToLawyer({ ...lawyer, city: lawyer.city }),
-      cases: lawyer.profileCases.map((c) => ({
+      cases: (lawyer.profileCases || []).map((c) => ({
         id: c.id,
         lawyerId: c.lawyerId,
         titleEn: c.titleEn,
@@ -188,7 +188,7 @@ export class LawyersRepository {
         createdAt: c.createdAt,
         updatedAt: c.updatedAt,
       })),
-      reviews: lawyer.reviews.map((r) => ({
+      reviews: (lawyer.reviews || []).map((r) => ({
         id: r.id,
         lawyerId: r.lawyerId,
         reviewerName: r.reviewerName,
