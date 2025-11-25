@@ -55,7 +55,7 @@ export class LawyersRepository {
       },
     });
 
-    return lawyers.map(this.mapToLawyerWithRelations);
+    return lawyers.map((lawyer) => this.mapToLawyerWithRelations(lawyer));
   }
 
   async findOne(id: string): Promise<Lawyer | null> {
