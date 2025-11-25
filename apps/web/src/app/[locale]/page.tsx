@@ -5,18 +5,17 @@ import LandingClient from '@/components/landing/landing-client';
 
 /**
  * Server Component - Landing Page
- * Fetches random lawyers and cases for the landing page
- * Following SOLID principles - service layer handles data fetching logic
+ * Fetches ALL lawyers and cases once, stores in context for app-wide use
  */
 const LandingPage = async () => {
-  // Fetch locale and random data in parallel
-  const [locale, randomLawyers, randomCases] = await Promise.all([
+  // Fetch locale and ALL data in parallel (fetch once, use everywhere)
+  const [locale, allLawyers, allCases] = await Promise.all([
     getLocale(),
-    lawyerService.fetchRandomLawyers(5),
-    caseService.fetchRandomCases(5),
+    lawyerService.fetchLawyers(),
+    caseService.fetchCases(),
   ]);
 
-  return <LandingClient lawyers={randomLawyers} cases={randomCases} locale={locale} />;
+  return <LandingClient lawyers={allLawyers} cases={allCases} locale={locale} />;
 };
 
 export default LandingPage;
