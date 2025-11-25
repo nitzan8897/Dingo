@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+import { createContext, useContext, useState, ReactNode, useCallback, useEffect } from 'react';
 import { Lawyer } from '@dingo/types';
 
 interface LawyersContextType {
@@ -14,13 +14,59 @@ interface LawyersContextType {
 
 const LawyersContext = createContext<LawyersContextType | undefined>(undefined);
 
+// Storage key for persisting lawyers across language switches
+const STORAGE_KEY = 'dingo_lawyers_cache';
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+
+interface CachedData {
+  lawyers: Lawyer[];
+  timestamp: number;
+}
+
 /**
  * LawyersProvider - Smart context with progressive loading
- * Shows data as soon as it arrives, even if fetch isn't complete
+ * Persists data across language switches using sessionStorage
  */
 export const LawyersProvider = ({ children }: { children: ReactNode }) => {
-  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
+  const [lawyers, setLawyers] = useState<Lawyer[]>(() => {
+    // Initialize from sessionStorage if available and not expired
+    if (typeof window === 'undefined') return [];
+
+    try {
+      const cached = sessionStorage.getItem(STORAGE_KEY);
+      if (cached) {
+        const { lawyers: cachedLawyers, timestamp }: CachedData = JSON.parse(cached);
+        const age = Date.now() - timestamp;
+
+        // Return cached data if less than 5 minutes old
+        if (age < CACHE_DURATION && cachedLawyers.length > 0) {
+          return cachedLawyers;
+        }
+      }
+    } catch (error) {
+      // Ignore errors, just start fresh
+      console.warn('Failed to load cached lawyers:', error);
+    }
+
+    return [];
+  });
   const [isLoading, setLoading] = useState(false);
+
+  // Persist to sessionStorage whenever lawyers change
+  useEffect(() => {
+    if (typeof window === 'undefined' || lawyers.length === 0) return;
+
+    try {
+      const cacheData: CachedData = {
+        lawyers,
+        timestamp: Date.now(),
+      };
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(cacheData));
+    } catch (error) {
+      // Ignore quota errors or other storage issues
+      console.warn('Failed to cache lawyers:', error);
+    }
+  }, [lawyers]);
 
   // Add lawyers progressively (for streaming/chunked responses)
   const addLawyers = useCallback((newLawyers: Lawyer[]) => {
