@@ -74,8 +74,8 @@ describe('LawyersGrid', () => {
       <LawyersGrid lawyers={[]} onSpecialtyClick={mockOnSpecialtyClick} />
     );
     expect(screen.queryAllByTestId('lawyer-card')).toHaveLength(0);
-    // DataPagination component still renders even with empty data
-    expect(container.firstChild).toBeTruthy();
+    // DataPagination returns null for empty data
+    expect(container.firstChild).toBeNull();
   });
 
   it('passes onSpecialtyClick to each card', () => {
