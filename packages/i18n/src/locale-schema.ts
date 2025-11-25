@@ -108,4 +108,9 @@ export interface LocaleSchema {
     description: string;
     backHome: string;
   };
+  navigation: {
+    home: string;
+    lawyers: string;
+    cases: string;
+  };
 }

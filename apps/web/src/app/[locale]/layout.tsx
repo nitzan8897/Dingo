@@ -7,6 +7,7 @@ import { Heebo } from 'next/font/google';
 import { ThemeProvider } from '@/components/providers/theme-provider';
 import LanguageSwitcher from '@/components/common/language-switcher';
 import ThemeToggle from '@/components/common/theme-toggle';
+import NavigationWrapper from '@/components/common/navigation-wrapper';
 import { Toaster } from 'sonner';
 import '../globals.css';
 
@@ -66,10 +67,11 @@ export default async function LocaleLayout({
       <body className={`${heebo.className} bg-gray-50 dark:bg-gray-900 transition-colors`} suppressHydrationWarning>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <NextIntlClientProvider messages={messages}>
+            <NavigationWrapper />
             <div className="min-h-screen dark:bg-gray-900 transition-colors">
               <div className="max-w-7xl mx-auto p-8">
                 {/* Header with toggles - appears on all pages */}
-                <div className="flex justify-end gap-3 mb-8">
+                <div className="flex gap-3 mb-8" dir="ltr">
                   <ThemeToggle />
                   <LanguageSwitcher />
                 </div>
