@@ -640,6 +640,143 @@ export default LawyerCard;
 - **Event Handlers:** Name as `handle{Action}` (e.g., `handleClick`, `handleSubmit`)
 - **Memoization:** Use `React.memo()` for expensive list items only when needed
 
+
+UI Components & E2E data-testid Rules (Web Only)
+
+Whenever Claude creates OR updates UI components in the web app (apps/web), it must establish stable, mapped test IDs for Playwright automation.
+
+1. Add data-testid Attributes to All Test-Relevant Elements
+
+All interactive, visible, or test-relevant HTML elements must include a data-testid.
+
+These include:
+
+* Buttons, links, toggles, icon buttons
+
+* Text inputs, search bars, selects, dropdowns
+
+* Cards (e.g., lawyer-card, case-card)
+
+* List items, rows
+
+* Filters, tabs, chips
+
+* Error states, empty states, loaders
+
+Format:
+```
+data-testid="<component-name>__<element>"
+```
+
+Rules:
+
+* Lowercase
+
+* Kebab-case
+
+* Deterministic — no dynamic text in IDs
+
+* Component name = file/component root name
+
+* Use double underscore between component and element
+
+Examples:
+```
+<button data-testid="case-filter__apply-button">Apply</button>
+<input data-testid="search-bar__input" />
+<div data-testid="lawyer-card__root">…</div>
+```
+2. Create a Mapping File per Component
+
+Each component using test IDs must have a co-located mapping file:
+
+{component-name}.testids.ts
+
+Example:
+```
+export const LAWYER_CARD_TESTIDS = {
+  root: 'lawyer-card__root',
+  name: 'lawyer-card__name',
+  specialtyTag: 'lawyer-card__specialty-tag',
+  rating: 'lawyer-card__rating',
+} as const;
+```
+3. Components Must Use the Mapping (Never Inline Strings)
+```
+import { LAWYER_CARD_TESTIDS } from './lawyer-card.testids';
+
+const LawyerCard = ({ lawyer }: LawyerCardProps): JSX.Element => {
+  return (
+    <div data-testid={LAWYER_CARD_TESTIDS.root}>
+      <h3 data-testid={LAWYER_CARD_TESTIDS.name}>{lawyer.fullName}</h3>
+
+      {lawyer.specialties.map((specialty) => (
+        <span
+          key={specialty}
+          data-testid={LAWYER_CARD_TESTIDS.specialtyTag}
+        >
+          {specialty}
+        </span>
+      ))}
+    </div>
+  );
+};
+```
+4. Page-Level Components Must Also Have TestID Maps
+
+File example:
+
+`case-page.testids.ts`
+```
+export const CASE_PAGE_TESTIDS = {
+  root: 'case-page__root',
+  searchInput: 'case-page__search-input',
+  statusFilter: 'case-page__status-filter',
+  caseCard: 'case-page__case-card',
+} as const;
+```
+5. Playwright Tests Must Import the Mapping (Never Hardcode)
+
+❌ Bad:
+```
+await page.getByTestId('lawyer-card__name').click();
+```
+
+✅ Good:
+```
+import { LAWYER_CARD_TESTIDS } from '@/components/lawyer/lawyer-card.testids';
+
+await page.getByTestId(LAWYER_CARD_TESTIDS.name).click();
+```
+6. Shadcn Components Must Forward TestIDs
+
+If a custom wrapper is used:
+
+interface FancyButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  testId?: string;
+}
+
+const FancyButton = ({ testId, ...props }: FancyButtonProps): JSX.Element => {
+  return <button data-testid={testId} {...props} />;
+};
+
+
+Usage:
+
+<FancyButton testId={CASE_PAGE_TESTIDS.searchButton}>Search</FancyButton>
+
+7. Forbidden Patterns
+
+❌ Hardcoded test IDs in E2E tests
+
+❌ Test IDs containing dynamic data
+
+❌ Test IDs depending on translations
+
+❌ Components missing data-testid for clickable/UI-important elements
+
+❌ Using text-based selectors in Playwright (locale breaks them)
+
 ### Server Components vs Client Components
 
 **Server Components** (default in Next.js 15):
