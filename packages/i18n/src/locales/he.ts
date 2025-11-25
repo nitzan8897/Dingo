@@ -110,4 +110,9 @@ export const he: LocaleSchema = {
     description: 'הדף שאתה מחפש לא קיים.',
     backHome: 'חזרה לדף הבית',
   },
+  navigation: {
+    home: 'דף הבית',
+    lawyers: 'עורכי דין',
+    cases: 'תיקים',
+  },
 };

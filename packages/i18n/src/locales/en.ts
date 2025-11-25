@@ -110,4 +110,9 @@ export const en: LocaleSchema = {
     description: "The page you're looking for doesn't exist.",
     backHome: 'Back to Home',
   },
+  navigation: {
+    home: 'Homepage',
+    lawyers: 'Lawyers',
+    cases: 'Cases',
+  },
 };
