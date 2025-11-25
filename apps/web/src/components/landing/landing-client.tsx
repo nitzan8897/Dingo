@@ -1,12 +1,10 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Lawyer, Case } from '@dingo/types';
 import { Button } from '@/components/ui/button';
-import { useLawyers } from '@/contexts/lawyers-context';
-import { useCases } from '@/contexts/cases-context';
 import FloatingLawyerIcons from './floating-lawyer-icons';
 import FloatingCaseIcons from './floating-case-icons';
 
@@ -29,25 +27,8 @@ const LandingClient = ({ lawyers, cases, locale }: LandingClientProps): JSX.Elem
   const [mode, setMode] = useState<Mode>('lawyers');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
-  const { setLawyers } = useLawyers();
-  const { setCases } = useCases();
-
-  // Populate contexts on mount
-  useEffect(() => {
-    setLawyers(lawyers);
-    setCases(cases);
-  }, [lawyers, cases, setLawyers, setCases]);
-
-  // Select 5 random lawyers and cases for display
-  const randomLawyers = useMemo(
-    () => lawyers.sort(() => Math.random() - 0.5).slice(0, 5),
-    [lawyers]
-  );
-
-  const randomCases = useMemo(
-    () => cases.sort(() => Math.random() - 0.5).slice(0, 5),
-    [cases]
-  );
+  // Lawyers and cases are already limited to 5 from server
+  // No need to randomize or filter again
 
   // Switch mode every 10 seconds with fade animation
   useEffect(() => {
@@ -91,9 +72,9 @@ const LandingClient = ({ lawyers, cases, locale }: LandingClientProps): JSX.Elem
 
       <div className={`w-full max-w-7xl px-4 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
         {mode === 'lawyers' ? (
-          <FloatingLawyerIcons lawyers={randomLawyers} locale={locale} />
+          <FloatingLawyerIcons lawyers={lawyers} locale={locale} />
         ) : (
-          <FloatingCaseIcons cases={randomCases} />
+          <FloatingCaseIcons cases={cases} />
         )}
       </div>
     </div>
