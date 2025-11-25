@@ -1,22 +1,25 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { Lawyer } from '@dingo/types';
 import SearchBar from '@/components/search/search-bar';
 import EmptyState from '@/components/lawyers/empty-state';
 import LawyersGrid from '@/components/lawyers/lawyers-grid';
 import { useLawyerFilters } from '@/hooks/use-lawyer-filters';
 import { useLawyerSearch } from '@/hooks/use-lawyer-search';
-import { useLawyers } from '@/contexts/lawyers-context';
+
+interface LawyersClientProps {
+  lawyers: Lawyer[];
+  availableSpecialties?: string[];
+}
 
 /**
  * Client Component for interactive lawyers search page features
- * Uses global context for lawyers data (no fetching needed)
- * Shows progressive data as it arrives from landing page
- * Single Responsibility: UI composition and coordination
+ * Receives lawyers as props from Server Component
+ * No context needed - data flows via props (React best practice)
  */
-const LawyersClient = () => {
+const LawyersClient = ({ lawyers: initialLawyers, availableSpecialties }: LawyersClientProps) => {
   const t = useTranslations();
-  const { lawyers: contextLawyers, isLoading } = useLawyers();
 
   const {
     lawyers,
@@ -24,7 +27,7 @@ const LawyersClient = () => {
     handleFilterSpecialties,
     handleFilterCity,
     handleSpecialtyClick,
-  } = useLawyerFilters(contextLawyers);
+  } = useLawyerFilters(initialLawyers);
 
   const { setSearchQuery, filteredLawyers } = useLawyerSearch(lawyers);
 
@@ -35,6 +38,7 @@ const LawyersClient = () => {
         onFilterSpecialties={handleFilterSpecialties}
         onFilterCity={handleFilterCity}
         selectedSpecialties={selectedSpecialties}
+        availableSpecialties={availableSpecialties}
       />
 
       <LawyersGrid

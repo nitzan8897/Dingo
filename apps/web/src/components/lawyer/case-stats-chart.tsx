@@ -12,12 +12,12 @@ interface CaseStatsChartProps {
 /**
  * CaseStatsChart component
  * Displays case result statistics as a pie chart
- * Works with Case type from global context
+ * Works with Court Case type
  */
 const CaseStatsChart = ({ cases }: CaseStatsChartProps): JSX.Element => {
   const t = useTranslations();
 
-  // Calculate statistics by grouping CaseResult into display categories
+  // Calculate statistics by result, grouping similar outcomes
   const stats = cases.reduce((acc, case_) => {
     // Map CaseResult to display categories
     let category: string;

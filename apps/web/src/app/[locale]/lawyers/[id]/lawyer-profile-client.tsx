@@ -1,8 +1,6 @@
 'use client';
 
-import { useLawyers } from '@/contexts/lawyers-context';
-import { useCases } from '@/contexts/cases-context';
-import { notFound } from 'next/navigation';
+import { Lawyer, Case } from '@dingo/types';
 import { useTranslations } from 'next-intl';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -13,30 +11,23 @@ import CaseCard from '@/components/case/case-card';
 import ReviewCard from '@/components/lawyer/review-card';
 import CaseStatsChart from '@/components/lawyer/case-stats-chart';
 import ReviewsStats from '@/components/lawyer/reviews-stats';
+import { DataPagination } from '@/components/ui/data-pagination';
 
 interface LawyerProfileClientProps {
-  lawyerId: string;
+  lawyer: Lawyer;
+  cases: Case[];
   locale: string;
 }
 
 /**
  * Client Component - Lawyer Profile
- * Uses global contexts for lawyer and cases data
- * No fetching needed - reads from global context
+ * Receives lawyer with reviews and filters court cases
+ * No context needed - props-based data flow
  */
-const LawyerProfileClient = ({ lawyerId, locale }: LawyerProfileClientProps) => {
+const LawyerProfileClient = ({ lawyer, cases: allCases, locale }: LawyerProfileClientProps) => {
   const t = useTranslations();
-  const { getLawyerById } = useLawyers();
-  const { cases: allCases } = useCases();
 
-  const lawyer = getLawyerById(lawyerId);
-
-  // If lawyer not found in context, show 404
-  if (!lawyer) {
-    notFound();
-  }
-
-  // Use locale-aware name display (same logic as LawyerCardHeader)
+  // Use locale-aware name display
   const displayName = locale === 'en' ? lawyer.fullNameEn : lawyer.fullNameHe;
   const cityName = locale === 'en' ? lawyer.city.nameEn : lawyer.city.nameHe;
 
@@ -48,8 +39,6 @@ const LawyerProfileClient = ({ lawyerId, locale }: LawyerProfileClientProps) => 
     .toUpperCase()
     .slice(0, 2);
 
-  const reviews = lawyer.reviews || [];
-
   // Filter court cases where this lawyer is involved
   const courtCases = allCases.filter(
     (c) =>
@@ -57,6 +46,8 @@ const LawyerProfileClient = ({ lawyerId, locale }: LawyerProfileClientProps) => 
       c.defendantLawyerIds.includes(lawyer.id) ||
       c.associatedLawyerIds.includes(lawyer.id)
   );
+
+  const reviews = lawyer.reviews || [];
 
   return (
     <ProfileAnimatedSections>
@@ -79,18 +70,22 @@ const LawyerProfileClient = ({ lawyerId, locale }: LawyerProfileClientProps) => 
       </Card>
 
       {/* Bio Card */}
-      {(lawyer.bioEn || lawyer.bioHe) && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-2xl">{t('lawyer.about')}</CardTitle>
-          </CardHeader>
-          <CardContent>
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-2xl">{t('lawyer.about')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {(lawyer.bioEn || lawyer.bioHe) ? (
             <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
               {locale === 'en' ? lawyer.bioEn : lawyer.bioHe}
             </p>
-          </CardContent>
-        </Card>
-      )}
+          ) : (
+            <p className="text-center py-8 text-gray-500 dark:text-gray-400">
+              {t('lawyer.noBio')}
+            </p>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Specialties Card */}
       <Card className="mb-6">
@@ -127,54 +122,89 @@ const LawyerProfileClient = ({ lawyerId, locale }: LawyerProfileClientProps) => 
       </Card>
 
       {/* Stats Grid - Cases and Reviews */}
-      {(courtCases.length > 0 || reviews.length > 0) && (
-        <div className="grid md:grid-cols-2 gap-6 mb-6">
-          {courtCases.length > 0 && <CaseStatsChart cases={courtCases} />}
-          {reviews.length > 0 && <ReviewsStats reviews={reviews} />}
-        </div>
-      )}
+      <div className="grid md:grid-cols-2 gap-6 mb-6">
+        {courtCases.length > 0 ? (
+          <CaseStatsChart cases={courtCases} />
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">{t('lawyer.caseStats')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-center py-8 text-gray-500 dark:text-gray-400">
+                {t('lawyer.noCaseStats')}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+
+        {reviews.length > 0 ? (
+          <ReviewsStats reviews={reviews} />
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-xl">{t('lawyer.reviewStats')}</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-center py-8 text-gray-500 dark:text-gray-400">
+                {t('lawyer.noReviewStats')}
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       {/* Cases Section */}
-      {courtCases.length > 0 && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-2xl">{t('lawyer.cases')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {courtCases.map((case_) => (
-                <CaseCard key={case_.id} case_={case_} />
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-2xl">{t('lawyer.cases')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {courtCases.length > 0 ? (
+            <DataPagination
+              data={courtCases}
+              itemsPerPage={3}
+              renderItems={(items) => (
+                <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  {items.map((case_) => (
+                    <CaseCard key={case_.id} case_={case_} />
+                  ))}
+                </div>
+              )}
+            />
+          ) : (
+            <p className="text-center py-8 text-gray-500 dark:text-gray-400">
+              {t('lawyer.noCases')}
+            </p>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Reviews Section */}
-      {reviews.length > 0 && (
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-2xl">{t('lawyer.reviews')}</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {reviews.map((review) => (
-                <ReviewCard key={review.id} review={review} locale={locale} />
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Empty state */}
-      {courtCases.length === 0 && reviews.length === 0 && (
-        <Card className="mb-6">
-          <CardContent className="py-12 text-center text-gray-500 dark:text-gray-400">
-            <p>{t('lawyer.noCases')}</p>
-            <p className="mt-2">{t('lawyer.noReviews')}</p>
-          </CardContent>
-        </Card>
-      )}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle className="text-2xl">{t('lawyer.reviews')}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {reviews.length > 0 ? (
+            <DataPagination
+              data={reviews}
+              itemsPerPage={3}
+              renderItems={(items) => (
+                <div className="space-y-4">
+                  {items.map((review) => (
+                    <ReviewCard key={review.id} review={review} locale={locale} />
+                  ))}
+                </div>
+              )}
+            />
+          ) : (
+            <p className="text-center py-8 text-gray-500 dark:text-gray-400">
+              {t('lawyer.noReviews')}
+            </p>
+          )}
+        </CardContent>
+      </Card>
     </ProfileAnimatedSections>
   );
 };

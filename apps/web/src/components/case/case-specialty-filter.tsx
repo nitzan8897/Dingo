@@ -8,14 +8,16 @@ import FilterTag from '@/components/search/filter-tag';
 interface CaseSpecialtyFilterProps {
   selectedSpecialty?: string;
   onSpecialtyChange: (specialty?: string) => void;
+  availableSpecialties?: string[];
 }
 
 const CaseSpecialtyFilter: React.FC<CaseSpecialtyFilterProps> = ({
   selectedSpecialty,
   onSpecialtyChange,
+  availableSpecialties,
 }) => {
   const t = useTranslations();
-  const allSpecialties = Object.values(Specialty);
+  const allSpecialties = availableSpecialties || Object.values(Specialty);
 
   const handleSpecialtyClick = (specialty: string): void => {
     if (selectedSpecialty === specialty) {

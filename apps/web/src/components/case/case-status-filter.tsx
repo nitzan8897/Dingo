@@ -8,14 +8,16 @@ import FilterTag from '@/components/search/filter-tag';
 interface CaseStatusFilterProps {
   selectedStatus?: CaseResult;
   onStatusChange: (status?: CaseResult) => void;
+  availableStatuses?: CaseResult[];
 }
 
 const CaseStatusFilter: React.FC<CaseStatusFilterProps> = ({
   selectedStatus,
   onStatusChange,
+  availableStatuses,
 }) => {
   const t = useTranslations();
-  const allStatuses: CaseResult[] = ['DEFENCE_WON', 'ATTACK_WON', 'settlement', 'dismissed', 'other'];
+  const allStatuses: CaseResult[] = availableStatuses || ['DEFENCE_WON', 'ATTACK_WON', 'settlement', 'dismissed', 'other'];
 
   const handleStatusClick = (status: string): void => {
     const caseStatus = status as CaseResult;

@@ -23,7 +23,8 @@
     "recentCases": "Recent Cases",
     "viewAllCases": "View All Cases",
     "recentReviews": "Recent Reviews",
-    "viewAllLawyers": "View All Lawyers"
+    "viewAllLawyers": "View All Lawyers",
+    "fetchError": "Failed to load lawyers. Please try again."
   },
   "search": {
     "placeholder": "Search lawyers...",
@@ -64,7 +65,12 @@
     "courtCases": "Court Cases",
     "noCases": "No cases available",
     "noReviews": "No reviews yet",
-    "reviewsCount": "reviews"
+    "reviewsCount": "reviews",
+    "caseStats": "Case Statistics",
+    "noCaseStats": "No case statistics available",
+    "reviewStats": "Review Statistics",
+    "noReviewStats": "No review statistics available",
+    "noBio": "No bio available"
   },
   "ratings": {
     "professionalism": "Professionalism",
@@ -100,6 +106,7 @@
     "allCases": "All Cases",
     "allYears": "All Years",
     "noCasesFound": "No cases found",
+    "fetchError": "Failed to load cases. Please try again.",
     "caseDetails": "Case Details",
     "judge": "Judge",
     "status": "Status",

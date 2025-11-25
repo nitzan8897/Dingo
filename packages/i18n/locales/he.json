@@ -23,7 +23,8 @@
     "recentCases": "תיקים אחרונים",
     "viewAllCases": "צפה בכל התיקים",
     "recentReviews": "ביקורות אחרונות",
-    "viewAllLawyers": "צפה בכל עורכי הדין"
+    "viewAllLawyers": "צפה בכל עורכי הדין",
+    "fetchError": "נכשל בטעינת עורכי הדין. נסה שוב."
   },
   "search": {
     "placeholder": "חפש עורכי דין...",
@@ -64,7 +65,12 @@
     "courtCases": "תיקי בית משפט",
     "noCases": "אין תיקים זמינים",
     "noReviews": "אין ביקורות עדיין",
-    "reviewsCount": "ביקורות"
+    "reviewsCount": "ביקורות",
+    "caseStats": "סטטיסטיקות תיקים",
+    "noCaseStats": "אין סטטיסטיקות תיקים זמינות",
+    "reviewStats": "סטטיסטיקות ביקורות",
+    "noReviewStats": "אין סטטיסטיקות ביקורות זמינות",
+    "noBio": "אין ביוגרפיה זמינה"
   },
   "ratings": {
     "professionalism": "מקצועיות",
@@ -100,6 +106,7 @@
     "allCases": "כל התיקים",
     "allYears": "כל השנים",
     "noCasesFound": "לא נמצאו תיקים",
+    "fetchError": "נכשל בטעינת התיקים. נסה שוב.",
     "caseDetails": "פרטי תיק",
     "judge": "שופט",
     "status": "סטטוס",

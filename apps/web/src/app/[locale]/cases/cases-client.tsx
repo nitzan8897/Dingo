@@ -2,20 +2,22 @@
 
 import React, { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
-import { CaseResult } from '@dingo/types';
-import { useCases } from '@/contexts/cases-context';
+import { Case, CaseResult } from '@dingo/types';
 import CaseFilterBar from '@/components/case/case-filter-bar';
 import CasesGrid from '@/components/case/cases-grid';
 import CasesEmptyState from '@/components/case/cases-empty-state';
 
+interface CasesClientProps {
+  cases: Case[];
+}
+
 /**
  * Client Component for cases page
- * Uses global context for cases data (no fetching needed)
- * Shows progressive data as it arrives from landing page
+ * Receives cases as props from Server Component
+ * No context needed - data flows via props (React best practice)
  */
-const CasesClient: React.FC = () => {
+const CasesClient: React.FC<CasesClientProps> = ({ cases: initialCases }) => {
   const searchParams = useSearchParams();
-  const { cases: contextCases, isLoading } = useCases();
 
   // Initialize state from URL params
   const [searchQuery, setSearchQuery] = useState('');
@@ -34,15 +36,27 @@ const CasesClient: React.FC = () => {
   }, [searchParams]);
 
   const availableYears = useMemo(() => {
-    const years = contextCases
+    const years = initialCases
       .filter((c) => c.closedAt)
       .map((c) => new Date(c.closedAt!).getFullYear());
     const uniqueYears = Array.from(new Set(years)).sort((a, b) => b - a);
     return uniqueYears;
-  }, [contextCases]);
+  }, [initialCases]);
+
+  const availableSpecialties = useMemo(() => {
+    const specialties = initialCases
+      .map((c) => c.specialty)
+      .filter((s): s is string => s !== null && s !== undefined);
+    return Array.from(new Set(specialties)).sort();
+  }, [initialCases]);
+
+  const availableStatuses = useMemo(() => {
+    const statuses = initialCases.map((c) => c.result);
+    return Array.from(new Set(statuses)).sort() as CaseResult[];
+  }, [initialCases]);
 
   const filteredCases = useMemo(() => {
-    return contextCases.filter((case_) => {
+    return initialCases.filter((case_) => {
       const searchLower = searchQuery.toLowerCase();
       const matchesSearch =
         !searchQuery ||
@@ -62,7 +76,7 @@ const CasesClient: React.FC = () => {
 
       return matchesSearch && matchesSpecialty && matchesStatus && matchesYear;
     });
-  }, [contextCases, searchQuery, selectedSpecialty, selectedStatus, selectedYear]);
+  }, [initialCases, searchQuery, selectedSpecialty, selectedStatus, selectedYear]);
 
   return (
     <div>
@@ -76,6 +90,8 @@ const CasesClient: React.FC = () => {
         selectedYear={selectedYear}
         onYearChange={setSelectedYear}
         availableYears={availableYears}
+        availableSpecialties={availableSpecialties}
+        availableStatuses={availableStatuses}
       />
 
       {filteredCases.length > 0 ? (

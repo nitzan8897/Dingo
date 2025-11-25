@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useCases } from '@/contexts/cases-context';
+import { Case } from '@dingo/types';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import CaseCard from '@/components/case/case-card';
@@ -10,18 +10,21 @@ import { ArrowRight } from 'lucide-react';
 
 interface RecentCasesSectionProps {
   locale: string;
+  cases: Case[];
 }
 
 /**
  * Client Component - Recent Cases Section
- * Uses cases context to show 3 most recent cases
- * No fetching needed - reads from global context
+ * Shows 3 most recent cases sorted by date
+ * Receives cases as props from Server Component
  */
-const RecentCasesSection = ({ locale }: RecentCasesSectionProps) => {
+const RecentCasesSection = ({ locale, cases }: RecentCasesSectionProps) => {
   const t = useTranslations();
-  const { cases } = useCases();
 
-  const recentCases = cases.slice(0, 3);
+  // Sort by createdAt descending and take 3
+  const recentCases = [...cases]
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, 3);
 
   if (recentCases.length === 0) {
     return null;

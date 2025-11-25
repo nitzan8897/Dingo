@@ -10,6 +10,7 @@ interface SearchBarProps {
   onFilterSpecialties?: (specialties: string[]) => void;
   onFilterCity?: (city: string) => void;
   selectedSpecialties?: string[];
+  availableSpecialties?: string[];
 }
 
 /**
@@ -21,6 +22,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   onFilterSpecialties,
   onFilterCity,
   selectedSpecialties = [],
+  availableSpecialties,
 }) => {
   const t = useTranslations();
   const [query, setQuery] = useState('');
@@ -55,6 +57,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
             <SpecialtyDropdown
               selectedSpecialties={selectedSpecialties}
               onSpecialtiesChange={handleSpecialtiesChange}
+              availableSpecialties={availableSpecialties}
             />
           </div>
         )}

@@ -4,6 +4,7 @@ import { BackButton } from '@/components/ui/back-button';
 import PageHeader from '@/components/lawyer/page-header';
 import CasesClient from './cases-client';
 import CasesPageHeader from './cases-page-header';
+import { caseService } from '@/services/case-service';
 
 export const revalidate = 3600;
 
@@ -23,8 +24,8 @@ export async function generateMetadata({
 
 /**
  * Server Component - Cases Page
- * Uses global context for data (populated from landing page)
- * No fetching needed - data flows from context
+ * Fetches only the data needed for this page
+ * No context needed - Next.js caching handles performance
  */
 const CasesPage = async ({
   params,
@@ -34,13 +35,16 @@ const CasesPage = async ({
   const { locale } = await params;
   const t = await getTranslations({ locale });
 
+  // Fetch cases for this page
+  const allCases = await caseService.fetchCases();
+
   return (
     <>
       <PageHeader locale={locale as Locale} />
       <div className="container mx-auto px-4 py-8 max-w-7xl">
         <BackButton fallbackUrl={`/${locale}`} label={t('notFound.backHome')} />
         <CasesPageHeader />
-        <CasesClient />
+        <CasesClient cases={allCases} />
       </div>
     </>
   );

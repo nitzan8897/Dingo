@@ -20,6 +20,8 @@ interface CaseFilterBarProps {
   selectedYear?: number;
   onYearChange: (year?: number) => void;
   availableYears: number[];
+  availableSpecialties?: string[];
+  availableStatuses?: CaseResult[];
 }
 
 const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
@@ -32,6 +34,8 @@ const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
   selectedYear,
   onYearChange,
   availableYears,
+  availableSpecialties,
+  availableStatuses,
 }) => {
   const t = useTranslations();
 
@@ -56,6 +60,7 @@ const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
           <CaseSpecialtyFilter
             selectedSpecialty={selectedSpecialty}
             onSpecialtyChange={onSpecialtyChange}
+            availableSpecialties={availableSpecialties}
           />
         </div>
 
@@ -66,6 +71,7 @@ const CaseFilterBar: React.FC<CaseFilterBarProps> = ({
           <CaseStatusFilter
             selectedStatus={selectedStatus}
             onStatusChange={onStatusChange}
+            availableStatuses={availableStatuses}
           />
         </div>
 

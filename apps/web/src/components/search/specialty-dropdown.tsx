@@ -24,21 +24,24 @@ import { cn } from '@/lib/utils';
 interface SpecialtyDropdownProps {
   selectedSpecialties: string[];
   onSpecialtiesChange: (specialties: string[]) => void;
+  availableSpecialties?: string[];
 }
 
 /**
  * SpecialtyDropdown component
  * A searchable dropdown with multi-select specialty filtering
  * Now using shadcn/ui Command + Popover for better UX and accessibility
+ * Accepts availableSpecialties from API or falls back to Specialty enum
  */
 const SpecialtyDropdown: React.FC<SpecialtyDropdownProps> = ({
   selectedSpecialties,
   onSpecialtiesChange,
+  availableSpecialties,
 }) => {
   const t = useTranslations();
   const [isOpen, setIsOpen] = useState(false);
 
-  const allSpecialties = Object.values(Specialty);
+  const allSpecialties = availableSpecialties || Object.values(Specialty);
 
   const handleSpecialtyToggle = (specialty: string): void => {
     const newSpecialties = selectedSpecialties.includes(specialty)
