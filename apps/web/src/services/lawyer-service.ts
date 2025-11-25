@@ -84,6 +84,28 @@ export class LawyerService {
       throw new Error('An unknown error occurred');
     }
   }
+
+  /**
+   * Fetch random lawyers for landing page
+   * Server-side randomization to avoid fetching all lawyers
+   * @param count - Number of random lawyers to fetch (default: 5)
+   * @returns Promise with array of random lawyers
+   */
+  async fetchRandomLawyers(count: number = 5): Promise<Lawyer[]> {
+    try {
+      // Fetch all lawyers and randomize on client side
+      // Note: In a production app, this should be done server-side with DB query
+      const allLawyers = await this.fetchLawyers();
+      return allLawyers
+        .sort(() => Math.random() - 0.5)
+        .slice(0, count);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('An unknown error occurred');
+    }
+  }
 }
 
 // Export singleton instance

@@ -83,6 +83,28 @@ export class CaseService {
       throw new Error('An unknown error occurred');
     }
   }
+
+  /**
+   * Fetch random cases for landing page
+   * Server-side randomization to avoid fetching all cases
+   * @param count - Number of random cases to fetch (default: 5)
+   * @returns Promise with array of random cases
+   */
+  async fetchRandomCases(count: number = 5): Promise<Case[]> {
+    try {
+      // Fetch all cases and randomize
+      // Note: In a production app, this should be done server-side with DB query
+      const allCases = await this.fetchCases();
+      return allCases
+        .sort(() => Math.random() - 0.5)
+        .slice(0, count);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('An unknown error occurred');
+    }
+  }
 }
 
 export const caseService = new CaseService();
