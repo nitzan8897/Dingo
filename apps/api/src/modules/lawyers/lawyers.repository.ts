@@ -43,13 +43,19 @@ export class LawyersRepository {
       where,
       include: {
         city: true,
+        profileCases: {
+          orderBy: { year: 'desc' },
+        },
+        reviews: {
+          orderBy: { createdAt: 'desc' },
+        },
       },
       orderBy: {
         createdAt: 'desc',
       },
     });
 
-    return lawyers.map(this.mapToLawyer);
+    return lawyers.map(this.mapToLawyerWithRelations);
   }
 
   async findOne(id: string): Promise<Lawyer | null> {
