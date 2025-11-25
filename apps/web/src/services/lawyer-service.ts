@@ -25,9 +25,13 @@ export class LawyerService {
   /**
    * Fetch lawyers from the API
    * @param params - Optional filters for specialties and city
+   * @param options - Fetch options including limit for pagination
    * @returns Promise with array of lawyers
    */
-  async fetchLawyers(params?: FetchLawyersParams): Promise<Lawyer[]> {
+  async fetchLawyers(
+    params?: FetchLawyersParams,
+    options?: { limit?: number; offset?: number }
+  ): Promise<Lawyer[]> {
     try {
       const queryParams = new URLSearchParams();
 
@@ -36,6 +40,12 @@ export class LawyerService {
       }
       if (params?.city) {
         queryParams.append('city', params.city);
+      }
+      if (options?.limit) {
+        queryParams.append('limit', options.limit.toString());
+      }
+      if (options?.offset) {
+        queryParams.append('offset', options.offset.toString());
       }
 
       const url = `${this.baseUrl}/lawyers${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
@@ -55,6 +65,31 @@ export class LawyerService {
         throw error;
       }
       throw new Error('An unknown error occurred');
+    }
+  }
+
+  /**
+   * Fetch random lawyers for homepage display
+   * @param limit - Number of random lawyers to fetch
+   * @returns Promise with array of random lawyers
+   */
+  async fetchRandomLawyers(limit: number = 5): Promise<Lawyer[]> {
+    try {
+      const url = `${this.baseUrl}/lawyers?random=true&limit=${limit}`;
+
+      const response = await fetch(url, {
+        next: { revalidate: 300 }, // Cache for 5 minutes
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch random lawyers: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      // Fallback: fetch all and pick random ones
+      const allLawyers = await this.fetchLawyers();
+      return [...allLawyers].sort(() => Math.random() - 0.5).slice(0, limit);
     }
   }
 

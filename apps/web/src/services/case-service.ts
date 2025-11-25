@@ -17,9 +17,13 @@ export class CaseService {
   /**
    * Fetch cases from the API
    * @param params - Optional filters for search, specialty, name, year, and status
+   * @param options - Fetch options including limit for pagination
    * @returns Promise with array of cases
    */
-  async fetchCases(params?: CaseFilterParams): Promise<Case[]> {
+  async fetchCases(
+    params?: CaseFilterParams,
+    options?: { limit?: number; offset?: number }
+  ): Promise<Case[]> {
     try {
       const queryParams = new URLSearchParams();
 
@@ -38,6 +42,12 @@ export class CaseService {
       if (params?.status) {
         queryParams.append('status', params.status);
       }
+      if (options?.limit) {
+        queryParams.append('limit', options.limit.toString());
+      }
+      if (options?.offset) {
+        queryParams.append('offset', options.offset.toString());
+      }
 
       const url = `${this.baseUrl}/cases${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
 
@@ -55,6 +65,31 @@ export class CaseService {
         throw error;
       }
       throw new Error('An unknown error occurred');
+    }
+  }
+
+  /**
+   * Fetch random cases for homepage display
+   * @param limit - Number of random cases to fetch
+   * @returns Promise with array of random cases
+   */
+  async fetchRandomCases(limit: number = 5): Promise<Case[]> {
+    try {
+      const url = `${this.baseUrl}/cases?random=true&limit=${limit}`;
+
+      const response = await fetch(url, {
+        next: { revalidate: 300 }, // Cache for 5 minutes
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch random cases: ${response.statusText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      // Fallback: fetch all and pick random ones
+      const allCases = await this.fetchCases();
+      return [...allCases].sort(() => Math.random() - 0.5).slice(0, limit);
     }
   }
 
