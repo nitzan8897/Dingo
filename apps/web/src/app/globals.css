@@ -59,3 +59,24 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+    }
+    25% {
+      transform: translateY(-40px) translateX(25px);
+    }
+    50% {
+      transform: translateY(-25px) translateX(-30px);
+    }
+    75% {
+      transform: translateY(-60px) translateX(15px);
+    }
+  }
+
+  .floating-icon {
+    animation: float 5s ease-in-out infinite;
+  }
+}
