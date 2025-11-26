@@ -29,14 +29,6 @@ input CaseFilterInput {
   year: Int
 }
 
-"""The outcome of a profile case"""
-enum CaseOutcome {
-  LOST
-  ONGOING
-  SETTLED
-  WON
-}
-
 type City {
   createdAt: DateTime!
   id: ID!
@@ -88,7 +80,6 @@ type Lawyer {
   fullNameEn: String!
   fullNameHe: String!
   id: ID!
-  profileCases: [ProfileCase!]
   ratingVector: RatingVector!
   reviews: [Review!]
   specialties: [String!]!
@@ -106,20 +97,6 @@ input LawyerFilterInput {
 type Mutation {
   createCase(input: CreateCaseInput!): Case!
   createLawyer(input: CreateLawyerInput!): Lawyer!
-}
-
-type ProfileCase {
-  createdAt: DateTime!
-  descriptionEn: String!
-  descriptionHe: String!
-  id: ID!
-  isFeatured: Boolean!
-  lawyerId: String!
-  outcome: CaseOutcome!
-  titleEn: String!
-  titleHe: String!
-  updatedAt: DateTime!
-  year: Int!
 }
 
 type Query {
