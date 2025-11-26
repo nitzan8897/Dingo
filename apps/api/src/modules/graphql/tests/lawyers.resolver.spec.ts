@@ -48,9 +48,6 @@ describe('LawyersResolver', () => {
     city: {
       findUnique: jest.fn(),
     },
-    profileCase: {
-      findMany: jest.fn(),
-    },
     review: {
       findMany: jest.fn(),
     },
@@ -172,35 +169,6 @@ describe('LawyersResolver', () => {
       expect(result).toEqual(mockCity);
       expect(prismaService.city.findUnique).toHaveBeenCalledWith({
         where: { id: 'city-1' },
-      });
-    });
-  });
-
-  describe('profileCases field resolver', () => {
-    it('should resolve profile cases for a lawyer', async () => {
-      const mockCases = [
-        {
-          id: 'case-1',
-          lawyerId: '1',
-          titleEn: 'Case 1',
-          titleHe: 'תיק 1',
-          descriptionEn: 'Description',
-          descriptionHe: 'תיאור',
-          outcome: 'WON',
-          year: 2023,
-          isFeatured: true,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-      ];
-
-      mockPrismaService.profileCase.findMany.mockResolvedValue(mockCases);
-
-      const result = await resolver.profileCases(mockLawyer as any);
-
-      expect(result).toEqual(mockCases);
-      expect(prismaService.profileCase.findMany).toHaveBeenCalledWith({
-        where: { lawyerId: '1' },
       });
     });
   });

@@ -1,6 +1,5 @@
 import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
 import { City } from './city.model';
-import { ProfileCase } from './profile-case.model';
 import { RatingVector } from './rating-vector.model';
 import { Review } from './review.model';
 
@@ -38,9 +37,6 @@ export class Lawyer {
 
   @Field(() => [String], { nullable: true })
   caseIds?: string[];
-
-  @Field(() => [ProfileCase], { nullable: true })
-  profileCases?: ProfileCase[];
 
   @Field(() => [Review], { nullable: true })
   reviews?: Review[];

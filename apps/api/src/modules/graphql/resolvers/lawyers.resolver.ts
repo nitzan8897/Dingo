@@ -11,7 +11,6 @@ import { CreateLawyerInput } from '../inputs/create-lawyer.input';
 import { LawyerFilterInput } from '../inputs/lawyer-filter.input';
 import { City } from '../models/city.model';
 import { Lawyer } from '../models/lawyer.model';
-import { ProfileCase } from '../models/profile-case.model';
 import { Review } from '../models/review.model';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -52,13 +51,6 @@ export class LawyersResolver {
   async city(@Parent() lawyer: Lawyer): Promise<City> {
     return this.prisma.city.findUnique({
       where: { id: lawyer.cityId },
-    });
-  }
-
-  @ResolveField(() => [ProfileCase])
-  async profileCases(@Parent() lawyer: Lawyer): Promise<ProfileCase[]> {
-    return this.prisma.profileCase.findMany({
-      where: { lawyerId: lawyer.id },
     });
   }
 
