@@ -1,0 +1,156 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Case {
+  associatedLawyerIds: [String!]!
+  closedAt: DateTime
+  complexityScore: Float!
+  createdAt: DateTime!
+  defendantLawyerIds: [String!]!
+  externalId: String!
+  id: ID!
+  judgeName: String
+  openedAt: DateTime
+  pdfUrl: String
+  plaintiffLawyerIds: [String!]!
+  rawText: String!
+  result: String!
+  specialty: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
+input CaseFilterInput {
+  name: String
+  search: String
+  specialty: String
+  status: String
+  year: Int
+}
+
+"""The outcome of a profile case"""
+enum CaseOutcome {
+  LOST
+  ONGOING
+  SETTLED
+  WON
+}
+
+type City {
+  createdAt: DateTime!
+  id: ID!
+  nameEn: String!
+  nameHe: String!
+  slug: String!
+  updatedAt: DateTime!
+}
+
+input CreateCaseInput {
+  associatedLawyerIds: [String!]!
+  closedAt: String
+  complexityScore: Float!
+  defendantLawyerIds: [String!]!
+  externalId: String!
+  judgeName: String
+  openedAt: String
+  pdfUrl: String
+  plaintiffLawyerIds: [String!]!
+  rawText: String!
+  result: String!
+  specialty: String!
+  title: String!
+}
+
+input CreateLawyerInput {
+  bioEn: String
+  bioHe: String
+  cityId: String!
+  fullNameEn: String!
+  fullNameHe: String!
+  ratingVector: RatingVectorInput!
+  specialties: [String!]!
+  yearsOfExperience: Int!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Lawyer {
+  bioEn: String
+  bioHe: String
+  caseIds: [String!]
+  city: City!
+  cityId: String!
+  createdAt: DateTime!
+  fullNameEn: String!
+  fullNameHe: String!
+  id: ID!
+  profileCases: [ProfileCase!]
+  ratingVector: RatingVector!
+  reviews: [Review!]
+  specialties: [String!]!
+  updatedAt: DateTime!
+  yearsOfExperience: Int!
+}
+
+input LawyerFilterInput {
+  city: String
+  minRating: Int
+  minYearsOfExperience: Int
+  specialties: [String!]
+}
+
+type Mutation {
+  createCase(input: CreateCaseInput!): Case!
+  createLawyer(input: CreateLawyerInput!): Lawyer!
+}
+
+type ProfileCase {
+  createdAt: DateTime!
+  descriptionEn: String!
+  descriptionHe: String!
+  id: ID!
+  isFeatured: Boolean!
+  lawyerId: String!
+  outcome: CaseOutcome!
+  titleEn: String!
+  titleHe: String!
+  updatedAt: DateTime!
+  year: Int!
+}
+
+type Query {
+  case(externalId: String!): Case
+  cases(filter: CaseFilterInput): [Case!]!
+  lawyer(id: String!): Lawyer
+  lawyers(filter: LawyerFilterInput): [Lawyer!]!
+  searchLawyers(name: String!): [Lawyer!]!
+}
+
+type RatingVector {
+  availability: Int!
+  cost: Int!
+  empathy: Int!
+  professionalism: Int!
+}
+
+input RatingVectorInput {
+  availability: Int!
+  cost: Int!
+  empathy: Int!
+  professionalism: Int!
+}
+
+type Review {
+  commentEn: String!
+  commentHe: String!
+  createdAt: DateTime!
+  id: ID!
+  lawyerId: String!
+  rating: Int!
+  reviewerName: String!
+  updatedAt: DateTime!
+}
