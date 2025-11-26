@@ -5,15 +5,15 @@ import LandingClient from '@/components/landing/landing-client';
 
 /**
  * Server Component - Landing Page
- * Fetches only 5 random lawyers and cases for display
+ * Fetches 20 random lawyers and cases for marquee display
  * Each page fetches its own data - no global context needed
  */
 const LandingPage = async () => {
-  // Fetch locale and only 5 random items for landing page display
+  // Fetch locale and 20 random items for landing page marquee
   const [locale, randomLawyers, randomCases] = await Promise.all([
     getLocale(),
-    lawyerService.fetchRandomLawyers(5),
-    caseService.fetchRandomCases(5),
+    lawyerService.fetchRandomLawyers(20),
+    caseService.fetchRandomCases(20),
   ]);
 
   return <LandingClient lawyers={randomLawyers} cases={randomCases} locale={locale} />;

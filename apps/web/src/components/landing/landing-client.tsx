@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { Lawyer, Case } from '@dingo/types';
@@ -23,7 +23,8 @@ interface LandingClientProps {
 /**
  * LandingClient component
  * Client-side landing page with mode switching between lawyers and cases
- * Shows marquee animation when user is AFK, regular floating icons when active
+ * Shows marquee animation when user is active, floating icons when AFK
+ * Triple click exits AFK mode
  */
 const LandingClient = ({ lawyers, cases, locale }: LandingClientProps): JSX.Element => {
   const t = useTranslations();
@@ -31,22 +32,66 @@ const LandingClient = ({ lawyers, cases, locale }: LandingClientProps): JSX.Elem
   const [mode, setMode] = useState<Mode>('lawyers');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const { isAfk } = useAfkDetection({ timeout: 30000 }); // 30 seconds
+  const [manuallyExitedAfk, setManuallyExitedAfk] = useState(false);
+  const clickCountRef = useRef(0);
+  const clickTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Lawyers and cases are already limited to 5 from server
-  // No need to randomize or filter again
+  // Lawyers and cases now fetched as 20 items from server
 
   // Switch mode every 10 seconds with fade animation
   useEffect(() => {
     const interval = setInterval(() => {
       setIsTransitioning(true);
       setTimeout(() => {
-        setMode((prevMode) => (prevMode === 'lawyers' ? 'cases' : 'lawyers'));
+        setMode(prevMode => (prevMode === 'lawyers' ? 'cases' : 'lawyers'));
         setIsTransitioning(false);
       }, 500);
     }, 10000);
 
     return () => clearInterval(interval);
   }, []);
+
+  // Handle triple click to exit AFK mode
+  useEffect(() => {
+    const handleClick = () => {
+      clickCountRef.current += 1;
+
+      // Clear existing timer
+      if (clickTimerRef.current) {
+        clearTimeout(clickTimerRef.current);
+      }
+
+      // Check for triple click
+      if (clickCountRef.current === 3) {
+        setManuallyExitedAfk(true);
+        clickCountRef.current = 0;
+      } else {
+        // Reset counter after 1 second if not triple clicked
+        clickTimerRef.current = setTimeout(() => {
+          clickCountRef.current = 0;
+        }, 1000);
+      }
+    };
+
+    document.addEventListener('click', handleClick);
+
+    return () => {
+      document.removeEventListener('click', handleClick);
+      if (clickTimerRef.current) {
+        clearTimeout(clickTimerRef.current);
+      }
+    };
+  }, []);
+
+  // Reset manual exit when user becomes active again
+  useEffect(() => {
+    if (!isAfk) {
+      setManuallyExitedAfk(false);
+    }
+  }, [isAfk]);
+
+  // Determine if we should show AFK mode (floating icons)
+  const showAfkMode = isAfk && !manuallyExitedAfk;
 
   const handleSearch = (): void => {
     if (mode === 'lawyers') {
@@ -57,10 +102,11 @@ const LandingClient = ({ lawyers, cases, locale }: LandingClientProps): JSX.Elem
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen text-center py-12">
+    <div className="flex flex-col items-center justify-center min-h-screen text-center py-12 overflow-hidden">
       <h1 className="text-5xl font-bold mb-4 text-gray-900 dark:text-white">
         {t('landing.title')}
       </h1>
+
       <p className="text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-2xl">
         {t('landing.subtitle')}
       </p>
@@ -70,56 +116,51 @@ const LandingClient = ({ lawyers, cases, locale }: LandingClientProps): JSX.Elem
         className="text-lg px-8 py-6 transition-all duration-700 mb-16"
         onClick={handleSearch}
       >
-        <span className={`transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+        <span
+          className={`transition-opacity duration-500 ${
+            isTransitioning ? 'opacity-0' : 'opacity-100'
+          }`}
+        >
           {mode === 'lawyers' ? t('landing.searchLawyers') : t('landing.searchCases')}
         </span>
       </Button>
 
-      <div className={`w-full max-w-7xl px-4 transition-opacity duration-500 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
-        {isAfk ? (
-          // AFK Mode: Show marquee animation
-          <div className="space-y-8">
-            {mode === 'lawyers' ? (
-              <>
-                <Marquee pauseOnHover className="[--duration:30s]">
-                  {lawyers.map((lawyer) => (
-                    <LawyerAvatarMarquee key={lawyer.id} lawyer={lawyer} locale={locale} />
-                  ))}
-                </Marquee>
-                <Marquee reverse pauseOnHover className="[--duration:30s]">
-                  {lawyers.map((lawyer) => (
-                    <LawyerAvatarMarquee key={`reverse-${lawyer.id}`} lawyer={lawyer} locale={locale} />
-                  ))}
-                </Marquee>
-              </>
-            ) : (
-              <>
-                <Marquee pauseOnHover className="[--duration:30s]">
-                  {cases.map((case_) => (
-                    <CaseAvatarMarquee key={case_.id} case_={case_} />
-                  ))}
-                </Marquee>
-                <Marquee reverse pauseOnHover className="[--duration:30s]">
-                  {cases.map((case_) => (
-                    <CaseAvatarMarquee key={`reverse-${case_.id}`} case_={case_} />
-                  ))}
-                </Marquee>
-              </>
-            )}
+      <div
+        className={`w-full transition-opacity duration-500 ${
+          isTransitioning ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
+        {showAfkMode ? (
+          // AFK Mode (Floating icons)
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="transition-opacity duration-700 ease-in-out">
+              {mode === 'lawyers' ? (
+                <FloatingLawyerIcons lawyers={lawyers} locale={locale} />
+              ) : (
+                <FloatingCaseIcons cases={cases} />
+              )}
+            </div>
           </div>
         ) : (
-          // Active Mode: Show regular floating icons
-          <>
+          // Active Mode (Marquee animation - full width with no horizontal scroll)
+          <div className="transition-opacity duration-700 ease-in-out pt-16 pb-8">
             {mode === 'lawyers' ? (
-              <FloatingLawyerIcons lawyers={lawyers} locale={locale} />
+              <Marquee pauseOnHover className="[--duration:80s]" repeat={4}>
+                {lawyers.map(lawyer => (
+                  <LawyerAvatarMarquee key={lawyer.id} lawyer={lawyer} locale={locale} />
+                ))}
+              </Marquee>
             ) : (
-              <FloatingCaseIcons cases={cases} />
+              <Marquee pauseOnHover className="[--duration:80s]" repeat={4}>
+                {cases.map(case_ => (
+                  <CaseAvatarMarquee key={case_.id} case_={case_} />
+                ))}
+              </Marquee>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
   );
 };
-
 export default LandingClient;
